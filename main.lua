@@ -8,6 +8,10 @@ local scenes = {}
 scenes.titleScreen = sceneMaker.makeScene("assets/images/background.jpg", 0, 0)
 scenes.level1 = sceneMaker.makeScene("assets/images/GrassLarge.png", 0, 0)
 
+local pokemonMaker = require
+
+local playersPokemon = {}
+
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
@@ -32,6 +36,8 @@ end
 
 function love.load()
     love.window.setMode(WIDTH, HEIGHT)
+
+    
 
     for sceneKey, scene in pairs(scenes) do
         scene.active = false
