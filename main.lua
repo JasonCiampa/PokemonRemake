@@ -109,14 +109,16 @@ function love.draw()
         love.graphics.draw(scenes.level1.background, scenes.level1.x + 100, scenes.level1.y)    
 
 
-        for i = 1, 20 do
-            currentHeight = currentHeight + halfHeight
-            love.graphics.draw(scenes.level1.background, scenes.level1.x, currentHeight)
-            love.graphics.draw(scenes.level1.background, scenes.level1.x + 100, currentHeight)
-            love.graphics.draw(scenes.level1.background, scenes.level1.x + 200, currentHeight)
-            love.graphics.draw(scenes.level1.background, scenes.level1.x + 300, currentHeight)
+        -- for i = 1, 20 do
+        --     currentHeight = currentHeight + halfHeight
+        --     love.graphics.draw(scenes.level1.background, scenes.level1.x, currentHeight)
+        --     love.graphics.draw(scenes.level1.background, scenes.level1.x + 100, currentHeight)
+        --     love.graphics.draw(scenes.level1.background, scenes.level1.x + 200, currentHeight)
+        --     love.graphics.draw(scenes.level1.background, scenes.level1.x + 300, currentHeight)
+        -- end
 
-        end
+        love.graphics.draw(love.graphics.newImage("assets/images/main_character/main_character.png"))
+
 
 
     end
