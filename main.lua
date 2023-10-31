@@ -6,7 +6,7 @@ local sceneMaker = require("sceneMaker")    -- Gathers all of the necessary code
 
 local scenes = {}
 scenes.titleScreen = sceneMaker.makeScene("assets/images/background.jpg", 0, 0)
-scenes.level1 = sceneMaker.makeScene("assets/images/GrassLarge.png", 0, 0)
+scenes.level1 = sceneMaker.makeScene("assets/images/grass/grass.png", 0, 0)
 
 local pokemonMaker = require
 
@@ -103,10 +103,21 @@ function love.draw()
         scenes.titleScreen:draw()
         
     elseif (scenes.level1.active) then
-        love.graphics.draw(scenes.level1.background, scenes.level1.x, scenes.level1.y, 0, 0.25, 0.25)    
-        love.graphics.draw(scenes.level1.background, scenes.level1.x, scenes.level1.y, 0, 0.25, 0.25, 0, -250)    
-        love.graphics.draw(scenes.level1.background, scenes.level1.x, scenes.level1.y, 0, 0.25, 0.25, -350, 0)
-        love.graphics.draw(scenes.level1.background, scenes.level1.x, scenes.level1.y, 0, 0.25, 0.25, -350, -250)    
+        local currentHeight = 0
+        local halfHeight = 90
+        love.graphics.draw(scenes.level1.background, scenes.level1.x, scenes.level1.y)    
+        love.graphics.draw(scenes.level1.background, scenes.level1.x + 100, scenes.level1.y)    
+
+
+        for i = 1, 20 do
+            currentHeight = currentHeight + halfHeight
+            love.graphics.draw(scenes.level1.background, scenes.level1.x, currentHeight)
+            love.graphics.draw(scenes.level1.background, scenes.level1.x + 100, currentHeight)
+            love.graphics.draw(scenes.level1.background, scenes.level1.x + 200, currentHeight)
+            love.graphics.draw(scenes.level1.background, scenes.level1.x + 300, currentHeight)
+
+        end
+
 
     end
 end
