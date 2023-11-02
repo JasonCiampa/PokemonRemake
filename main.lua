@@ -6,12 +6,11 @@ local sceneMaker = require("sceneMaker")    -- Gathers all of the necessary code
 
 local scenes = {}
 scenes.titleScreen = sceneMaker.makeScene("assets/images/background.jpg", 0, 0)
-scenes.level1 = sceneMaker.makeScene("assets/images/grass/grass.png", 0, 0)
+scenes.clearMeadowTown = sceneMaker.makeScene("assets/images/background/clear_meadow_town/clearMeadow.png", 0, 0)
 
 local pokemonMaker = require
 
 local playersPokemon = {}
-
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
@@ -34,10 +33,11 @@ end
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
+local player = require("player")
+local timer = 0
+
 function love.load()
     love.window.setMode(WIDTH, HEIGHT)
-
-    
 
     for sceneKey, scene in pairs(scenes) do
         scene.active = false
@@ -52,9 +52,8 @@ function love.load()
 
     -- Creates the code to execute whenever the playButton is clicked on.
     function scenes.titleScreen.buttons.playButton.performAction(button, mouseX, mouseY) 
-        button.text = "Fart"
         scenes.titleScreen.active = false
-        scenes.level1.active = true
+        scenes.clearMeadowTown.active = true
     end
 
    --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
@@ -62,14 +61,7 @@ function love.load()
     -- level1 Set-Up --
 
     -- Initializes the level1 scene
-    scenes.level1.active = false       -- Sets the level1 scene to be active when the game loads.
-    scenes.level1.buttons.playButton = scenes.level1:makeButton(WIDTH / 2, 100, (scenes.level1.width / 2) - WIDTH / 4, ((scenes.level1.height / 2) - 50) - 100, {0, 0, 1}, {0, 0, 0.5}, {1, 1, 1}, {0.6, 0.6, 0.6}, "TEST")     -- Adds a playButton to the scene
-
-    -- Creates the code to execute whenever the playButton is clicked on.
-    function scenes.level1.buttons.playButton.performAction(button, mouseX, mouseY) 
-        scenes.level1.active = false
-        scenes.titleScreen.active = true
-    end
+    scenes.clearMeadowTown.active = false       -- Sets the level1 scene to be active when the game loads.
 
    --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
@@ -78,6 +70,7 @@ end
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
 function love.update(dt)
+
     -- Closes Love2D when "ESC" is clicked
     if (love.keyboard.isDown("escape")) then
         love.event.quit()
@@ -89,10 +82,14 @@ function love.update(dt)
             button:mouseHovering()
         end
 
-    elseif (scenes.level1.active) then
-        for buttonKey, button in pairs(scenes.level1.buttons) do
-            button:mouseHovering()
+    elseif (scenes.clearMeadowTown.active) then
+        if (timer > 0.5) then 
+            timer = 0
         end
+
+        timer = timer + dt
+
+        player.move(timer, dt)
     end
 end
 
@@ -102,24 +99,8 @@ function love.draw()
     if (scenes.titleScreen.active) then
         scenes.titleScreen:draw()
         
-    elseif (scenes.level1.active) then
-        local currentHeight = 0
-        local halfHeight = 90
-        love.graphics.draw(scenes.level1.background, scenes.level1.x, scenes.level1.y)    
-        love.graphics.draw(scenes.level1.background, scenes.level1.x + 100, scenes.level1.y)    
-
-
-        -- for i = 1, 20 do
-        --     currentHeight = currentHeight + halfHeight
-        --     love.graphics.draw(scenes.level1.background, scenes.level1.x, currentHeight)
-        --     love.graphics.draw(scenes.level1.background, scenes.level1.x + 100, currentHeight)
-        --     love.graphics.draw(scenes.level1.background, scenes.level1.x + 200, currentHeight)
-        --     love.graphics.draw(scenes.level1.background, scenes.level1.x + 300, currentHeight)
-        -- end
-
-        love.graphics.draw(love.graphics.newImage("assets/images/main_character/main_character.png"))
-
-
-
+    elseif (scenes.clearMeadowTown.active) then
+        scenes.clearMeadowTown:draw()
+        player:draw()
     end
 end
