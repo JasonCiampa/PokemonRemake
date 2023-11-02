@@ -6,11 +6,45 @@ local sceneMaker = require("sceneMaker")    -- Gathers all of the necessary code
 
 local scenes = {}
 scenes.titleScreen = sceneMaker.makeScene("assets/images/background.jpg", 0, 0)
-scenes.clearMeadowTown = sceneMaker.makeScene("assets/images/background/clear_meadow_town/clearMeadow.png", 0, 0)
+scenes.clearMeadowTown = sceneMaker.makeScene("assets/images/clear_meadow_town/clear_meadow_background.png", 0, 0)
 
 local pokemonMaker = require
 
 local playersPokemon = {}
+
+local camera = {}
+camera.x = 0
+camera.y = 0
+camera.freeze = false
+
+function camera.adjustScreenPosition(camera, player)
+    if (not camera.freeze) then
+        -- When the player crosses over the right boundary of the screen
+        -- Get how far he crossed over to the right
+        -- Set the camera further right by the distance the character traveled to the right
+        if(player.x > camera.x + (WIDTH * 0.55)) then
+            local diff = player.x - (camera.x + (WIDTH * 0.55))
+            camera.x = camera.x + diff
+        end
+        -- When the player crosses over the left boundary of the screen
+        if (player.x < camera.x + (WIDTH * 0.45)) then
+            local diff = (camera.x + (WIDTH * 0.45)) - player.x
+            camera.x = camera.x - diff
+        end
+
+        -- When the player crosses over the bottom boundary of the screen
+        if (player.y > camera.y + (HEIGHT * 0.55)) then
+            local diff = player.y - (camera.y + (HEIGHT * 0.55))
+            camera.y = camera.y + diff
+        end
+        
+        -- When the player crosses over the top boundary of the screen
+        if (player.y < camera.y + (HEIGHT * 0.45)) then
+            local diff = (camera.y + (HEIGHT * 0.45)) - player.y
+            camera.y = camera.y - diff
+        end
+    end
+end
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
@@ -31,13 +65,20 @@ function love.mousepressed(mouseX, mouseY, mouseButton)
     end
 end
 
+
+
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
 local player = require("player")
 local timer = 0
 
+
 function love.load()
     love.window.setMode(WIDTH, HEIGHT)
+
+    player.x = (WIDTH / 2) - (player.width / 2)
+    player.y = (HEIGHT / 2) - (player.height / 2)
+
 
     for sceneKey, scene in pairs(scenes) do
         scene.active = false
@@ -83,6 +124,9 @@ function love.update(dt)
         end
 
     elseif (scenes.clearMeadowTown.active) then
+
+        camera:adjustScreenPosition(player)
+
         if (timer > 0.5) then 
             timer = 0
         end
@@ -100,7 +144,20 @@ function love.draw()
         scenes.titleScreen:draw()
         
     elseif (scenes.clearMeadowTown.active) then
+        if (player.x >= 960 and player.x <= 2880) and (player.y >= 540 and player.y <= 1620) then
+            camera.freeze = false
+            love.graphics.translate(-camera.x, -camera.y)
+        else
+            camera.freeze = true
+            love.graphics.translate(-camera.x, -camera.y)
+        end
+
         scenes.clearMeadowTown:draw()
         player:draw()
+        love.graphics.print("Player X: " .. player.x, 0, 0)
+        love.graphics.print("Player Y: " .. player.y, 0, 100)
+
+        love.graphics.print("Camera X: " .. camera.x, player.x, player.y)
+        love.graphics.print("Camera Y: " .. camera.y, player.x, player.y + 100)
     end
 end
