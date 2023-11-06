@@ -8,6 +8,8 @@ local scenes = {}
 scenes.titleScreen = sceneMaker.makeScene("assets/images/background.jpg", 0, 0)
 scenes.clearMeadowTown = sceneMaker.makeScene("assets/images/clear_meadow_town/clear_meadow_background.png", 0, 0)
 
+local player = require("player")
+
 local pokemonMaker = require
 
 local playersPokemon = {}
@@ -15,34 +17,48 @@ local playersPokemon = {}
 local camera = {}
 camera.x = 0
 camera.y = 0
-camera.freeze = false
 
 function camera.adjustScreenPosition(camera, player)
-    if (not camera.freeze) then
-        -- When the player crosses over the right boundary of the screen
-        -- Get how far he crossed over to the right
-        -- Set the camera further right by the distance the character traveled to the right
-        if(player.x > camera.x + (WIDTH * 0.55)) then
-            local diff = player.x - (camera.x + (WIDTH * 0.55))
-            camera.x = camera.x + diff
+    -- When the player crosses over the right boundary of the screen
+    -- Get how far he crossed over to the right
+    -- Set the camera further right by the distance the character traveled to the right
+    if (player.x > camera.x + (WIDTH * 0.55)) then
+        local diff = player.x - (camera.x + (WIDTH * 0.55))
+        camera.x = camera.x + diff
+
+        if (camera.x > 1920) then
+            camera.x = 1920
         end
-        -- When the player crosses over the left boundary of the screen
-        if (player.x < camera.x + (WIDTH * 0.45)) then
-            local diff = (camera.x + (WIDTH * 0.45)) - player.x
-            camera.x = camera.x - diff
+    
+    -- When the player crosses over the left boundary of the screen
+    elseif (player.x < camera.x + (WIDTH * 0.45) - (player.width / 2)) then
+        local diff = (camera.x + (WIDTH * 0.45) - (player.width / 2)) - player.x
+        camera.x = camera.x - diff
+
+        if (camera.x < 0) then
+            camera.x = 0
         end
 
-        -- When the player crosses over the bottom boundary of the screen
-        if (player.y > camera.y + (HEIGHT * 0.55)) then
-            local diff = player.y - (camera.y + (HEIGHT * 0.55))
-            camera.y = camera.y + diff
+    end
+
+    -- When the player crosses over the bottom boundary of the screen
+    if (player.y > camera.y + (HEIGHT * 0.55)) then
+        local diff = player.y - (camera.y + (HEIGHT * 0.55))
+        camera.y = camera.y + diff
+
+        if (camera.y > 1080) then
+            camera.y = 1080
         end
-        
-        -- When the player crosses over the top boundary of the screen
-        if (player.y < camera.y + (HEIGHT * 0.45)) then
-            local diff = (camera.y + (HEIGHT * 0.45)) - player.y
-            camera.y = camera.y - diff
+
+    -- When the player crosses over the top boundary of the screen
+    elseif (player.y < camera.y + (HEIGHT * 0.45)) then
+        local diff = (camera.y + (HEIGHT * 0.45)) - player.y
+        camera.y = camera.y - diff
+
+        if (camera.y < 0) then
+            camera.y = 0
         end
+
     end
 end
 
@@ -65,13 +81,8 @@ function love.mousepressed(mouseX, mouseY, mouseButton)
     end
 end
 
-
-
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
-
-local player = require("player")
 local timer = 0
-
 
 function love.load()
     love.window.setMode(WIDTH, HEIGHT)
@@ -144,20 +155,16 @@ function love.draw()
         scenes.titleScreen:draw()
         
     elseif (scenes.clearMeadowTown.active) then
-        if (player.x >= 960 and player.x <= 2880) and (player.y >= 540 and player.y <= 1620) then
-            camera.freeze = false
-            love.graphics.translate(-camera.x, -camera.y)
-        else
-            camera.freeze = true
-            love.graphics.translate(-camera.x, -camera.y)
-        end
+        love.graphics.translate(-camera.x, -camera.y)
 
         scenes.clearMeadowTown:draw()
         player:draw()
-        love.graphics.print("Player X: " .. player.x, 0, 0)
-        love.graphics.print("Player Y: " .. player.y, 0, 100)
 
-        love.graphics.print("Camera X: " .. camera.x, player.x, player.y)
-        love.graphics.print("Camera Y: " .. camera.y, player.x, player.y + 100)
+        -- love.graphics.print("Player X: " .. player.x, player.x, player.y)
+        -- love.graphics.print("Player Y: " .. player.x, player.x, player.y + 100)
+
+        -- love.graphics.print("Camera X: " .. camera.x, camera.x, camera.y + 100)
+        -- love.graphics.print("Camera Y: " .. camera.y, camera.x, camera.y + 200)
+        
     end
 end

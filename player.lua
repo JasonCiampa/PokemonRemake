@@ -59,3 +59,17 @@ function player.draw(player)
 end
 
 return player
+
+
+
+
+
+
+
+
+
+
+
+
+
+
