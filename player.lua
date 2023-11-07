@@ -1,10 +1,15 @@
+local animator = require("animator")
+
 local player = {}
 player.spriteSheet = {}
-player.spriteSheet.frontIdle = love.graphics.newImage("assets/images/main_character/front/main_character.png")    
-player.spriteSheet.frontMoving1 = love.graphics.newImage("assets/images/main_character/front/main_character_frontMoving1.png")
-player.spriteSheet.frontMoving2 = love.graphics.newImage("assets/images/main_character/front/main_character_frontMoving2.png")
+-- player.spriteSheet.frontIdle = love.graphics.newImage("assets/images/main_character/front/main_character.png")    
+-- player.spriteSheet.frontMoving1 = love.graphics.newImage("assets/images/main_character/front/main_character_frontMoving1.png")
+-- player.spriteSheet.frontMoving2 = love.graphics.newImage("assets/images/main_character/front/main_character_frontMoving2.png")
 
-player.currentCostume = player.spriteSheet.frontIdle
+player.animations = {}
+player.animations.frontMoving = animator.makeAnimation("assets/images/main_character/front/", "frontMoving", ".png", 2)
+
+player.currentAnimation = player.animations.frontMoving
 player.width = 120
 player.height = 160
 player.x = 0
@@ -21,33 +26,37 @@ function player.move(timer, dt)
     if (love.keyboard.isDown("s")) then
         player.y = player.y + (player.movementSpeed * dt)
 
-        if (timer < 0.25) then
-            player.currentCostume = player.spriteSheet.frontMoving1
-        else
-            player.currentCostume = player.spriteSheet.frontMoving2
-        end
+        player.animations.frontMoving.play(dt, 2)
+        -- if (timer < 0.25) then
+        --     player.currentCostume = player.spriteSheet.frontMoving1
+        -- else
+        --     player.currentCostume = player.spriteSheet.frontMoving2
+        -- end
 
     end
 
     if (love.keyboard.isDown("a")) then
         player.x = player.x - (player.movementSpeed * dt)
 
-        if (timer < 0.25) then
-            player.currentCostume = player.spriteSheet.frontMoving1
-        else
-            player.currentCostume = player.spriteSheet.frontMoving2
-        end
+        player.animations.frontMoving.play(dt, 2)
+        -- if (timer < 0.25) then
+        --     player.currentCostume = player.spriteSheet.frontMoving1
+        -- else
+        --     player.currentCostume = player.spriteSheet.frontMoving2
+        -- end
 
     end
 
     if (love.keyboard.isDown("d")) then
         player.x = player.x + (player.movementSpeed * dt)
 
-        if (timer < 0.25) then
-            player.currentCostume = player.spriteSheet.frontMoving1
-        else
-            player.currentCostume = player.spriteSheet.frontMoving2
-        end
+        player.animations.frontMoving.play(dt, 2)
+
+        -- if (timer < 0.25) then
+        --     player.currentCostume = player.spriteSheet.frontMoving1
+        -- else
+        --     player.currentCostume = player.spriteSheet.frontMoving2
+        -- end
     end
 
     -- player.currentCostume = player.spriteSheet.frontIdle
@@ -55,7 +64,7 @@ end
 
 
 function player.draw(player)
-    love.graphics.draw(player.currentCostume, player.x, player.y)
+    player.currentAnimation.draw(player)
 end
 
 return player
