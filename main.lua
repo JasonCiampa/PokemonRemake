@@ -1,64 +1,35 @@
--- File-Wide Variables/Fields
-
 local WIDTH, HEIGHT = 1920, 1080
 
-local sceneMaker = require("sceneMaker")    -- Gathers all of the necessary code for creating a scene from the sceneMaker.lua file and stores it in this file's sceneMaker table.
-
-local scenes = {}
-scenes.titleScreen = sceneMaker.makeScene("assets/images/background.jpg", 0, 0)
-scenes.clearMeadowTown = sceneMaker.makeScene("assets/images/clear_meadow_town/clear_meadow_background.png", 0, 0)
-
+local scene = require("scene")    
 local player = require("player")
 
-local pokemonMaker = require
+local scenes = {}
+scenes.titleScreen = scene.create("assets/images/title_screen/background.jpg", 0, 0)
+scenes.clearMeadowTown = scene.create("assets/images/clear_meadow_town/clear_meadow_background.png", 0, 0)
 
-local playersPokemon = {}
+--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
-local camera = {}
-camera.x = 0
-camera.y = 0
+-- Returns the current color
+function getCurrentColor()
+    return {love.graphics.getColor()}
+end
 
-function camera.adjustScreenPosition(camera, player)
-    -- When the player crosses over the right boundary of the screen
-    -- Get how far he crossed over to the right
-    -- Set the camera further right by the distance the character traveled to the right
-    if (player.x > camera.x + (WIDTH * 0.55)) then
-        local diff = player.x - (camera.x + (WIDTH * 0.55))
-        camera.x = camera.x + diff
+--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
-        if (camera.x > 1920) then
-            camera.x = 1920
-        end
-    
-    -- When the player crosses over the left boundary of the screen
-    elseif (player.x < camera.x + (WIDTH * 0.45) - (player.width / 2)) then
-        local diff = (camera.x + (WIDTH * 0.45) - (player.width / 2)) - player.x
-        camera.x = camera.x - diff
+-- Detects whether an object was clicked on (true) or not (false)
+function mouseInObject(object, mouseX, mouseY)
+    return ((mouseX >= object.x) and (mouseX <= object.x + object.width)) and ((mouseY >= object.y) and (mouseY <= object.y + object.height))
+end
 
-        if (camera.x < 0) then
-            camera.x = 0
-        end
+--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
-    end
-
-    -- When the player crosses over the bottom boundary of the screen
-    if (player.y > camera.y + (HEIGHT * 0.55)) then
-        local diff = player.y - (camera.y + (HEIGHT * 0.55))
-        camera.y = camera.y + diff
-
-        if (camera.y > 1080) then
-            camera.y = 1080
-        end
-
-    -- When the player crosses over the top boundary of the screen
-    elseif (player.y < camera.y + (HEIGHT * 0.45)) then
-        local diff = (camera.y + (HEIGHT * 0.45)) - player.y
-        camera.y = camera.y - diff
-
-        if (camera.y < 0) then
-            camera.y = 0
-        end
-
+-- Determines whether the mouse is hovering over an object (true) or not (false)
+function isMouseHovering(object)
+    local mouseX, mouseY = love.mouse.getPosition()
+    if (mouseInObject(object, mouseX, mouseY)) then
+        return true
+    else
+        return false
     end
 end
 
@@ -68,12 +39,12 @@ end
 
 -- Everytime the mouse is left-clicked, this function will call the active scene's mousepressed() function.
 function love.mousepressed(mouseX, mouseY, mouseButton)
-    if (mouseButton == 1) then
+    if (mouseButton == 1) then                                                          -- If the mouseButton was left-click...
 
         -- Checks which scene in the scenes list is the active one
-        for sceneKey, scene in pairs(scenes) do
-            if (scene.active) then
-                scene.mousepressed(mouseX,mouseY)
+        for sceneKey, scene in pairs(scenes) do                                             -- For every Scene in the scenes list...
+            if (scene.active) then                                                              -- If the Scene is active...
+                scene.mousepressed(mouseX,mouseY)                                                   -- Call the Scene to process the click
                 return
             end
         end    
@@ -82,41 +53,33 @@ function love.mousepressed(mouseX, mouseY, mouseButton)
 end
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
-local timer = 0
 
 function love.load()
-    love.window.setMode(WIDTH, HEIGHT)
+    love.window.setMode(WIDTH, HEIGHT)                              -- Sets the window size
 
-    player.x = (WIDTH / 2) - (player.width / 2)
-    player.y = (HEIGHT / 2) - (player.height / 2)
+    player.x = (WIDTH / 2) - (player.width / 2)                     -- Sets the Player to be centered on the x-axis
+    player.y = (HEIGHT / 2) - (player.height / 2)                   -- Sets the Player to be centered on the y-axis
 
-
-    for sceneKey, scene in pairs(scenes) do
-        scene.active = false
+    for sceneKey, scene in pairs(scenes) do                         -- For every Scene in the scenes list...
+        scene.active = false                                            -- Set every Scene to be not active when the game loads
     end    
 
-    --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
-    -- titleScreen Set-Up --
+    -- TITLE SCREEN SETUP --
+    scenes.titleScreen.active = true       -- Sets titleScreen to be active when the game loads.
 
-    -- Initializes the titleScreen scene
-    scenes.titleScreen.active = true       -- Sets the scene to be active when the game loads.
-    scenes.titleScreen.buttons.playButton = scenes.titleScreen:makeButton(WIDTH / 2, 100, (scenes.titleScreen.width / 2) - WIDTH / 4, (scenes.titleScreen.height / 2) - 50, {0, 0, 1}, {0, 0, 0.5}, {1, 1, 1}, {0.6, 0.6, 0.6}, "Play")     -- Adds a playButton to the scene
+    scenes.titleScreen.buttons.play = scenes.titleScreen.createButton(WIDTH / 2, 100, (scenes.titleScreen.width / 2) - WIDTH / 4, (scenes.titleScreen.height / 2) - 50, {0, 0, 1}, {1, 1, 1}, "Play")     -- Adds a play Button to the titleScreen Button list
 
     -- Creates the code to execute whenever the playButton is clicked on.
-    function scenes.titleScreen.buttons.playButton.performAction(button, mouseX, mouseY) 
-        scenes.titleScreen.active = false
-        scenes.clearMeadowTown.active = true
+    function scenes.titleScreen.buttons.play.performAction(button, mouseX, mouseY) 
+        scene.change(scenes.titleScreen, scenes.clearMeadowTown)                        -- Changes the Scene from titleScreen to clearMeadowTown
     end
 
-   --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
-    -- level1 Set-Up --
+    -- CLEAR MEADOW TOWN SETUP --
+    scenes.clearMeadowTown.active = false       -- Sets clearMeadowTown to not be active when the game loads.
 
-    -- Initializes the level1 scene
-    scenes.clearMeadowTown.active = false       -- Sets the level1 scene to be active when the game loads.
-
-   --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
-
+    scenes.clearMeadowTown.cameras.main = scenes.clearMeadowTown.createCamera(0, 0, (WIDTH * 0.55), (WIDTH * 0.45) - ((player.width / 2) ), (HEIGHT * 0.55), (HEIGHT * 0.45), 1920, 0, 1080, 0) -- Adds a main Camera to the clearMeadowTown Cameras list
+    scenes.clearMeadowTown.activeCamera = scenes.clearMeadowTown.cameras.main   -- Sets the main camera to be the active camera for clearMeadowTown
 end
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
@@ -128,43 +91,31 @@ function love.update(dt)
         love.event.quit()
     end
 
-    -- Executes when titleScreen is the active scene.
+    -- TITLE SCREEN --
     if (scenes.titleScreen.active) then
-        for buttonKey, button in pairs(scenes.titleScreen.buttons) do
-            button:mouseHovering()
+        for buttonKey, button in pairs(scenes.titleScreen.buttons) do       -- For every Button in the Scene...
+            button:mouseHovering()                                              -- Adjust a Button's color if the mouse is hovering over it
         end
 
+    -- CLEAR MEADOW TOWN --
     elseif (scenes.clearMeadowTown.active) then
-
-        camera:adjustScreenPosition(player)
-
-        if (timer > 0.5) then 
-            timer = 0
-        end
-
-        timer = timer + dt
-
-        player.move(timer, dt)
+        scenes.clearMeadowTown.cameras.main.follow(player)             -- Update the Camera's position
+        player.move(timer, dt)                                         -- Update the Player's movements
     end
 end
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
 function love.draw()
+
+    -- TITLE SCREEN --
     if (scenes.titleScreen.active) then
-        scenes.titleScreen:draw()
+        scenes.titleScreen.draw()                      -- Draws the Title Screen Scene and all of its Buttons
         
+    -- CLEAR MEADOW TOWN --
     elseif (scenes.clearMeadowTown.active) then
-        love.graphics.translate(-camera.x, -camera.y)
-
-        scenes.clearMeadowTown:draw()
-        player:draw()
-
-        -- love.graphics.print("Player X: " .. player.x, player.x, player.y)
-        -- love.graphics.print("Player Y: " .. player.x, player.x, player.y + 100)
-
-        -- love.graphics.print("Camera X: " .. camera.x, camera.x, camera.y + 100)
-        -- love.graphics.print("Camera Y: " .. camera.y, camera.x, camera.y + 200)
-        
+        scenes.clearMeadowTown.activeCamera.draw()     -- Updates the Camera
+        scenes.clearMeadowTown.draw()                  -- Draws the Clear Meadow Town Scene and all of its Buttons
+        player.draw()                                  -- Draws the Player
     end
 end
