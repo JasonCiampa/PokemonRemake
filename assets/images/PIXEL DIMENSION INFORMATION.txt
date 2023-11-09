@@ -1,0 +1,29 @@
+PIXEL DIMENSION INFORMATION:
+
+Houses (Scale Factor: 15) -
+Background:
+	Drawing Size: 192x108 px
+		x20⬇️   ⬆️x20
+	In-game Size: 3840x2160 px
+
+One-Floored House:
+     Drawing Size: 70x41 px
+            x15⬇️    ⬆️ /15
+     In-game Size: 1050x615 px
+
+One-Floored Expanded House: 
+     Drawing Size: 140x41 px ???
+                x15 ⬇️    ⬆️ /15
+     In-Game Size: 2100x615 px ???
+
+Two-Floored House:
+     Drawing Size: 88x82 px ???
+              x15 ⬇️    ⬆️ /15
+     In-Game Size: 1320x1230 px ???
+
+
+Grass (Scale Factor: ?) -
+Grass:
+     Drawing Size: 70x41 px
+            x15 ⬇️    ⬆️ /15
+     In-Game Size: 160x180 px 
