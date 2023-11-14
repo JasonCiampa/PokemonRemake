@@ -18,10 +18,12 @@ function cameraHandler.create(x, y, rightShiftCoord, leftShiftCoord, downwardShi
     camera.upwardBoundary = upwardBoundary              -- The y-coordinate that the Camera's y-coordinate can not be smaller than
 
     function camera.follow(object)
+        objectX = object.body:getX()
+        objectY = object.body:getY()
 
         -- RIGHT SHIFT HANDLER --
-        if (object.x > camera.x + camera.rightShiftCoord) then                      -- If the object crosses the rightShiftCoord...
-            local shiftDistance = object.x - (camera.x + camera.rightShiftCoord)        -- Calculate the shiftDistance (how far the object traveled past the rightShiftCoord)
+        if (objectX > camera.x + camera.rightShiftCoord) then                      -- If the object crosses the rightShiftCoord...
+            local shiftDistance = objectX - (camera.x + camera.rightShiftCoord)        -- Calculate the shiftDistance (how far the object traveled past the rightShiftCoord)
             camera.x = camera.x + shiftDistance                                         -- Shift the Camera to the right by shiftDistance px
     
             if (camera.x > camera.rightBoundary) then                               -- If the Camera crosses the right boundary...
@@ -29,8 +31,8 @@ function cameraHandler.create(x, y, rightShiftCoord, leftShiftCoord, downwardShi
             end
         
         -- LEFT SHIFT HANDLER --
-        elseif (object.x < camera.x + camera.leftShiftCoord) then                   -- If the object crosses the leftShiftCoord...
-            local shiftDistance = (camera.x + camera.leftShiftCoord) - object.x     -- Calculate the shiftDistance (how far the object traveled past the leftShiftCoord)
+        elseif (objectX < camera.x + camera.leftShiftCoord) then                   -- If the object crosses the leftShiftCoord...
+            local shiftDistance = (camera.x + camera.leftShiftCoord) - objectX     -- Calculate the shiftDistance (how far the object traveled past the leftShiftCoord)
             camera.x = camera.x - shiftDistance                                     -- Shift the Camera to the left by shiftDistance px
     
             if (camera.x < camera.leftBoundary) then                                -- If the Camera crosses the left boundary...
@@ -39,8 +41,8 @@ function cameraHandler.create(x, y, rightShiftCoord, leftShiftCoord, downwardShi
         end
     
         -- DOWNWARD SHIFT HANDLER --
-        if (object.y > camera.y + camera.downwardShiftCoord) then                             -- If the object crosses the downwardShiftCoord...
-            local shiftDistance = object.y - (camera.y + camera.downwardShiftCoord)           -- Calculate the shiftDistance (how far the object traveled past the downwardShiftCoord)
+        if (objectY > camera.y + camera.downwardShiftCoord) then                             -- If the object crosses the downwardShiftCoord...
+            local shiftDistance = objectY - (camera.y + camera.downwardShiftCoord)           -- Calculate the shiftDistance (how far the object traveled past the downwardShiftCoord)
             camera.y = camera.y + shiftDistance                                               -- Shift the Camera to the downward by shiftDistance px
     
             if (camera.y > camera.downwardBoundary) then                                      -- If the Camera crosses the downward boundary...
@@ -48,8 +50,8 @@ function cameraHandler.create(x, y, rightShiftCoord, leftShiftCoord, downwardShi
             end
     
         -- UPWARD SHIFT HANDLER
-        elseif (object.y < camera.y + camera.upwardShiftCoord) then                           -- If the object crosses the upwardShiftCoord...
-            local shiftDistance = (camera.y + camera.upwardShiftCoord) - object.y             -- Calculate the shiftDistance (how far the object traveled past the upwardShiftCoord)
+        elseif (objectY < camera.y + camera.upwardShiftCoord) then                           -- If the object crosses the upwardShiftCoord...
+            local shiftDistance = (camera.y + camera.upwardShiftCoord) - objectY             -- Calculate the shiftDistance (how far the object traveled past the upwardShiftCoord)
             camera.y = camera.y - shiftDistance                                               -- Shift the Camera to the upward by shiftDistance px
     
             if (camera.y < camera.upwardBoundary) then                                        -- If the Camera crosses the upward boundary...

@@ -1,5 +1,5 @@
 local button = require("button")
-local camera = require("camera")  
+local camera = require("camera")
 
 -- Creates a new Scene
 local sceneHandler = {}
@@ -21,8 +21,12 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     end
     
     scene.buttons = {}                                          -- Scene Button list is created
+
     scene.cameras = {}                                          -- Scene Camera list is created
     scene.activeCamera = ""                                     -- Scene Active Camera is set as empty (will store whichever camera is active)
+
+    scene.physicsObjects = {}
+
 
     scene.active = false                                        -- Scene is set to be inactive
 
@@ -36,6 +40,10 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     function scene.createCamera(x, y, rightShiftCoord, leftShiftCoord, downwardShiftCoord, upwardShiftCoord, rightBoundary, leftBoundary, downwardBoundary, upwardBoundary)
         return camera.create(x, y, rightShiftCoord, leftShiftCoord, downwardShiftCoord, upwardShiftCoord, rightBoundary, leftBoundary, downwardBoundary, upwardBoundary)
     end
+
+    -- function scene.createObject()
+    --     return physics.
+    -- end
 
     -- Checks if any of the Buttons in the Scene were clicked on (this function is only called after a left-click has been detected by the love.mousepressed function).
     function scene.mousepressed(mouseX, mouseY)

@@ -1,7 +1,17 @@
+
+love.physics.setMeter(64)
+WORLD = love.physics.newWorld(0, 0, true)
+-- WORLD:setCallbacks(beginContact, endContact, preSolve, postSolve)
+
+-- local physicsHandler = require("physics")
+
+
 local WIDTH, HEIGHT = 1920, 1080
+
 
 local scene = require("scene")    
 local player = require("player")
+
 
 local scenes = {}
 scenes.titleScreen = scene.create("assets/images/title_screen/background.jpg", 0, 0)
@@ -85,6 +95,7 @@ end
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
 function love.update(dt)
+    WORLD:update(dt)
 
     -- Closes Love2D when "ESC" is clicked
     if (love.keyboard.isDown("escape")) then
@@ -100,7 +111,8 @@ function love.update(dt)
     -- CLEAR MEADOW TOWN --
     elseif (scenes.clearMeadowTown.active) then
         scenes.clearMeadowTown.cameras.main.follow(player)             -- Update the Camera's position
-        player.move(timer, dt)                                         -- Update the Player's movements
+        player.move(dt)                                         -- Update the Player's movements
+        player.update(dt)
     end
 end
 
