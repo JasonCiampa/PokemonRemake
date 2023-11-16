@@ -2,7 +2,7 @@ local WIDTH, HEIGHT = 1920, 1080
 
 local physics = require("physics")
 
-local scene = require("scene")    
+local scene = require("scene")
 local player = require("player")
 
 local flower_short = physics.addObject("flower_short", nil, 100, 100, -50, -50, "static", 1, 0)
@@ -10,7 +10,9 @@ local flower_tall = physics.addObject("flower_tall", nil, 100, 200, -100, -100, 
 
 local scenes = {}
 scenes.titleScreen = scene.create("assets/images/title_screen/background.jpg", 0, 0)
-scenes.clearMeadowTown = scene.create("assets/images/clear_meadow_town/clear_meadow_background.png", 0, 0)
+
+local clearMeadowTown = require("clearMeadowTown")
+-- scenes.clearMeadowTown = scene.create("assets/images/clear_meadow_town/clear_meadow_background.png", 0, 0)
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
@@ -81,10 +83,6 @@ function love.load()
 
 
     -- CLEAR MEADOW TOWN SETUP --
-    scenes.clearMeadowTown.active = false       -- Sets clearMeadowTown to not be active when the game loads.
-
-    scenes.clearMeadowTown.cameras.main = scenes.clearMeadowTown.createCamera(0, 0, (WIDTH * 0.55), (WIDTH * 0.45) - ((player.width / 2) ), (HEIGHT * 0.55), (HEIGHT * 0.45), 1920, 0, 1080, 0) -- Adds a main Camera to the clearMeadowTown Cameras list
-    scenes.clearMeadowTown.activeCamera = scenes.clearMeadowTown.cameras.main   -- Sets the main camera to be the active camera for clearMeadowTown
 
     -- 40 tiles wide, 10 tiles tall
     -- 96 x 216 per tile

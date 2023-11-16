@@ -2,7 +2,6 @@ local button = require("button")
 local camera = require("camera")
 local physics = require("physics")
 
--- Creates a new Scene
 local sceneHandler = {}
 
 -- Creates and returns a new Scene
@@ -55,8 +54,6 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
         table.insert(scene.objects, object)
         return object
     end
-
-    
 
     -- Creates the tiles for a given tilemap
     function scene.createTiles(scene, tilemap)
