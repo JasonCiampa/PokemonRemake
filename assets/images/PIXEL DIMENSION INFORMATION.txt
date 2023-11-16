@@ -27,8 +27,38 @@ Two-Floored Expanded House:
      In-Game Size: 2100x1230 px 
 
 
-Grass (Scale Factor: ?) -
+Grass (Scale Factor: 4) -
 Grass:
-     Drawing Size: 70x41 px
-            x15 ⬇️    ⬆️ /15
+     Drawing Size: 40x45 px
+            x4 ⬇️    ⬆️ /4
      In-Game Size: 160x180 px 
+
+Small Flower:
+     Drawing Size: 5x5 px
+	   x20 ⬇️    ⬆️ /20
+     In-Game Size: 100x100 px
+
+Tall Flower:
+     Drawing Size: 5x10 px
+	   x20 ⬇️    ⬆️ /20
+     In-Game Size: 100x200 px
+
+Fence:
+    Drawing Size: 8x24 px
+ 	  x20 ⬇️    ⬆️ /20
+     In-Game Size: 160x480 px
+
+Fence Front Facing:
+    Drawing Size: 24x10 px
+ 	  x20 ⬇️    ⬆️ /20
+     In-Game Size: 480x200 px
+
+Bench:
+    Drawing Size: 30x16 px
+ 	  x20 ⬇️    ⬆️ /20
+     In-Game Size: 600x320 px
+
+Tree:
+    Drawing Size: 20x30 px
+ 	  x20 ⬇️    ⬆️ /20
+     In-Game Size: 400x600 px
