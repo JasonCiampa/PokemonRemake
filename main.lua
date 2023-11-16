@@ -1,17 +1,12 @@
-
-love.physics.setMeter(64)
-WORLD = love.physics.newWorld(0, 0, true)
--- WORLD:setCallbacks(beginContact, endContact, preSolve, postSolve)
-
--- local physicsHandler = require("physics")
-
-
 local WIDTH, HEIGHT = 1920, 1080
 
+local physics = require("physics")
 
 local scene = require("scene")    
 local player = require("player")
 
+local flower_short = physics.addObject("flower_short", nil, 100, 100, -50, -50, "static", 1, 0)
+local flower_tall = physics.addObject("flower_tall", nil, 100, 200, -100, -100, "static", 1, 0)
 
 local scenes = {}
 scenes.titleScreen = scene.create("assets/images/title_screen/background.jpg", 0, 0)
@@ -90,6 +85,24 @@ function love.load()
 
     scenes.clearMeadowTown.cameras.main = scenes.clearMeadowTown.createCamera(0, 0, (WIDTH * 0.55), (WIDTH * 0.45) - ((player.width / 2) ), (HEIGHT * 0.55), (HEIGHT * 0.45), 1920, 0, 1080, 0) -- Adds a main Camera to the clearMeadowTown Cameras list
     scenes.clearMeadowTown.activeCamera = scenes.clearMeadowTown.cameras.main   -- Sets the main camera to be the active camera for clearMeadowTown
+
+    -- 40 tiles wide, 10 tiles tall
+    -- 96 x 216 per tile
+    scenes.clearMeadowTown.tilemap = {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    }
+
+    player_house = scenes.clearMeadowTown.createObject("player_house", nil, width, height, x, y, physicsType, density, restitution)
+
 end
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
@@ -130,4 +143,5 @@ function love.draw()
         scenes.clearMeadowTown.draw()                  -- Draws the Clear Meadow Town Scene and all of its Buttons
         player.draw()                                  -- Draws the Player
     end
+    
 end

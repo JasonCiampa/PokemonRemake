@@ -7,6 +7,8 @@ function animator.create(pathToFile, fileType, frameCount, speed)
     -- frameCount: the number of frames to turn into an animation (Number)
     -- speed: multiplier for the fps value (0.5 = half of fps, 1 = same fps, 2 = double the fps, 3 = triple the fps, etc.)
 
+
+    --parallel lists
     local animation = {}
 
     animation.frames = {}                                                                   -- A list to hold all of the animation frames

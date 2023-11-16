@@ -1,5 +1,6 @@
 local button = require("button")
 local camera = require("camera")
+local physics = require("physics")
 
 -- Creates a new Scene
 local sceneHandler = {}
@@ -25,7 +26,7 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     scene.cameras = {}                                          -- Scene Camera list is created
     scene.activeCamera = ""                                     -- Scene Active Camera is set as empty (will store whichever camera is active)
 
-    scene.physicsObjects = {}
+    scene.objects = {}
 
 
     scene.active = false                                        -- Scene is set to be inactive
@@ -41,9 +42,36 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
         return camera.create(x, y, rightShiftCoord, leftShiftCoord, downwardShiftCoord, upwardShiftCoord, rightBoundary, leftBoundary, downwardBoundary, upwardBoundary)
     end
 
-    -- function scene.createObject()
-    --     return physics.
-    -- end
+    -- Creates and returns a new Object
+    function scene.createObject(name, animations, width, height, x, y, physicsType, density, restitution)
+        local object = physics.addObject(name, animations, width, height, x, y, physicsType, density, restitution)
+        table.insert(scene.objects, object)
+        return object
+    end
+
+    -- Creates and returns a new Object
+    function scene.createPhysicsObject(name, animations, width, height, x, y, physicsType, density, restitution)
+        local object = physics.addObject(name, animations, width, height, x, y, physicsType, density, restitution)
+        table.insert(scene.objects, object)
+        return object
+    end
+
+    
+
+    -- Creates the tiles for a given tilemap
+    function scene.createTiles(scene, tilemap)
+        local tilemap = {}
+        tilemap.coordinates = tilemap
+
+        for row = 1, #tilemap.coordinates do
+            for col = 1, #tilemap.coordinates[row] do
+                local tile = tilemap.coordinates[row][col]
+                if(tile ~= 0) then
+                    scene.createObject(tile.name, tile.animations, tile.width, tile.height, tile.x, tile.y, tile.physicsType, tile.density, tile.restitution)
+                end
+            end
+        end
+    end
 
     -- Checks if any of the Buttons in the Scene were clicked on (this function is only called after a left-click has been detected by the love.mousepressed function).
     function scene.mousepressed(mouseX, mouseY)

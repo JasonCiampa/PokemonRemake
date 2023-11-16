@@ -10,7 +10,7 @@ player.animations.frontMoving = animator.create("assets/images/main_character/fr
 player.animations.idle = animator.create("assets/images/main_character/front/idle", ".png", 1, 1)                        -- Creates an idle animation
 player.currentAnimation = player.animations.frontMoving                                                                  -- Stores the current animation
 
-player.movementSpeed = 300                                                                                               -- Sets the Player's movement speed to 300px
+player.movementSpeed = 500                                                                                               -- Sets the Player's movement speed to 300px
 
 -- Moves the Player and updates animates the movements
 function player.move(dt)
@@ -43,15 +43,8 @@ function player.move(dt)
         player.currentAnimation = player.animations.idle                        -- Set the Player's currentAnimation to the idle Animation
         player.animations.idle.update(dt)                                       -- Update the idle Animation
 
-        player.body:setLinearDamping(9)
+        player.body:setLinearDamping(10)
     end
-end
-
-
--- Draws the Player's currentAnimation frame
-function player.draw()
-    player.currentAnimation.draw(player.body:getX(), player.body:getY())
-    barrier.currentAnimation.draw(barrier.body:getX(), barrier.body:getY())
 end
 
 return player
