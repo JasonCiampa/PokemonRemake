@@ -1,12 +1,9 @@
-local WIDTH, HEIGHT = 1920, 1080
+WIDTH, HEIGHT = 1920, 1080  -- Width and Height of the Window
 
 local physics = require("physics")
 
 local scene = require("scene")
 local player = require("player")
-
-local flower_short = physics.addObject("flower_short", nil, 100, 100, -50, -50, "static", 1, 0)
-local flower_tall = physics.addObject("flower_tall", nil, 100, 200, -100, -100, "static", 1, 0)
 
 local scenes = {}
 scenes.titleScreen = scene.create("assets/images/title_screen/background.jpg", 0, 0)

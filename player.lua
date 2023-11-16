@@ -2,7 +2,7 @@ local physics = require("physics")
 local animator = require("animator")
 
 local player = physics.addObject("player", 120, 160, 0, 0, "dynamic", 0, 1)
-local barrier = physics.addObject("barrier", 120, 160, 1920, 160, "static", 1, 1, 0)
+local barrier = physics.addObject("barrier", 120, 160, 1920, 160, "static", 1, 1)
 barrier.animations.idle = animator.create("assets/images/grass/grass", ".png", 1, 1)
 barrier.currentAnimation = barrier.animations.idle
 

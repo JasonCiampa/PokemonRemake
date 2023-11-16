@@ -42,12 +42,12 @@ Tall Flower:
 	   x20 ⬇️    ⬆️ /20
      In-Game Size: 100x200 px
 
-Fence:
+Fence (Vertical):
     Drawing Size: 8x24 px
  	  x20 ⬇️    ⬆️ /20
      In-Game Size: 160x480 px
 
-Fence Front Facing:
+Fence (Horizontal):
     Drawing Size: 24x10 px
  	  x20 ⬇️    ⬆️ /20
      In-Game Size: 480x200 px

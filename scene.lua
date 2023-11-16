@@ -6,7 +6,10 @@ local sceneHandler = {}
 
 -- Creates and returns a new Scene
 function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
+
+    -- SCENE FIELDS --
     local scene = {}
+    scene.active = false                                        -- Scene is set to be inactive
 
     scene.background = love.graphics.newImage(backgroundImage)  -- Scene background image is set
     scene.width = scene.background:getWidth()                   -- Scene width is set to the width of the Scene's background image
@@ -19,17 +22,16 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
         scene.backgroundMusic:setVolume(0.50)                       -- Scene background music volume is set to half
         scene.backgroundMusic:setLooping(true)                      -- Scene background music is set to loop
     end
-    
-    scene.buttons = {}                                          -- Scene Button list is created
 
     scene.cameras = {}                                          -- Scene Camera list is created
     scene.activeCamera = ""                                     -- Scene Active Camera is set as empty (will store whichever camera is active)
 
+    scene.buttons = {}                                          -- Scene Button list is created
+
     scene.objects = {}
-
-
-    scene.active = false                                        -- Scene is set to be inactive
-
+    
+    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    -- SCENE CREATE FUNCTIONS --
 
     -- Creates and returns a new Button
     function scene.createButton(width, height, x, y, backgroundColor, textColor, text)
@@ -56,19 +58,11 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     end
 
     -- Creates the tiles for a given tilemap
-    function scene.createTiles(scene, tilemap)
-        local tilemap = {}
-        tilemap.coordinates = tilemap
+    function scene.createTilemap()
 
-        for row = 1, #tilemap.coordinates do
-            for col = 1, #tilemap.coordinates[row] do
-                local tile = tilemap.coordinates[row][col]
-                if(tile ~= 0) then
-                    scene.createObject(tile.name, tile.animations, tile.width, tile.height, tile.x, tile.y, tile.physicsType, tile.density, tile.restitution)
-                end
-            end
-        end
     end
+
+    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     -- Checks if any of the Buttons in the Scene were clicked on (this function is only called after a left-click has been detected by the love.mousepressed function).
     function scene.mousepressed(mouseX, mouseY)

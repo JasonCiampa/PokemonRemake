@@ -6,13 +6,15 @@ WORLD = love.physics.newWorld(0, 0, true)
 
 -- local physicsHandler = require("physics")
 
-function physicsHandler.addObject(name, animations, width, height, x, y, physicsType, density, restitution)
+function physicsHandler.addObject(name, width, height, x, y, physicsType, density, restitution, animations)
         local object = {}
 
         object.name = name
 
         if (animations ~= nil) then
             object.animations = animations
+        else
+            object.animations = {}
         end
 
         object.currentAnimation = {}
@@ -48,9 +50,6 @@ function physicsHandler.addObject(name, animations, width, height, x, y, physics
         
         return object
 end
-
--- FOR REFERENCE --
-physicsHandler.addObject("player", 120, 160, 0, 0, "dynamic", 1, 1, 0)
 
 
 return physicsHandler
