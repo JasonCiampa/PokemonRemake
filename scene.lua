@@ -1,15 +1,16 @@
-local button = require("button")
-local camera = require("camera")
-local physics = require("physics")
-
 local sceneHandler = {}
 
--- Creates and returns a new Scene
+-- Sets the currently active Scene to newScene
+function sceneHandler.changeTo(newScene)
+    activeScene = newScene
+end
+
+-- Creates and returns a new Scene 
 function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
 
     -- SCENE FIELDS --
+
     local scene = {}
-    scene.active = false                                        -- Scene is set to be inactive
 
     scene.background = love.graphics.newImage(backgroundImage)  -- Scene background image is set
     scene.width = scene.background:getWidth()                   -- Scene width is set to the width of the Scene's background image
@@ -31,6 +32,7 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     scene.objects = {}
     
     ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     -- SCENE CREATE FUNCTIONS --
 
     -- Creates and returns a new Button
@@ -44,8 +46,8 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     end
 
     -- Creates and returns a new Object
-    function scene.createObject(name, animations, width, height, x, y, physicsType, density, restitution)
-        local object = physics.addObject(name, animations, width, height, x, y, physicsType, density, restitution)
+    function scene.createObject(name, width, height, x, y, physicsType, density, restitution, animations)
+        local object = physics.addObject(name, width, height, x, y, physicsType, density, restitution, animations)
         table.insert(scene.objects, object)
         return object
     end
@@ -73,23 +75,30 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
         end
     end
 
-    -- Draws the Scene on the screen.
-    function scene.draw()
-        love.graphics.draw(scene.background, scene.x, scene.y)
-
-        for buttonKey, button in pairs(scene.buttons) do -- Found out how to iterate over key and value pairs from here: https://opensource.com/article/22/11/iterate-over-tables-lua 
-            button:draw()
+    -- Draws all of the Buttons in the Scene's Button list on the screen (and adjusts their color if the Button is being hovered over).
+    function scene.drawButtons()
+        for buttonKey, button in pairs(scene.buttons) do
+            button:draw()                               -- Draws a Button on the screen
+            button:mouseHovering()                      -- Adjust a Button's color if the mouse is hovering over it
         end
     end
 
+    -- Loads the Scene's starting state
+    function scene.load()
+        -- The code for this function should be defined manually for each Scene in their own individual file.
+    end
+
+    -- Updates the Scene's state
+    function scene.update()
+        -- The code for this function should be defined manually for each Scene in their own individual file.
+    end
+
+    -- Draws the Scene's current state on the screen
+    function scene.draw()
+        -- The code for this function should be defined manually for each Scene in their own individual file.
+    end
+
     return scene
-end
-
-
--- Changes from the currentScene to the nextScene (switches their .active values)
-function sceneHandler.change(currentScene, nextScene)
-    currentScene.active = false
-    nextScene.active = true
 end
 
 return sceneHandler

@@ -60,7 +60,7 @@ function cameraHandler.create(x, y, rightShiftCoord, leftShiftCoord, downwardShi
         end
     end
 
-    -- Sets the window to the camera's coordinates
+    -- Sets the window to the camera's coordinates (what the camera sees)
     function camera.draw()
         love.graphics.translate(-camera.x, -camera.y)
     end

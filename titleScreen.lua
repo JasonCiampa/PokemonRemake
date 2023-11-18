@@ -1,22 +1,30 @@
 -- SCENE SETUP --
 
-local clearMeadowTown = scene.create("assets/images/clear_meadow_town/clear_meadow_town_background.png", 0, 0, nil)  -- Creates a clearMeadowTown Scene
+local titleScreen = scene.create("assets/images/title_screen/background.jpg", 0, 0, nil)  -- Creates a titleScreen Scene
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- CAMERA SETUP --
 
-clearMeadowTown.cameras.main = clearMeadowTown.createCamera(0, 0, (WIDTH * 0.55), (WIDTH * 0.45) - ((player.width / 2) ), (HEIGHT * 0.55), (HEIGHT * 0.45), 1920, 0, 1080, 0)   -- Adds a Camera labeled "main" to the clearMeadowTown Cameras table
-clearMeadowTown.activeCamera = clearMeadowTown.cameras.main                                                                                                                     -- Sets the "main" Camera to be the active Camera for clearMeadowTown
+titleScreen.cameras.main = titleScreen.createCamera(0, 0)   -- Adds a Camera labeled "main" to the titleScreen Cameras table
+titleScreen.activeCamera = titleScreen.cameras.main         -- Sets the "main" Camera to be the active Camera for titleScreen
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- BUTTON SETUP --
 
+titleScreen.buttons.play = titleScreen.createButton(WIDTH / 2, 100, (titleScreen.width / 2) - WIDTH / 4, (titleScreen.height / 2) - 50, {0, 0, 1}, {1, 1, 1}, "Play")     -- Adds a play Button to the titleScreen Button list
+
+-- Sets playButton's action to be to change the Scene to clearMeadowTown
+function titleScreen.buttons.play.performAction(button, mouseX, mouseY) 
+    scene.changeTo(clearMeadowTown)                                  -- Changes the Scene from titleScreen to clearMeadowTown
+end
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- OBJECT SETUP --
--- clearMeadowTown.createObject()
+
+-- titleScreen.createObject()
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -24,16 +32,14 @@ clearMeadowTown.activeCamera = clearMeadowTown.cameras.main                     
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-function clearMeadowTown.update(dt)
-    clearMeadowTown.cameras.main.follow(player)
-    player.move(dt)                                         -- Update the Player's movements
-    player.update(dt)
+function titleScreen.update(dt)
+
 end
 
-function clearMeadowTown.draw()
-    clearMeadowTown.activeCamera.draw()
-    love.graphics.draw(clearMeadowTown.background, clearMeadowTown.x, clearMeadowTown.y)
-    player.draw()
+function titleScreen.draw()
+    titleScreen.activeCamera.draw()
+    love.graphics.draw(titleScreen.background, titleScreen.x, titleScreen.y)
+    titleScreen.drawButtons()
 end
 
-return clearMeadowTown
+return titleScreen
