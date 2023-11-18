@@ -66,11 +66,7 @@ function love.load()
     love.window.setMode(WIDTH, HEIGHT)                              -- Sets the window size
 
     activeScene = titleScreen                                       -- Sets the currently active Scene to be the titleScreen
-    -- activeScene.load()
-
-    player.x = (WIDTH / 2) - (player.width / 2)                     -- Sets the Player to be centered on the x-axis
-    player.y = (HEIGHT / 2) - (player.height / 2)                   -- Sets the Player to be centered on the y-axis    
-
+    activeScene.load()
 end
 
 

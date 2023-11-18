@@ -2,7 +2,7 @@ local physicsHandler = {}
 
 love.physics.setMeter(64)
 WORLD = love.physics.newWorld(0, 0, true)
--- WORLD:setCallbacks(beginContact, endContact, preSolve, postSolve)
+WORLD:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
 -- local physicsHandler = require("physics")
 
@@ -13,11 +13,12 @@ function physicsHandler.addObject(name, width, height, x, y, physicsType, densit
 
         if (animations ~= nil) then
             object.animations = animations
+            object.currentAnimation = object.animations[1]
         else
             object.animations = {}
+            object.currentAnimation = {}
         end
 
-        object.currentAnimation = {}
 
         object.width = width
         object.height = height
@@ -27,7 +28,9 @@ function physicsHandler.addObject(name, width, height, x, y, physicsType, densit
         object.density = density
 
         object.body = love.physics.newBody(WORLD, object.x, object.y, physicsType)
-        object.shape = love.physics.newRectangleShape(object.width, object.height)
+        object.body:setFixedRotation(true)
+
+        object.shape = love.physics.newRectangleShape(0, 0, object.width, object.height)
         object.fixture = love.physics.newFixture(object.body, object.shape, object.density)
         object.fixture:setUserData(object.name)
         object.fixture:setRestitution(object.restitution)
@@ -45,12 +48,71 @@ function physicsHandler.addObject(name, width, height, x, y, physicsType, densit
         end
 
         function object.draw()
-            object.currentAnimation.draw(object.x, object.y)
+            -- love.graphics.setColor(1, 1, 1, 0.3)
+            object.currentAnimation.draw(object.x, object.y, object.body:getAngle())
+
+            -- love.graphics.setColor(1, 1, 1, 1)
+            -- love.graphics.rectangle("line", object.body:getX(), object.body:getY(), object.width, object.height)
         end
         
         return object
 end
 
+function beginContact(fixtureA, fixtureB, coll)
+    -- if(fixtureA:getUserData() == "player") then 
+    --     local playerFixture = fixtureA
+    --     player.color = {1, 1, 1, 1}
+
+    --     for i = 1, #activeScene.objects do
+    --         if (activeScene.objects[i].fixture:getUserData() == fixtureB:getUserData()) then
+    --             activeScene.objects[i].color = {1, 1, 1, 1}
+    --         end
+    --     end
+
+    -- elseif (fixtureB:getUserData() == "player") then
+    --     local playerFixture = fixtureB
+    --     player.color = {1, 1, 1, 1}
+
+    --     for i = 1, #activeScene.objects do
+    --         if (activeScene.objects[i].fixture:getUserData() == fixtureA:getUserData()) then
+    --             activeScene.objects[i].color = {1, 1, 1, 1}
+    --         end
+    --     end
+    -- end
+
+end 
+
+function endContact(fixtureA, fixtureB, coll)
+    -- if(fixtureA:getUserData() == "player") then 
+    --     local playerFixture = fixtureA
+    --     player.color = {1, 1, 1, 0.3}
+
+    --     for i = 1, #activeScene.objects do
+    --         if (activeScene.objects[i].fixture:getUserData() == fixtureB:getUserData()) then
+    --             activeScene.objects[i].color = {1, 1, 1, 1}
+    --         end
+    --     end
+
+    -- elseif (fixtureB:getUserData() == "player") then
+    --     local playerFixture = fixtureB
+    --     player.color = {1, 1, 1, 1}
+
+    --     for i = 1, #activeScene.objects do
+    --         if (activeScene.objects[i].fixture:getUserData() == fixtureA:getUserData()) then
+    --             activeScene.objects[i].color = {1, 1, 1, 1}
+    --         end
+    --     end
+    -- end
+
+end
+
+function preSolve(fixtureA, fixtureB, coll)
+    
+end
+
+function postSolve(fixtureA, fixtureB, coll, normalimpulse, tangentimpulse)
+  
+end
 
 return physicsHandler
 

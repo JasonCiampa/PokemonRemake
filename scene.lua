@@ -3,6 +3,7 @@ local sceneHandler = {}
 -- Sets the currently active Scene to newScene
 function sceneHandler.changeTo(newScene)
     activeScene = newScene
+    activeScene.load()
 end
 
 -- Creates and returns a new Scene 
@@ -52,9 +53,9 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
         return object
     end
 
-    -- Creates and returns a new Object
-    function scene.createPhysicsObject(name, animations, width, height, x, y, physicsType, density, restitution)
-        local object = physics.addObject(name, animations, width, height, x, y, physicsType, density, restitution)
+    -- Create a new duplicate Object of a passed in Object
+    function scene.createDuplicateObject(object, newX, newY)
+        local object = physics.addObject(object.name, object.width, object.height, object.x, object.y, object.physicsType, object.density, object.restitution, object.animations)
         table.insert(scene.objects, object)
         return object
     end
@@ -80,6 +81,20 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
         for buttonKey, button in pairs(scene.buttons) do
             button:draw()                               -- Draws a Button on the screen
             button:mouseHovering()                      -- Adjust a Button's color if the mouse is hovering over it
+        end
+    end
+
+    -- Updates all of the Objects in the Scene's Object list on the screen
+    function scene.updateObjects(dt)
+        for i = 1, #scene.objects do
+            scene.objects[i].update(dt)
+        end
+    end
+
+    -- Draws all of the Objects in the Scene's Object list on the screen
+    function scene.drawObjects()
+        for i = 1, #scene.objects do
+            scene.objects[i]:draw()
         end
     end
 

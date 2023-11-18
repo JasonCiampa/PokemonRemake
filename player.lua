@@ -1,13 +1,12 @@
 local player = physics.addObject("player", 120, 160, 0, 0, "dynamic", 0, 1)
-local barrier = physics.addObject("barrier", 120, 160, 1920, 160, "static", 1, 1)
-barrier.animations.idle = animator.create("assets/images/greenery/grass/grass", ".png", 1, 1)
-barrier.currentAnimation = barrier.animations.idle
 
 player.animations.frontMoving = animator.create("assets/images/main_character/front/frontMoving", ".png", 2, 2)          -- Creates a frontMoving animation
 player.animations.idle = animator.create("assets/images/main_character/front/idle", ".png", 1, 1)                        -- Creates an idle animation
 player.currentAnimation = player.animations.frontMoving                                                                  -- Stores the current animation
 
 player.movementSpeed = 500                                                                                               -- Sets the Player's movement speed to 300px
+
+player.color = {1, 1, 1, 0.3}
 
 -- Moves the Player and updates animates the movements
 function player.move(dt)
