@@ -1,12 +1,10 @@
-local player = physics.addObject("player", 120, 160, 0, 0, "dynamic", 0, 1)
+local player = physics.addObject("player", 0, 0, 120, 160, 0, 0, 120, 160, "dynamic", 0, 0, nil)
 
 player.animations.frontMoving = animator.create("assets/images/main_character/front/frontMoving", ".png", 2, 2)          -- Creates a frontMoving animation
 player.animations.idle = animator.create("assets/images/main_character/front/idle", ".png", 1, 1)                        -- Creates an idle animation
 player.currentAnimation = player.animations.frontMoving                                                                  -- Stores the current animation
 
 player.movementSpeed = 500                                                                                               -- Sets the Player's movement speed to 300px
-
-player.color = {1, 1, 1, 0.3}
 
 -- Moves the Player and updates animates the movements
 function player.move(dt)
@@ -42,6 +40,7 @@ function player.move(dt)
         player.body:setLinearDamping(10)
     end
 end
+
 
 return player
 

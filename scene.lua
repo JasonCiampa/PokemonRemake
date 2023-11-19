@@ -47,8 +47,8 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     end
 
     -- Creates and returns a new Object
-    function scene.createObject(name, width, height, x, y, physicsType, density, restitution, animations)
-        local object = physics.addObject(name, width, height, x, y, physicsType, density, restitution, animations)
+    function scene.createObject(name, objectX, objectY, objectWidth, objectHeight, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution, animations)
+        local object = physics.addObject(name, objectX, objectY, objectWidth, objectHeight, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution, animations)
         table.insert(scene.objects, object)
         return object
     end

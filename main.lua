@@ -20,6 +20,8 @@ clearMeadowTown = require("clearMeadowTown")
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
 
+printDebug = false
+
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
 -- GLOBAL FUNCTIONS --
@@ -72,13 +74,19 @@ end
 
 function love.update(dt)
     checkQuit()                                                     -- Checks if the game needs to be quit
-    WORLD:update(dt)                                                -- Updates the physics world
+    world:update(dt)                                                -- Updates the physics world
     activeScene.update(dt)                                          -- Updates the currently active scene
 end
 
 
 function love.draw()
     activeScene.draw()                                              -- Draws the currently active scene
+
+    if (printDebug) then
+        love.graphics.print("player colliding with another fixture", player.centerX, player.centerY)
+        love.graphics.print("Player X: " .. player.topLeftX, player.centerX, player.centerY - 50)
+        love.graphics.print("Player Y: " .. player.topLeftY, player.centerX, player.centerY - 100)
+    end
 end
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
