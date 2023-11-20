@@ -13,14 +13,12 @@ scene = require("scene")
 
 -- Global import for the Player
 player = require("player")     
-
--- Global imports for all of the various Scenes in the game
-titleScreen = require("titleScreen")           
-clearMeadowTown = require("clearMeadowTown")     
+         
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
 
 printDebug = false
+printDebugText = ""
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
@@ -67,8 +65,9 @@ end
 function love.load()
     love.window.setMode(WIDTH, HEIGHT)                              -- Sets the window size
 
+    titleScreen = require("titleScreen")                            -- Imports the titleScreen file
     activeScene = titleScreen                                       -- Sets the currently active Scene to be the titleScreen
-    activeScene.load()
+    activeScene.load()                                              -- Loads the currently active scene
 end
 
 
@@ -82,10 +81,11 @@ end
 function love.draw()
     activeScene.draw()                                              -- Draws the currently active scene
 
+    -- DEBUGGING STATEMENTS --
     if (printDebug) then
-        love.graphics.print("player colliding with another fixture", player.centerX, player.centerY)
-        love.graphics.print("Player X: " .. player.topLeftX, player.centerX, player.centerY - 50)
-        love.graphics.print("Player Y: " .. player.topLeftY, player.centerX, player.centerY - 100)
+        love.graphics.print("Player X: " .. player.topLeftX, player.centerX, player.centerY)
+        love.graphics.print("Player Y: " .. player.topLeftY, player.centerX, player.centerY - 25)
+        love.graphics.print(printDebugText, player.centerX, player.centerY - 50)
     end
 end
 
