@@ -37,7 +37,7 @@ love.physics.setMeter(64)
 world = love.physics.newWorld(0, 0, true)
 world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
-function physicsHandler.addObject(name, objectX, objectY, objectWidth, objectHeight, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution, animations)
+function physicsHandler.addObject(name, objectX, objectY, objectWidth, objectHeight, pathToSpritesheet, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution)
 
     -- OBJECT SETUP --
 
@@ -50,13 +50,9 @@ function physicsHandler.addObject(name, objectX, objectY, objectWidth, objectHei
 
     object.name = name                                                                                                                          -- Stores the name of the Object
 
-    if (animations ~= nil) then                                                                                                                 -- If Animations were passed in...
-        object.animations = animations                                                                                                              -- Store them in the Object's Animations list
-        object.currentAnimation = object.animations[1]                                                                                              -- Set the currently active Animation to be the first Animation in the list
-    else                                                                                                                                        -- If Animations weren't passed in...
-        object.animations = {}                                                                                                                      -- Create an empty list to hold the Object's Animations
-        object.currentAnimation = {}                                                                                                                -- Set the currently active Animation to be an empty table
-    end
+    object.spritesheet = love.graphics.newImage(pathToSpritesheet)                                                                              -- Stores the Object's spritesheet
+    object.animations = {}                                                                                                                      -- A list to hold Animations that will be created for the Object
+    object.currentAnimation = {}                                                                                                                -- Set the currently active Animation to be an empty table
 
     object.width = objectWidth                                                                                                                  -- Sets the Object's width
     object.height = objectHeight                                                                                                                -- Sets the Object's height
@@ -96,8 +92,15 @@ function physicsHandler.addObject(name, objectX, objectY, objectWidth, objectHei
     -- OBJECT FUNCTIONS --
 
     -- Creates and returns a new Animation for the Object
-    function object.createAnimation(pathToFile, fileType, frameCount, speed)
-        return animator.create(pathToFile, fileType, frameCount, speed)  
+    function object.createAnimation(frameCount, row, col, speed)
+        return animator.create(object.spritesheet, frameCount, object.width, object.height, row, col, speed)  
+    end
+
+    -- Sets all of the object's animations to be updatable
+    function object.enableAnimationUpdates()
+        for animations, animation in pairs(object.animations) do
+            animation.updatable = true                                          -- Sets each animation to be updatable
+        end
     end
 
     -- Sets the position for the Object to be drawn in (either above or underneath the player)

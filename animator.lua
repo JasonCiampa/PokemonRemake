@@ -1,16 +1,20 @@
 local animator = {}
 
 -- Creates an Animation
-function animator.create(pathToFile, fileType, frameCount, speed)
-    -- pathToFile: the path to the file (ending just before the image number, for example: take the "assets/images/jump" as the file path out from "assets/images/jump1.png")) (String)
-    -- fileType: the file type of the frames, like ".png" or ".jpg" (String)
+function animator.create(spritesheet, frameCount, width, height, row, col, speed)
+    -- spritesheet: Object's spritesheet
     -- frameCount: the number of frames to turn into an animation (Number)
+    -- width: width of each frame
+    -- height: height of each frame
+    -- row: the row number in the spritesheet for the first frame to animate
+    -- col: the column number in the spritesheet for the first frame to animate
     -- speed: multiplier for the fps value (0.5 = half of fps, 1 = same fps, 2 = double the fps, 3 = triple the fps, etc.)
 
 
     --parallel lists
     local animation = {}
 
+    animation.spritesheet = spritesheet
     animation.frames = {}                                                                   -- A list to hold all of the animation frames
     animation.totalFrames = frameCount                                                      -- Stores the total number of frames in the animation
     animation.speed = speed * animation.totalFrames                                         -- Calculates the animation speed in frames per second
@@ -19,8 +23,11 @@ function animator.create(pathToFile, fileType, frameCount, speed)
     animation.currentFrameTime = 0                                                          -- Stores the amount of time a frame has been active for
     animation.updatable = false                                                             -- Determines if an animation can be played or not (typically starts as true at the start of a love.update() call and is modified to false once the animation.update() function has run once in the love.update() call)
     
-    for i = 1, animation.totalFrames do                                                            -- For every frame...
-        table.insert(animation.frames, love.graphics.newImage(pathToFile.. i .. fileType))              -- Insert the frame into the animation.frames table
+    local y = ((row - 1) * height)
+    local x = ((col - 1) * width)
+    
+    for i = x, (x + ((frameCount * width) - 1)), width do
+        table.insert(animation.frames, love.graphics.newQuad(i, y, width, height, animation.spritesheet:getDimensions()))
     end
 
     -- Updates the Animation state if it's updatable state is true
@@ -43,7 +50,7 @@ function animator.create(pathToFile, fileType, frameCount, speed)
 
     -- Draws the currentFrame for the Animation
     function animation.draw(x, y, r, sx, ox, oy)
-        love.graphics.draw(animation.frames[animation.currentFrameNum], x, y, r, sx, sy, ox, oy)
+        love.graphics.draw(animation.spritesheet, animation.frames[animation.currentFrameNum], x, y, r, sx, sy, ox, oy)
     end
 
     return animation
