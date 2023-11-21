@@ -1,7 +1,8 @@
 -- PLAYER CREATION --
 
-local player = physics.addObject("player", 0, 0, 120, 160, "assets/images/player/player_spritesheet.png", 0, 0, 120, 160, "dynamic", 0, 0.05)
+local player = physics.create("player", 0, 0, 120, 160, 112, "assets/images/player/player_spritesheet.png", 0, 0, 120, 160, "dynamic", 0, 0.05)
 player.movementSpeed = 500                                                                  -- Sets the Player's linear velocity to be 500
+player.splitPoint = 112
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

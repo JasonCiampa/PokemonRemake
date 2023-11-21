@@ -13,26 +13,26 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
 
     local scene = {}
 
-    scene.background = love.graphics.newImage(backgroundImage)  -- Scene background image is set
-    scene.width = scene.background:getWidth()                   -- Scene width is set to the width of the Scene's background image
-    scene.height = scene.background:getHeight()                 -- Scene height is set set to the height of the Scene's background image
-    scene.x = x                                                 -- Scene x-coordinate is set
-    scene.y = y                                                 -- Scene y-coordinate is set
+    scene.background = love.graphics.newImage(backgroundImage)                      -- Stores the Scene's background image
+    scene.width = scene.background:getWidth()                                       -- Stores the width of the Scene's background image
+    scene.height = scene.background:getHeight()                                     -- Stores the height of the Scene's background image
+    scene.x = x                                                                     -- Stores the x-coordinate of the Scene
+    scene.y = y                                                                     -- Stores the y-coordinate of the Scene
 
-    if (backgroundMusic ~= nil) then                            -- If Scene background music was passed into the function...
-        scene.backgroundMusic = backgroundMusic                     -- Scene background music is set
-        scene.backgroundMusic:setVolume(0.50)                       -- Scene background music volume is set to half
-        scene.backgroundMusic:setLooping(true)                      -- Scene background music is set to loop
+    if (backgroundMusic ~= nil) then                                                -- If Scene background music was passed into the function...
+        scene.backgroundMusic = love.audio.newSource(backgroundMusic, "stream")         -- Stores the background music for the Scene
+        scene.backgroundMusic:setVolume(0.50)                                           -- Sets the Scene's background music volume to half
+        scene.backgroundMusic:setLooping(true)                                          -- Sets the Scene's background music to loop
     end
 
-    scene.cameras = {}                                          -- Scene Camera list is created
-    scene.activeCamera = ""                                     -- Scene Active Camera is set as empty (will store whichever camera is active)
+    scene.cameras = {}                                                              -- Stores all of the Scene's Cameras
+    scene.activeCamera = {}                                                         -- Stores the Scene's active Cameras
 
-    scene.buttons = {}                                          -- Scene Button list is created
+    scene.buttons = {}                                                              -- Stores all of the Scene's Buttons
 
-    scene.objects = {}
+    scene.objects = {}                                                              -- Stores all of the Scene's Objects
     
-    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     -- SCENE CREATE FUNCTIONS --
 
@@ -43,12 +43,12 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
 
     -- Creates and returns a new Camera
     function scene.createCamera(x, y, rightShiftCoord, leftShiftCoord, downwardShiftCoord, upwardShiftCoord, rightBoundary, leftBoundary, downwardBoundary, upwardBoundary)
-        return camera.create(x, y, rightShiftCoord, leftShiftCoord, downwardShiftCoord, upwardShiftCoord, rightBoundary, leftBoundary, downwardBoundary, upwardBoundary)
+        return camera.create(x, y, rightShiftCoord, leftShiftCoord, downwardShiftCoord, upwardShiftCoord, rightBoundary, leftBoundary, downwardBoundary, upwardBoundary)           
     end
 
     -- Creates and returns a new Object
     function scene.createObject(name, objectX, objectY, objectWidth, objectHeight, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution, animations)
-        local object = physics.addObject(name, objectX, objectY, objectWidth, objectHeight, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution, animations)
+        local object = physics.create(name, objectX, objectY, objectWidth, objectHeight, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution, animations)
         table.insert(scene.objects, object)
         return object
     end
@@ -64,12 +64,7 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
         duplicateObject.setDrawPosition = object.setDrawPosition
     end
 
-    -- Creates the tiles for a given tilemap
-    function scene.createTilemap()
-
-    end
-
-    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     -- OTHER SCENE FUNCTIONS --
 
@@ -121,5 +116,7 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
 
     return scene
 end
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 return sceneHandler

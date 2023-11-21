@@ -138,8 +138,10 @@ clearMeadowTown.activeCamera = clearMeadowTown.cameras.main                     
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function clearMeadowTown.load()
-    clearMeadowTown.drawUnderneathPlayer = {}
-    clearMeadowTown.drawAbovePlayer = {}
+    clearMeadowTown.drawUnderPlayerTorso = {}
+    clearMeadowTown.drawAbovePlayerTorso = {}
+    clearMeadowTown.drawUnderPlayerHead = {}
+    clearMeadowTown.drawAbovePlayerHead = {}
 
     player.body:setX(2400)     -- Sets the Player to be centered on the x-axis
     player.body:setY(1080)                   -- Sets the Player to be centered on the y-axis  
@@ -154,6 +156,10 @@ end
 -- OBJECT UPDATING --
 
 function clearMeadowTown.update(dt)
+    -- under player bottom
+    -- under player top
+    -- above player top
+    -- above player bottom
     clearMeadowTown.drawUnderneathPlayer = {}
     clearMeadowTown.drawAbovePlayer = {}
 
@@ -171,16 +177,37 @@ end
 function clearMeadowTown.draw()
     clearMeadowTown.activeCamera.draw()
     love.graphics.draw(clearMeadowTown.background, clearMeadowTown.x, clearMeadowTown.y)
-    -- clearMeadowTown.drawObjects()
 
-    for i = 1, #clearMeadowTown.drawUnderneathPlayer do
-        clearMeadowTown.drawUnderneathPlayer[i]:draw()
+    for i = 1, #clearMeadowTown.drawUnderPlayerTorso do
+        clearMeadowTown.drawUnderPlayerTorso[i].draw()
     end
 
+    player.drawBottomHalf()
+
+    for i = 1, #clearMeadowTown.drawAbovePlayerTorso do
+        clearMeadowTown.drawAbovePlayerTorso[i].draw()
+    end
+
+
+
+    for i = 1, #clearMeadowTown.drawUnderPlayerHead do
+        clearMeadowTown.drawUnderPlayerHead[i].draw()
+    end
+
+    player.drawTopHalf()
+
+    for i = 1, #clearMeadowTown.drawAbovePlayerHead do
+        clearMeadowTown.drawAbovePlayerHead[i].draw()
+    end
+
+
+    
+    -- GRASS BOTTOM HALF GOES ABOVE PLAYER BOTTOM HALF
+    -- GRASS TOP HALF GOES UNDERNEATH PLAYER TOP HALF
     player.draw()
 
     for i = 1, #clearMeadowTown.drawAbovePlayer do
-        clearMeadowTown.drawAbovePlayer[i]:draw()
+        clearMeadowTown.drawAbovePlayer[i].draw()
     end
 end
 

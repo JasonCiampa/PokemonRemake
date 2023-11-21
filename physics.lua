@@ -37,7 +37,7 @@ love.physics.setMeter(64)
 world = love.physics.newWorld(0, 0, true)
 world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
-function physicsHandler.addObject(name, objectX, objectY, objectWidth, objectHeight, pathToSpritesheet, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution)
+function physicsHandler.create(name, objectX, objectY, objectWidth, objectHeight, splitPoint, pathToSpritesheet, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution)
 
     -- OBJECT SETUP --
 
@@ -53,6 +53,7 @@ function physicsHandler.addObject(name, objectX, objectY, objectWidth, objectHei
     object.spritesheet = love.graphics.newImage(pathToSpritesheet)                                                                              -- Stores the Object's spritesheet
     object.animations = {}                                                                                                                      -- A list to hold Animations that will be created for the Object
     object.currentAnimation = {}                                                                                                                -- Set the currently active Animation to be an empty table
+    object.splitPoint = splitPoint
 
     object.width = objectWidth                                                                                                                  -- Sets the Object's width
     object.height = objectHeight                                                                                                                -- Sets the Object's height
@@ -93,7 +94,7 @@ function physicsHandler.addObject(name, objectX, objectY, objectWidth, objectHei
 
     -- Creates and returns a new Animation for the Object
     function object.createAnimation(frameCount, row, col, speed)
-        return animator.create(object.spritesheet, frameCount, object.width, object.height, row, col, speed)  
+        return animator.create(object.spritesheet, frameCount, object.width, object.height, row, col, object.splitPoint, speed)  
     end
 
     -- Sets all of the object's animations to be updatable
@@ -117,6 +118,16 @@ function physicsHandler.addObject(name, objectX, objectY, objectWidth, objectHei
         object:setDrawPosition()                                                                                                                -- Updates the Object's draw position (above or below the player)
     end
 
+    -- Draw the state of the top half of the Object
+    function object.drawTopHalf()
+        object.currentAnimation.drawTopHalf(object.topLeftX, object.topLeftY)
+    end
+
+    -- Draw the state of the bottom half of the Object
+    function object.drawBottomHalf()
+        object.currentAnimation.drawBottomHalf(object.topLeftX, object.topLeftY)
+    end
+
     -- Draws the Object's state
     function object.draw()
         love.graphics.setColor(object.color)                                                                                                    -- Sets the drawing color to the Object's color
@@ -129,6 +140,7 @@ function physicsHandler.addObject(name, objectX, objectY, objectWidth, objectHei
         love.graphics.rectangle("line", (object.hitbox.topLeftX), (object.hitbox.topLeftY), object.hitbox.width, object.hitbox.height)          -- Draws a red line around the entire hitbox
         love.graphics.setColor(1, 1, 1, 1)                                                                                                      -- Sets the color back to default white
     end
+
 
     return object
 end
