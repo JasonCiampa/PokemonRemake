@@ -1,4 +1,4 @@
-local player = physics.addObject("player", 0, 0, 120, 160, 0, 0, 120, 160, "dynamic", 0, 0, nil)
+local player = physics.addObject("player", 0, 0, 120, 160, 0, 0, 120, 160, "dynamic", 0, 0.05, nil)
 
 player.animations.frontMoving = animator.create("assets/images/main_character/front/frontMoving", ".png", 2, 2)          -- Creates a frontMoving animation
 player.animations.idle = animator.create("assets/images/main_character/front/idle", ".png", 1, 1)                        -- Creates an idle animation

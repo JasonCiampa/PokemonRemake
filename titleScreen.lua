@@ -17,6 +17,7 @@ titleScreen.buttons.play = titleScreen.createButton(WIDTH / 2, 100, (titleScreen
 
 -- Sets playButton's action to be to change the Scene to clearMeadowTown
 function titleScreen.buttons.play.performAction(button, mouseX, mouseY) 
+    clearMeadowTown = require("clearMeadowTown")   
     scene.changeTo(clearMeadowTown)                                  -- Changes the Scene from titleScreen to clearMeadowTown
 end
 

@@ -54,10 +54,14 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     end
 
     -- Create a new duplicate Object of a passed in Object
-    function scene.createDuplicateObject(object, newX, newY)
-        local object = physics.addObject(object.name, object.width, object.height, object.x, object.y, object.physicsType, object.density, object.restitution, object.animations)
-        table.insert(scene.objects, object)
-        return object
+    function scene.createDuplicateObject(object, newX, newY, newHitboxX, newHitboxY)
+        if (newHitboxX == nil and newHitboxY == nil) then
+            newHitboxX = object.hitbox.topLeftX + (newX - object.topLeftX) 
+            newHitboxY = object.hitbox.topLeftY + (newY - object.topLeftY)
+        end
+
+        local duplicateObject = scene.createObject(object.name, newX, newY, object.width, object.height, newHitboxX, newHitboxY, object.hitbox.width, object.hitbox.height, object.physicsType, object.density, object.restitution, object.animations)
+        duplicateObject.setDrawPosition = object.setDrawPosition
     end
 
     -- Creates the tiles for a given tilemap
@@ -66,6 +70,8 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     end
 
     ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    -- OTHER SCENE FUNCTIONS --
 
     -- Checks if any of the Buttons in the Scene were clicked on (this function is only called after a left-click has been detected by the love.mousepressed function).
     function scene.mousepressed(mouseX, mouseY)
