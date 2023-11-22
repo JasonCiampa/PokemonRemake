@@ -22,12 +22,12 @@ function animator.create(spritesheet, frameCount, width, height, row, col, split
 
     -- ANIMATION FRAME CREATION --
 
-    local y = ((row - 1) * height)                                                                                                                          -- Stores the row number where the Animation frames will start being pulled from
-    local startingPosition = ((col - 1) * width)                                                                                                            -- Stores the column number where the Animation frames will start being pulled from
-    
-    for x = startingPosition, (startingPosition + ((frameCount * width) - 1)), width do                                                                     -- For every Sprite from this starting position until the inputted number of sprites...
-        table.insert(animation.frames_top, love.graphics.newQuad(x, y, width, splitPoint, animation.spritesheet:getDimensions()))                               -- Create the top half of the new frame/quad/sprite and add it to the animation.frames_top list (splitPoint is used as a dividing point between top and bottom half)
-        table.insert(animation.frames_bottom, love.graphics.newQuad(x, y + splitPoint, width, height - splitPoint, animation.spritesheet:getDimensions()))      -- Create the bottom half of the new frame/quad/sprite and add it to the animation.frames_top list (splitPoint is used as a dividing point between top and bottom half)
+    local y = ((row - 1) * height) + row                                                                                                                    -- Stores the row number where the Animation frames will start being pulled from (this value will not change, animations in spritesheets will be contained to one row)
+    local startX = ((col - 1) * width) + col                                                                                                                -- Stores the column number where the Animation frames will start being pulled from
+ 
+    for x = startX, (startX + ((frameCount * width))), width + 1 do                                                                                             -- For every Sprite from this starting position until the inputted number of sprites...
+        table.insert(animation.frames_top, love.graphics.newQuad(x, y, width, splitPoint, animation.spritesheet:getDimensions()))                                -- Create the top half of the new frame/quad/sprite and add it to the animation.frames_top list (splitPoint is used as a dividing point between top and bottom half)
+        table.insert(animation.frames_bottom, love.graphics.newQuad(x, y + splitPoint, width, height - splitPoint, animation.spritesheet:getDimensions()))    -- Create the bottom half of the new frame/quad/sprite and add it to the animation.frames_top list (splitPoint is used as a dividing point between top and bottom half)
     end
 
     ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ function animator.create(spritesheet, frameCount, width, height, row, col, split
     -- ANIMATION DRAW FUNCTIONS --
 
     -- Draw the state of the top half of the Animation
-    function animation.drawTopHalf(x, y, r, sx, sy, ox, oy)
+    function animation.drawTopHalf(animation, x, y, r, sx, sy, ox, oy)
         if (r == nil and sx == nil and sy == nil and ox == nil and oy == nil) then                                                                          -- If no values were passed in after x and y...
             r = 0                                                                                                                                               -- Set those values to their defaults
             sx = 1
@@ -70,7 +70,7 @@ function animator.create(spritesheet, frameCount, width, height, row, col, split
     end
     
     -- Draw the state of the bottom half of the Animation
-    function animation.drawBottomHalf(x, y, r, sx, sy, ox, oy)
+    function animation.drawBottomHalf(animation, x, y, r, sx, sy, ox, oy)
         if (r == nil and sx == nil and sy == nil and ox == nil and oy == nil) then                                                                          -- If no values were passed in after x and y...
             r = 0                                                                                                                                               -- Set those values to their defaults
             sx = 1
@@ -83,7 +83,7 @@ function animator.create(spritesheet, frameCount, width, height, row, col, split
     end
 
     -- Draws the currentFrame for the Animation
-    function animation.draw(x, y, r, sx, sy, ox, oy)
+    function animation.draw(animation, x, y, r, sx, sy, ox, oy)
         if (r == nil and sx == nil and sy == nil and ox == nil and oy == nil) then
             r = 0
             sx = 1

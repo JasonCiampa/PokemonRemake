@@ -47,8 +47,14 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     end
 
     -- Creates and returns a new Object
-    function scene.createObject(name, objectX, objectY, objectWidth, objectHeight, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution, animations)
-        local object = physics.create(name, objectX, objectY, objectWidth, objectHeight, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution, animations)
+    function scene.createObject(name, objectX, objectY, objectWidth, objectHeight, splitPoint, spritesheet, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution)
+        local object = physics.create(name, objectX, objectY, objectWidth, objectHeight, splitPoint, spritesheet, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution)
+        table.insert(scene.objects, object)
+        return object
+    end
+
+
+    function scene.loadObject(object)
         table.insert(scene.objects, object)
         return object
     end
@@ -60,8 +66,11 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
             newHitboxY = object.hitbox.topLeftY + (newY - object.topLeftY)
         end
 
-        local duplicateObject = scene.createObject(object.name, newX, newY, object.width, object.height, newHitboxX, newHitboxY, object.hitbox.width, object.hitbox.height, object.physicsType, object.density, object.restitution, object.animations)
+        local duplicateObject = scene.createObject(object.name, newX, newY, object.width, object.height, object.splitPoint, object.spritesheet, newHitboxX, newHitboxY, object.hitbox.width, object.hitbox.height, object.physicsType, object.density, object.restitution)
         duplicateObject.setDrawPosition = object.setDrawPosition
+        duplicateObject.animations = object.animations
+        duplicateObject.currentAnimation = object.currentAnimation
+        duplicateObject.drawTopHalf = object.drawTopHalf
     end
 
     ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
