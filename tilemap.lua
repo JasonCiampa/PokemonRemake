@@ -1,3 +1,0 @@
-local tilemapMaker = {}
-
-function tilemapMaker

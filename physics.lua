@@ -2,38 +2,21 @@ local physicsHandler = {}
 
 -- CALLBACKS CURRENTLY ARE ONLY BEING USED FOR DEBUGGING --
 function beginContact(a, b, coll)
-    local data = player.fixture:getUserData()
-    if (data == a:getUserData()) then
+    if (a:getUserData() == "player" or b:getUserData()) then
         player.color = {1, 0, 0, 1}
         printDebug = true
-        printDebugText = ("Colliding With: " .. b:getUserData())
-    elseif (data == b:getUserData()) then
-        player.color = {1, 0, 0, 1}
-        printDebug = true
-        printDebugText = ("Colliding With: " .. a:getUserData())
+        printDebugText = (a:getUserData() .. " is colliding with " .. b:getUserData())
     end
 end 
 
-function endContact(fixtureA, fixtureB, coll)
-    for i = 1, #activeScene.objects do
-        local data = activeScene.objects[i].fixture:getUserData()
-        if (data == fixtureA:getUserData() or data == fixtureB:getUserData()) then
-            player.color = {1, 1, 1, 1}
-            printDebug = false
-            printDebugText = ""
-        end
+function endContact(a, b, coll)
+    if (a:getUserData() == "player" or b:getUserData()) then
+        player.color = {1, 1, 1, 1}
+        printDebug = false
+        printDebugText = ""
     end
 end
 
-function preSolve(fixtureA, fixtureB, coll)
-    
-end
-
-function postSolve(fixtureA, fixtureB, coll, normalimpulse, tangentimpulse)
-  
-end
-
-love.physics.setMeter(64)
 world = love.physics.newWorld(0, 0, true)
 world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
@@ -112,13 +95,19 @@ function physicsHandler.create(name, objectX, objectY, objectWidth, objectHeight
     end
 
     -- Updates the Object's state
-    function object.update(dt)
+    function object.customUpdate(object, dt)
+        -- This code should be defined in instances where an object needs further updating that what is provided in the default object.update() method.
+    end
+
+    -- Updates the Object's state
+    function object.update(object, dt)
         object.centerX = object.body:getX()                                                                                                     -- Updates the Object's centerX value to be the value of the body's x-coordinate
         object.centerY = object.body:getY()                                                                                                     -- Updates the Object's centerY value to be the value of the body's y-coordinate
         object.topLeftX = object.centerX - object.halfWidth                                                                                     -- Updates the Object's top left corner value by subtracting away from the center
         object.topLeftY = object.centerY - object.halfHeight                                                                                    -- Updates the Object's top left corner value by subtracting away from the center
         object:setDrawPosition()                                                                                                                -- Updates the Object's draw position (above or below the player)
         object.resetAnimation()
+        object:customUpdate(dt)
     end
 
     -- Draw the state of the top half of the Object

@@ -97,7 +97,7 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     -- Updates all of the Objects in the Scene's Object list on the screen
     function scene.updateObjects(dt)
         for i = 1, #scene.objects do
-            scene.objects[i].update(dt)
+            scene.objects[i]:update(dt)
         end
     end
 

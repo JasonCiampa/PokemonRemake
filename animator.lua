@@ -22,10 +22,21 @@ function animator.create(spritesheet, frameCount, width, height, row, col, split
 
     -- ANIMATION FRAME CREATION --
 
-    local y = ((row - 1) * height) + row                                                                                                                    -- Stores the row number where the Animation frames will start being pulled from (this value will not change, animations in spritesheets will be contained to one row)
-    local startX = ((col - 1) * width) + col                                                                                                                -- Stores the column number where the Animation frames will start being pulled from
+    -- row = 4
+    -- col = 2
+    -- height = 160
+    -- width = 120
+    -- frameCount = 2
+    -- splitPoint = 112
+
+    -- y = 1
+    local y = ((row - 1) * height) + ((row * 2) - 1)                                                                                                                   -- Stores the row number where the Animation frames will start being pulled from (this value will not change, animations in spritesheets will be contained to one row)
+    
+    -- x = 243
+    local startX = ((col - 1) * width) + ((col * 2) - 1)                                                                                                             -- Stores the column number where the Animation frames will start being pulled from
  
-    for x = startX, (startX + ((frameCount * width))), width + 1 do                                                                                             -- For every Sprite from this starting position until the inputted number of sprites...
+    -- startX = 243
+    for x = startX, (startX + ((frameCount * width))), width + 2 do                                                                                             -- For every Sprite from this starting position until the inputted number of sprites...
         table.insert(animation.frames_top, love.graphics.newQuad(x, y, width, splitPoint, animation.spritesheet:getDimensions()))                                -- Create the top half of the new frame/quad/sprite and add it to the animation.frames_top list (splitPoint is used as a dividing point between top and bottom half)
         table.insert(animation.frames_bottom, love.graphics.newQuad(x, y + splitPoint, width, height - splitPoint, animation.spritesheet:getDimensions()))    -- Create the bottom half of the new frame/quad/sprite and add it to the animation.frames_top list (splitPoint is used as a dividing point between top and bottom half)
     end
