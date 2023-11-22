@@ -22,6 +22,7 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
     object.halfHeight = object.height / 2                                                                                                       -- Stores half of the Object's height
     object.x = objectX                                                                                                                          -- Refers to the top left corner of the Object
     object.y = objectY                                                                                                                          -- Refers to the top left corner of the Object
+    object.type = 0                                                                                                                             -- Stores the type of the Object (0 is default, 1 is physicsified)
     object.duplicate = (duplicate or false)                                                                                                     -- Stores whether or not an object is a duplicate
 
     --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -103,29 +104,30 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
 
     -- Draw the state of the top half of the Object
     function object.drawTopHalf(object)
-        object.currentAnimation:drawTopHalf(object.topLeftX, object.topLeftY)
+        object.currentAnimation:drawTopHalf(object.x, object.y)
+
         -- -- DEBUGGING LINES --
         -- love.graphics.setColor(object.color)
-        -- love.graphics.rectangle("line", object.topLeftX, object.topLeftY, object.width, object.height)                                          -- Draws a white line around the entire Object      
+        -- love.graphics.rectangle("line", object.x, object.y, object.width, object.height)                                          -- Draws a white line around the entire Object      
         -- love.graphics.setColor(1, 0, 0, 1)                                                                                                      -- Sets the color back to default white
-        -- love.graphics.rectangle("line", (object.hitbox.topLeftX), (object.hitbox.topLeftY), object.hitbox.width, object.hitbox.height)          -- Draws a red line around the entire hitbox
+        -- love.graphics.rectangle("line", (object.hitbox.x), (object.hitbox.y), object.hitbox.width, object.hitbox.height)          -- Draws a red line around the entire hitbox
         -- love.graphics.setColor(1, 1, 1, 1)                                                                                                      -- Sets the color back to default white
     end
 
     -- Draw the state of the bottom half of the Object
     function object.drawBottomHalf(object)
-        object.currentAnimation:drawBottomHalf(object.topLeftX, object.topLeftY)
+        object.currentAnimation:drawBottomHalf(object.x, object.y)
     end
 
     -- Draws the Object's state
     function object.draw(object)
         love.graphics.setColor(object.color)                                                                                                    -- Sets the drawing color to the Object's color
-        object.currentAnimation.draw(object.topLeftX, object.topLeftY)                                                                          -- Draws the currently active Animation
+        object.currentAnimation.draw(object.x, object.y)                                                                          -- Draws the currently active Animation
         love.graphics.setColor(1, 1, 1, 1)                                                                                                      -- Sets the color back to default white
     end
 
     -- Produces a duplicate of the Object
-    function object.duplicate(object, newX, newY, newHitboxX, newHitboxY)
+    function object.customDuplicate(object, duplicateObject)
         -- This code should be defined manually for each Object since there are certain functions/values that might need to be added to a duplicate manually
     end
 
@@ -139,12 +141,20 @@ end
 -- Creates and returns an Object with the same duplicated fields as another Object (duplicated Object receives a new x and y position and new hitbox position, but doesn't receive functions)
 function objectHandler.duplicate(object, newX, newY, newHitboxX, newHitboxY)
 
-    if (newHitboxX == nil and newHitboxY == nil) then
-        newHitboxX = object.hitbox.topLeftX + (newX - object.topLeftX) 
-        newHitboxY = object.hitbox.topLeftY + (newY - object.topLeftY)
+    local duplicate = objectHandler.create(object.name, newX, newY, object.width, object.height, object.splitPoint, object.spritesheet, true)
+
+    if (object.type == 1) then        
+        if (newHitboxX == nil and newHitboxY == nil) then
+            newHitboxX = object.physics.hitbox.x + (newX - object.x) 
+            newHitboxY = object.physics.hitbox.y + (newY - object.y)
+        end
+
+        duplicate:physicsify(object.physicsType, object.density, object.restitution, newHitboxX, newHitboxY, object.hitbox.width, object.hitbox.height)
     end
 
-    return object.create(object.name, newX, newY, object.width, object.height, object.splitPoint, object.spritesheet, newHitboxX, newHitboxY, object.hitbox.width, object.hitbox.height, object.physicsType, object.density, object.restitution)
+    object:customDuplicate(duplicate)
+
+    return duplicate
 end
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -163,7 +173,7 @@ end
 function endContact(a, b, coll)
     if (a:getUserData() == "player" or b:getUserData()) then
         player.color = {1, 1, 1, 1}
-        printDebug = true
+        printDebug = false
         printDebugText = ""
     end
 end

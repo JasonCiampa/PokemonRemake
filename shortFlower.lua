@@ -24,20 +24,15 @@ function shortFlower.customUpdate(flower, dt)
     flower.currentAnimation.update(dt)                                                 -- Updates the flower's animation so that it keeps changing frames                                                                                                      
 end
 
-function shortFlower.drawTopHalf(object)
-    object.currentAnimation:drawTopHalf(object.topLeftX, object.topLeftY)
-end
+function shortFlower.customDuplicate(object, duplicateObject)
 
-function shortFlower.customDuplicate(object, newX, newY, newHitboxX, newHitboxY)
-    local duplicate = object.duplicate(object, newX, newY, newHitboxX, newHitboxY)
-
-    duplicate.setDrawPosition = object.setDrawPosition
-    duplicate.customUpdate = object.customUpdate
-    duplicate.drawTopHalf = object.drawTopHalf
-    duplicate.animations = object.animations
-    duplicate.currentAnimation = object.animations[math.random(1, #object.animations)]
+    duplicateObject.setDrawPosition = object.setDrawPosition
+    duplicateObject.customUpdate = object.customUpdate
+    duplicateObject.drawTopHalf = object.drawTopHalf
+    duplicateObject.animations = object.animations
+    duplicateObject.currentAnimation = object.animations[math.random(1, #object.animations)]
     
-    return duplicate
+    return duplicateObject
 end
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

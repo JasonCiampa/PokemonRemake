@@ -34,7 +34,7 @@ clearMeadowTown.activeCamera = clearMeadowTown.cameras.main                     
 -- fenceHalfHorizontalNorth.currentAnimation = fenceHalfHorizontalNorth.animations.idle
 
 -- function fenceHalfHorizontalNorth.setDrawPosition(object)
---     if(player.topLeftY < clearMeadowTown.height / 2) then
+--     if(player.y < clearMeadowTown.height / 2) then
 --         table.insert(clearMeadowTown.bottomHalfUnderPlayerTorso, object)
 --         table.insert(clearMeadowTown.topHalfUnderPlayerTorso, object)
 --     else
@@ -99,7 +99,7 @@ local shortFlower = clearMeadowTown.loadObject(require("shortFlower"))
 -- bench1.currentAnimation = bench1.animations.idle
 
 -- function bench1.setDrawPosition(object)
---     if (player.topLeftY > object.topLeftY - object.splitPoint) then
+--     if (player.y > object.y - object.splitPoint) then
 --         table.insert(clearMeadowTown.bottomHalfUnderPlayerTorso, object)
 --         table.insert(clearMeadowTown.topHalfUnderPlayerTorso, object)
 --     else
@@ -145,7 +145,7 @@ clearMeadowTown.tilemap = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0},
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},        
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},        
@@ -170,7 +170,7 @@ for row = 1, #clearMeadowTown.tilemap do
         local tileValue = clearMeadowTown.tilemap[row][col]
         if (tileValue == 1) then
             -- clearMeadowTown.createDuplicateObject(clearMeadowTown.objects[tileValue], ((col - 1) * 60), ((row - 1) * 60))
-            clearMeadowTown.loadObject(clearMeadowTown.objects[tileValue]:duplicate(((col - 1) * 60), ((row - 1) * 60)))
+            clearMeadowTown.loadObject(objectHandler.duplicate(clearMeadowTown.objects[tileValue], ((col - 1) * 60), ((row - 1) * 60)))
         end
     end
 end
@@ -246,6 +246,10 @@ function clearMeadowTown.draw()
     for i = 1, #clearMeadowTown.topHalfAbovePlayer do
         clearMeadowTown.topHalfAbovePlayer[i]:drawTopHalf()
     end
+
+    love.graphics.print("Object Count: " .. #clearMeadowTown.objects, player.x, player.y - 100)
+    love.graphics.print("Bottom Half Under Player Torso: " .. #clearMeadowTown.bottomHalfUnderPlayerTorso, player.x, player.y - 125)
+
 end
 
 return clearMeadowTown
