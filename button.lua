@@ -54,6 +54,10 @@ function buttonHandler.create(width, height, x, y, backgroundColor, textColor, t
         end
     end
 
+    function button.update(button, dt)
+        button:mouseHovering()
+    end
+
     -- Draws the Button on the screen.
     function button.draw(button)
         if (button.active) then

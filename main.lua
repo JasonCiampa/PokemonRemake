@@ -7,8 +7,8 @@ WIDTH, HEIGHT = 1920, 1080  -- Width and Height of the Window
 -- Global imports for different game components, each with helpful functions
 animator = require("animator")  
 button = require("button")     
-camera = require("camera")      
-physics = require("physics")    
+camera = require("camera")  
+objectHandler = require("object")    
 scene = require("scene")        
 
 -- Global import for the Player
@@ -17,7 +17,7 @@ player = require("player")
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
 
-printDebug = false
+printDebug = true
 printDebugText = ""
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
@@ -83,9 +83,9 @@ function love.draw()
 
     -- DEBUGGING STATEMENTS --
     if (printDebug) then
-        love.graphics.print("Player X: " .. player.topLeftX, player.centerX, player.centerY)
-        love.graphics.print("Player Y: " .. player.topLeftY, player.centerX, player.centerY - 25)
-        love.graphics.print(printDebugText, player.centerX, player.centerY - 50)
+        love.graphics.print("Player X: " .. player.x, player.physics.x, player.physics.y)
+        love.graphics.print("Player Y: " .. player.y, player.physics.x, player.physics.y - 25)
+        love.graphics.print(printDebugText, player.physics.x, player.physics.y - 50)
     end
 end
 

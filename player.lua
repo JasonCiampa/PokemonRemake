@@ -1,9 +1,8 @@
 -- PLAYER CREATION --
 
-local player = physics.create("player", 0, 0, 120, 160, 112, love.graphics.newImage("assets/images/player/player_spritesheet.png"), 0, 0, 120, 160, "dynamic", 0, 0.05)
-player.movementSpeed = 500                                                                  -- Sets the Player's linear velocity to be 500
-
-player.splitPoint = 112
+local player = objectHandler.create("player", 0, 0, 120, 160, 112, love.graphics.newImage("assets/images/player/player_spritesheet.png"))      -- Creates the Player Object
+player:physicsify("dynamic", 0, 0.05, 0, 0, 120, 160)                                                                                   -- Turns the Player into a Physics Object
+player.movementSpeed = 500                                                                                                              -- Sets the Player's linear velocity to be 500
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -37,7 +36,7 @@ function player.move(dt)
         player.currentAnimation = player.animations.running_up                                  -- Set the Player's currentAnimation to the running_up Animation
         player.animations.idle_direction = player.animations.idle_up                            -- Set the idle_up as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
-        player.body:setLinearVelocity(player.movementSpeed, -player.movementSpeed)              -- Move the Player upward and rightward by their movement speed * dt
+        player.physics.body:setLinearVelocity(player.movementSpeed, -player.movementSpeed)              -- Move the Player upward and rightward by their movement speed * dt
         return                                                                                  -- Return since only one direction can be moved in at once
     end
 
@@ -46,7 +45,7 @@ function player.move(dt)
         player.currentAnimation = player.animations.running_up                                  -- Set the Player's currentAnimation to the running_up Animation
         player.animations.idle_direction = player.animations.idle_up                            -- Set the idle_up as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
-        player.body:setLinearVelocity(-player.movementSpeed, -player.movementSpeed)             -- Move the Player upward and leftward by their movement speed * dt
+        player.physics.body:setLinearVelocity(-player.movementSpeed, -player.movementSpeed)             -- Move the Player upward and leftward by their movement speed * dt
         return                                                                                  -- Return since only one direction can be moved in at once
     end
 
@@ -55,7 +54,7 @@ function player.move(dt)
         player.currentAnimation = player.animations.running_down                                -- Set the Player's currentAnimation to the running_down Animation
         player.animations.idle_direction = player.animations.idle_down                          -- Set the idle_down as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
-        player.body:setLinearVelocity(player.movementSpeed, player.movementSpeed)              -- Move the Player downward and rightward by their movement speed * dt
+        player.physics.body:setLinearVelocity(player.movementSpeed, player.movementSpeed)              -- Move the Player downward and rightward by their movement speed * dt
         return                                                                                  -- Return since only one direction can be moved in at once
     end
 
@@ -64,7 +63,7 @@ function player.move(dt)
         player.currentAnimation = player.animations.running_down                                -- Set the Player's currentAnimation to the running_down Animation
         player.animations.idle_direction = player.animations.idle_down                          -- Set the idle_down as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
-        player.body:setLinearVelocity(-player.movementSpeed, player.movementSpeed)             -- Move the Player downward and leftward by their movement speed * dt
+        player.physics.body:setLinearVelocity(-player.movementSpeed, player.movementSpeed)             -- Move the Player downward and leftward by their movement speed * dt
         return                                                                                  -- Return since only one direction can be moved in at once  
     end
 
@@ -73,7 +72,7 @@ function player.move(dt)
         player.currentAnimation = player.animations.running_up                                  -- Set the Player's currentAnimation to the running_up Animation
         player.animations.idle_direction = player.animations.idle_up                            -- Set the idle_up as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
-        player.body:setLinearVelocity(0, -player.movementSpeed)                                 -- Move the Player upward by their movement speed * dt
+        player.physics.body:setLinearVelocity(0, -player.movementSpeed)                                 -- Move the Player upward by their movement speed * dt
         return                                                                                  -- Return since only one direction can be moved in at once
     end
 
@@ -82,7 +81,7 @@ function player.move(dt)
         player.currentAnimation = player.animations.running_down                                -- Set the Player's currentAnimation to the running_down Animation
         player.animations.idle_direction = player.animations.idle_down                          -- Set the idle_down as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
-        player.body:setLinearVelocity(0, player.movementSpeed)                                  -- Move the Player downward by their movement speed * dt
+        player.physics.body:setLinearVelocity(0, player.movementSpeed)                                  -- Move the Player downward by their movement speed * dt
         return                                                                                  -- Return since only one direction can be moved in at once
     end
 
@@ -91,7 +90,7 @@ function player.move(dt)
         player.currentAnimation = player.animations.running_left                                -- Set the Player's currentAnimation to the running_left Animation
         player.animations.idle_direction = player.animations.idle_left                          -- Set the idle_left as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
-        player.body:setLinearVelocity(-player.movementSpeed, 0)                                 -- Move the Player leftward by their movement speed * dt
+        player.physics.body:setLinearVelocity(-player.movementSpeed, 0)                                 -- Move the Player leftward by their movement speed * dt
         return                                                                                  -- Return since only one direction can be moved in at once
     end
 
@@ -100,7 +99,7 @@ function player.move(dt)
         player.currentAnimation = player.animations.running_right                               -- Set the Player's currentAnimation to the running_right Animation
         player.animations.idle_direction = player.animations.idle_right                         -- Set the idle_right as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
-        player.body:setLinearVelocity(player.movementSpeed, 0)                                  -- Move the Player rightward by their movement speed * dt
+        player.physics.body:setLinearVelocity(player.movementSpeed, 0)                                  -- Move the Player rightward by their movement speed * dt
         return                                                                                  -- Return since only one direction can be moved in at once
     end
 
@@ -108,12 +107,12 @@ function player.move(dt)
     if(not love.keyboard.isDown("w", "a", "s", "d")) then                                   -- If none of the movement keys are being pressed...
         player.currentAnimation = player.animations.idle_direction                              -- Set the Player's currentAnimation to the idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the idle Animation
-        player.body:setLinearDamping(10)                                                        -- Set the amount of "sliding" the Player does when finishing a movement (deceleration)
+        player.physics.body:setLinearDamping(10)                                                        -- Set the amount of "sliding" the Player does when finishing a movement (deceleration)
     end
 end
 
 function player.customUpdate(player, dt)
-
+    player.move(dt)
 end
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

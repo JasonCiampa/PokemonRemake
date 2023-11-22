@@ -34,43 +34,23 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     
     ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    -- SCENE CREATE FUNCTIONS --
+    -- SCENE LOAD FUNCTIONS --
 
     -- Creates and returns a new Button
-    function scene.createButton(width, height, x, y, backgroundColor, textColor, text)
-        return button.create(width, height, x, y, backgroundColor, textColor, text)
+    function scene.loadButton(button)
+        -- table.insert(scene.buttons, button)      -- Disabled for now, Buttons are put into dictionary format
+        return button
     end
 
     -- Creates and returns a new Camera
-    function scene.createCamera(x, y, rightShiftCoord, leftShiftCoord, downwardShiftCoord, upwardShiftCoord, rightBoundary, leftBoundary, downwardBoundary, upwardBoundary)
-        return camera.create(x, y, rightShiftCoord, leftShiftCoord, downwardShiftCoord, upwardShiftCoord, rightBoundary, leftBoundary, downwardBoundary, upwardBoundary)           
+    function scene.loadCamera(camera)
+        -- table.insert(scene.cameras, camera)      -- Disabled for now, Cameras are put into dictionary format
+        return camera          
     end
-
-    -- Creates and returns a new Object
-    function scene.createObject(name, objectX, objectY, objectWidth, objectHeight, splitPoint, spritesheet, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution)
-        local object = physics.create(name, objectX, objectY, objectWidth, objectHeight, splitPoint, spritesheet, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution)
-        table.insert(scene.objects, object)
-        return object
-    end
-
 
     function scene.loadObject(object)
-        table.insert(scene.objects, object)
+        table.insert(scene.objects, object)         -- Objects are stored in typical list format
         return object
-    end
-
-    -- Create a new duplicate Object of a passed in Object
-    function scene.createDuplicateObject(object, newX, newY, newHitboxX, newHitboxY)
-        if (newHitboxX == nil and newHitboxY == nil) then
-            newHitboxX = object.hitbox.topLeftX + (newX - object.topLeftX) 
-            newHitboxY = object.hitbox.topLeftY + (newY - object.topLeftY)
-        end
-
-        local duplicateObject = scene.createObject(object.name, newX, newY, object.width, object.height, object.splitPoint, object.spritesheet, newHitboxX, newHitboxY, object.hitbox.width, object.hitbox.height, object.physicsType, object.density, object.restitution)
-        duplicateObject.setDrawPosition = object.setDrawPosition
-        duplicateObject.animations = object.animations
-        duplicateObject.currentAnimation = object.currentAnimation
-        duplicateObject.drawTopHalf = object.drawTopHalf
     end
 
     ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -86,11 +66,9 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
         end
     end
 
-    -- Draws all of the Buttons in the Scene's Button list on the screen (and adjusts their color if the Button is being hovered over).
-    function scene.drawButtons()
-        for buttonKey, button in pairs(scene.buttons) do
-            button:draw()                               -- Draws a Button on the screen
-            button:mouseHovering()                      -- Adjust a Button's color if the mouse is hovering over it
+    function scene.updateButtons(dt)
+        for buttonLabel, button in pairs(scene.buttons) do
+            button:update(dt)                               -- Draws a Button on the screen
         end
     end
 
@@ -98,6 +76,17 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     function scene.updateObjects(dt)
         for i = 1, #scene.objects do
             scene.objects[i]:update(dt)
+        end
+    end
+
+    -- Draws all of the Buttons in the Scene's Button list on the screen (and adjusts their color if the Button is being hovered over).
+    function scene.drawButtons()
+        -- for i = 1, #scene.buttons do     -- Disabled for now, Buttons aren't stored in typical list format
+        --     scene.buttons[i]:draw()
+        -- end
+
+        for buttonLabel, button in pairs(scene.buttons) do
+            button:draw()                               -- Draws a Button on the screen
         end
     end
 

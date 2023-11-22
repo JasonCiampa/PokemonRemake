@@ -18,8 +18,8 @@ function cameraHandler.create(x, y, rightShiftCoord, leftShiftCoord, downwardShi
     camera.upwardBoundary = upwardBoundary              -- The y-coordinate that the Camera's y-coordinate can not be smaller than
 
     function camera.follow(object)
-        objectX = object.body:getX()
-        objectY = object.body:getY()
+        objectX = object.physics.x
+        objectY = object.physics.y
 
         -- RIGHT SHIFT HANDLER --
         if (objectX > camera.x + camera.rightShiftCoord) then                      -- If the object crosses the rightShiftCoord...
