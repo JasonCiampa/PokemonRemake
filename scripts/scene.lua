@@ -30,7 +30,8 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
 
     scene.buttons = {}                                                              -- Stores all of the Scene's Buttons
 
-    scene.objects = {}                                                              -- Stores all of the Scene's Objects
+    scene.assets = {}                                                               -- Stores all of the Scene's Assets (Objects that serve as blueprints for duplicates)
+    scene.objects = {}                                                              -- Stores all of the Scene's Objects (Duplicate Objects that are created from asset blueprints)
     
     ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -68,7 +68,7 @@ function animator.create(spritesheet, frameCount, width, height, row, col, split
     -- ANIMATION DRAW FUNCTIONS --
 
     -- Draw the state of the top half of the Animation
-    function animation.drawTopHalf(animation, x, y, r, sx, sy, ox, oy)
+    function animation.drawTop(animation, x, y, r, sx, sy, ox, oy)
         if (r == nil and sx == nil and sy == nil and ox == nil and oy == nil) then                                                                          -- If no values were passed in after x and y...
             r = 0                                                                                                                                               -- Set those values to their defaults
             sx = 1
@@ -81,7 +81,7 @@ function animator.create(spritesheet, frameCount, width, height, row, col, split
     end
     
     -- Draw the state of the bottom half of the Animation
-    function animation.drawBottomHalf(animation, x, y, r, sx, sy, ox, oy)
+    function animation.drawBottom(animation, x, y, r, sx, sy, ox, oy)
         if (r == nil and sx == nil and sy == nil and ox == nil and oy == nil) then                                                                          -- If no values were passed in after x and y...
             r = 0                                                                                                                                               -- Set those values to their defaults
             sx = 1

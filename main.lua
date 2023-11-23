@@ -5,14 +5,14 @@
 WIDTH, HEIGHT = 1920, 1080  -- Width and Height of the Window
 
 -- Global imports for different game components, each with helpful functions
-animator = require("animator")  
-button = require("button")     
-camera = require("camera")  
-objectHandler = require("object")    
-scene = require("scene")        
+animator = require("scripts/animator")  
+button = require("scripts/button")     
+camera = require("scripts/camera")  
+objectHandler = require("scripts/object")    
+scene = require("scripts/scene")        
 
 -- Global import for the Player
-player = require("player")     
+player = require("scripts/objects/player")     
          
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
@@ -65,9 +65,10 @@ end
 function love.load()
     love.window.setMode(WIDTH, HEIGHT)                              -- Sets the window size
 
-    titleScreen = require("titleScreen")                            -- Imports the titleScreen file
+    titleScreen = require("scripts/scenes/titleScreen")             -- Imports the titleScreen file
     activeScene = titleScreen                                       -- Sets the currently active Scene to be the titleScreen
     activeScene.load()                                              -- Loads the currently active scene
+
 end
 
 
@@ -87,6 +88,7 @@ function love.draw()
         love.graphics.print("Player Y: " .. player.y, player.physics.x, player.physics.y - 25)
         love.graphics.print(printDebugText, player.physics.x, player.physics.y - 50)
     end
+
 end
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--

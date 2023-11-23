@@ -1,10 +1,38 @@
 local objectHandler = {}
 
+-- CALLBACKS CURRENTLY ARE ONLY BEING USED FOR DEBUGGING --
+function beginContact(a, b, coll)
+    if (a:getUserData() == "player" or b:getUserData()) then
+        player.color = {1, 0, 0, 1}
+        printDebug = false
+        printDebugText = (a:getUserData() .. " is colliding with " .. b:getUserData())
+    end
+end 
+
+function endContact(a, b, coll)
+    if (a:getUserData() == "player" or b:getUserData()) then
+        player.color = {1, 1, 1, 1}
+        printDebug = false
+        printDebugText = ""
+    end
+end
+
+-- function preSolve(fixtureA, fixtureB, coll)
+    
+-- end
+
+-- function postSolve(fixtureA, fixtureB, coll, normalimpulse, tangentimpulse)
+  
+-- end
+
+-- love.physics.setMeter(64)
+world = love.physics.newWorld(0, 0, true)
+world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- OBJECTHANDLER CREATE FUNCTION --
 
-function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight, splitPoint, spritesheet, duplicate)
+function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight, splitPoint, spritesheet, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution)
 
     -- OBJECT SETUP --
 
@@ -22,36 +50,8 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
     object.halfHeight = object.height / 2                                                                                                       -- Stores half of the Object's height
     object.x = objectX                                                                                                                          -- Refers to the top left corner of the Object
     object.y = objectY                                                                                                                          -- Refers to the top left corner of the Object
-    object.type = 0                                                                                                                             -- Stores the type of the Object (0 is default, 1 is physicsified)
-    object.duplicate = (duplicate or false)                                                                                                     -- Stores whether or not an object is a duplicate
 
-    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    -- OBJECT FUNCTIONS --
-
-    function object.createHitbox(object, hitboxX, hitboxY, hitboxWidth, hitboxHeight)
-        -- USE GIMP XCF OF OBJECT TO DETERMINE HITBOX PROPERTIES
-        object.physics.hitbox = {}                                                                                                                          -- Creates an empty table to store all of the Object's Hitbox information
-        object.physics.hitbox.width = hitboxWidth                                                                                                           -- Stores the hitbox width
-        object.physics.hitbox.height = hitboxHeight                                                                                                         -- Stores the hitbox height
-    
-        object.physics.hitbox.halfWidth = object.physics.hitbox.width  / 2                                                                                          -- Stores half of the hitbox's width
-        object.physics.hitbox.halfHeight = object.physics.hitbox.height / 2                                                                                         -- Stores half of the hitbox's height
-    
-        object.physics.hitbox.x = (hitboxX + (object.physics.hitbox.halfWidth))                                                                -- Refers to the center of the hitbox
-        object.physics.hitbox.y = (hitboxY + (object.physics.hitbox.halfHeight))                                                           -- Refers to the center of the hitbox
-    
-        object.physics.hitbox.offsetX = (object.physics.hitbox.x + object.physics.hitbox.halfWidth) - (object.x + object.halfWidth / 2)                                                       -- Stores how much the hitbox is offset from the center of the physics body
-        object.physics.hitbox.offsetY = (object.physics.hitbox.y + object.physics.hitbox.halfHeight) - (object.y + object.halfHeight)                                                     -- Stores how much the hitbox y-coordinate should be offset based 
-    
-        object.physics.shape = love.physics.newRectangleShape(object.physics.hitbox.offsetX, object.physics.hitbox.offsetY, object.physics.hitbox.width, object.physics.hitbox.height)      -- Creates a new physics shape (hitbox) for the Object
-        object.physics.fixture = love.physics.newFixture(object.physics.body, object.physics.shape, object.physics.density)                                                         -- Creates a new physics fixture for the Object
-        object.physics.fixture:setUserData(object.name)                                                                                                     -- Sets the Object's fixture's userdata to equal to the name of the Object
-        object.physics.fixture:setRestitution(object.physics.restitution)                                                                                           -- Sets the Object's restitution
-    end
-
-    -- Makes an object into a physics object
-    function object.physicsify(object, physicsType, density, restitution, hitboxX, hitboxY, hitboxWidth, hitboxHeight)
+    if (physicsType ~= nil) then
         object.physics = {}
         object.physics.x = object.x + object.halfWidth                                                                                         -- Refers to the center of the Object
         object.physics.y = object.y + object.halfHeight                                                                                        -- Refers to the center of the Object
@@ -60,11 +60,31 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
         object.physics.density = density                                                                                                                    -- Stores the density value for the Object's physics body
         object.physics.restitution = restitution                                                                                                            -- Stores the resitution value for the Object's physics fixture
 
-        object.physics.body = love.physics.newBody(world, object.physics.centerX, object.physics.centerY, object.physics.type)                                      -- Creates a physics body for the Object (center registration point)
+        object.physics.body = love.physics.newBody(world, object.physics.x, object.physics.y, object.physics.type)                                      -- Creates a physics body for the Object (center registration point)
         object.physics.body:setFixedRotation(true)
-       
-        object.physics.hitbox = object:createHitbox(hitboxX, hitboxY, hitboxWidth, hitboxHeight)
+
+        object.physics.hitbox = {}                                                                                                                          -- Creates an empty table to store all of the Object's Hitbox information
+        object.physics.hitbox.width = hitboxWidth                                                                                                           -- Stores the hitbox width
+        object.physics.hitbox.height = hitboxHeight                                                                                                         -- Stores the hitbox height
+
+        object.physics.hitbox.halfWidth = hitboxWidth  / 2                                                                                          -- Stores half of the hitbox's width
+        object.physics.hitbox.halfHeight = hitboxHeight / 2                                                                                         -- Stores half of the hitbox's height
+
+        object.physics.hitbox.x = (hitboxX + (hitboxWidth  / 2))                                                                -- Refers to the center of the hitbox
+        object.physics.hitbox.y = (hitboxY + (hitboxHeight / 2))                                                           -- Refers to the center of the hitbox
+
+        object.physics.hitbox.offsetX = (hitboxX + hitboxWidth  / 2) - (object.x + object.halfWidth)                                                       -- Stores how much the hitbox is offset from the center of the physics body
+        object.physics.hitbox.offsetY = (hitboxY + hitboxHeight / 2) - (object.y + object.halfHeight)                                                     -- Stores how much the hitbox y-coordinate should be offset based 
+
+        object.physics.shape = love.physics.newRectangleShape((hitboxX + hitboxWidth  / 2) - (object.x + object.halfWidth), (hitboxY + hitboxHeight / 2) - (object.y + object.halfHeight), hitboxWidth, hitboxHeight)      -- Creates a new physics shape (hitbox) for the Object
+        object.physics.fixture = love.physics.newFixture(object.physics.body, object.physics.shape, object.physics.density)                                                         -- Creates a new physics fixture for the Object
+        object.physics.fixture:setUserData(object.name)                                                                                                     -- Sets the Object's fixture's userdata to equal to the name of the Object
+        object.physics.fixture:setRestitution(object.physics.restitution)                                                                                           -- Sets the Object's restitution
     end
+
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    -- OBJECT FUNCTIONS --
 
     -- Creates and returns a new Animation for the Object
     function object.createAnimation(frameCount, row, col, speed)
@@ -103,27 +123,18 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
     end
 
     -- Draw the state of the top half of the Object
-    function object.drawTopHalf(object)
-        object.currentAnimation:drawTopHalf(object.x, object.y)
-
-        -- -- DEBUGGING LINES --
-        -- love.graphics.setColor(object.color)
-        -- love.graphics.rectangle("line", object.x, object.y, object.width, object.height)                                          -- Draws a white line around the entire Object      
-        -- love.graphics.setColor(1, 0, 0, 1)                                                                                                      -- Sets the color back to default white
-        -- love.graphics.rectangle("line", (object.hitbox.x), (object.hitbox.y), object.hitbox.width, object.hitbox.height)          -- Draws a red line around the entire hitbox
-        -- love.graphics.setColor(1, 1, 1, 1)                                                                                                      -- Sets the color back to default white
+    function object.drawTop(object)
+        object.currentAnimation:drawTop(object.x, object.y)
     end
 
     -- Draw the state of the bottom half of the Object
-    function object.drawBottomHalf(object)
-        object.currentAnimation:drawBottomHalf(object.x, object.y)
+    function object.drawBottom(object)
+        object.currentAnimation:drawBottom(object.x, object.y)
     end
 
     -- Draws the Object's state
     function object.draw(object)
-        love.graphics.setColor(object.color)                                                                                                    -- Sets the drawing color to the Object's color
         object.currentAnimation.draw(object.x, object.y)                                                                          -- Draws the currently active Animation
-        love.graphics.setColor(1, 1, 1, 1)                                                                                                      -- Sets the color back to default white
     end
 
     -- Produces a duplicate of the Object
@@ -140,45 +151,33 @@ end
 
 -- Creates and returns an Object with the same duplicated fields as another Object (duplicated Object receives a new x and y position and new hitbox position, but doesn't receive functions)
 function objectHandler.duplicate(object, newX, newY, newHitboxX, newHitboxY)
+    local duplicateObject = {}
 
-    local duplicate = objectHandler.create(object.name, newX, newY, object.width, object.height, object.splitPoint, object.spritesheet, true)
-
-    if (object.type == 1) then        
+    if (object.physics ~= nil) then
         if (newHitboxX == nil and newHitboxY == nil) then
             newHitboxX = object.physics.hitbox.x + (newX - object.x) 
             newHitboxY = object.physics.hitbox.y + (newY - object.y)
         end
 
-        duplicate:physicsify(object.physicsType, object.density, object.restitution, newHitboxX, newHitboxY, object.hitbox.width, object.hitbox.height)
+        duplicateObject = objectHandler.create(object.name, newX, newY, object.width, object.height, object.splitPoint, object.spritesheet, newHitboxX, newHitboxY, object.physics.hitbox.width, object.physics.hitbox.height, object.physics.type, object.physics.density, object.physics.restitution)
+
+    else
+        duplicateObject = objectHandler.create(object.name, newX, newY, object.width, object.height, object.splitPoint, object.spritesheet)
     end
 
-    object:customDuplicate(duplicate)
+    duplicateObject.animations = object.animations
+    duplicateObject.currentAnimation = object.currentAnimation
+    duplicateObject.setDrawPosition = object.setDrawPosition
 
-    return duplicate
+    object:customDuplicate(duplicateObject)
+
+    return duplicateObject
 end
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- OBJECT WORLD AND PHYSICS --
 
--- CALLBACKS CURRENTLY ARE ONLY BEING USED FOR DEBUGGING --
-function beginContact(a, b, coll)
-    if (a:getUserData() == "player" or b:getUserData()) then
-        player.color = {1, 0, 0, 1}
-        printDebug = true
-        printDebugText = (a:getUserData() .. " is colliding with " .. b:getUserData())
-    end
-end 
 
-function endContact(a, b, coll)
-    if (a:getUserData() == "player" or b:getUserData()) then
-        player.color = {1, 1, 1, 1}
-        printDebug = false
-        printDebugText = ""
-    end
-end
-
-world = love.physics.newWorld(0, 0, true)
-world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
 return objectHandler

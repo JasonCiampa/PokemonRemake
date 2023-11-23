@@ -1,8 +1,7 @@
 -- PLAYER CREATION --
 
-local player = objectHandler.create("player", 0, 0, 120, 160, 112, love.graphics.newImage("assets/images/player/player_spritesheet.png"))      -- Creates the Player Object
-player:physicsify("dynamic", 0, 0.05, 0, 0, 120, 160)                                                                                   -- Turns the Player into a Physics Object
-player.movementSpeed = 500                                                                                                              -- Sets the Player's linear velocity to be 500
+local player = objectHandler.create("player", 0, 0, 120, 160, 112, love.graphics.newImage("assets/images/player/player_spritesheet.png"), 0, 0, 120, 160, "dynamic", 0, 0.05)      -- Creates the Player Object
+player.movementSpeed = 500                                                                                                                                                         -- Sets the Player's linear velocity to be 500
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
