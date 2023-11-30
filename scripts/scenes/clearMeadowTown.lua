@@ -31,19 +31,13 @@ local tree = clearMeadowTown.loadObject(require("scripts/objects/tree"))
 -- FLOWERS --
 local flower = clearMeadowTown.loadObject(require("scripts/objects/flower"))
 
+-- BENCHES --
 local bench1 = clearMeadowTown.loadObject(require("scripts/objects/bench"))
 local bench2 = clearMeadowTown.loadObject(objectHandler.duplicate(bench1, (bench1.x + bench1.width) + (player.width + 10), bench1.y, (bench1.x + bench1.width) + (player.width + 10), bench1.physics.hitbox.y))
 local bench3 = clearMeadowTown.loadObject(objectHandler.duplicate(bench2, (bench2.x + bench2.width) + (player.width + 10), bench2.y, (bench2.x + bench2.width) + (player.width + 10), bench2.physics.hitbox.y))
 
 -- PLAYER HOUSE --
-local playerHouse = clearMeadowTown.loadObject(objectHandler.create("player_house", 2496, 328, 840, 492, 356, love.graphics.newImage("assets/images/clear_meadow_town/buildings/houses/single_floor/single_floor1.png"), 2534, 684, 742, 1, "static", 1, 0))
-playerHouse.animations.idle = playerHouse.createAnimation(1, 1, 1, 1)
-playerHouse.currentAnimation = playerHouse.animations.idle
-
-function playerHouse.setDrawPosition(object)
-    table.insert(clearMeadowTown.bottomHalfUnderPlayerTorso, object)
-    table.insert(clearMeadowTown.topHalfAbovePlayer, object)
-end
+local playerHouse = clearMeadowTown.loadObject(require("scripts/objects/playerHouse"))
 
 
 -- NEIGHBOR HOUSE --
@@ -79,6 +73,7 @@ clearMeadowTown.tilemap = {
     -- 2 = FENCE HALF HORIZONTAL NORTH
     -- 3 = TREE
     -- 4 = SHORT FLOWER
+    -- 5 = BENCH
 
         {2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 3, 0, 2},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0},
@@ -107,10 +102,10 @@ clearMeadowTown.tilemap = {
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0},
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0},
-        {0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 3, 0, 0},
+        {0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 0, 0, 0},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0},
         {0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -161,6 +156,17 @@ function clearMeadowTown.update(dt)
     player:update(dt)                                       -- Updates the Player's state
 
     clearMeadowTown.updateObjects(dt)
+
+    if (playerHouse.door.open) then
+        playerHouseInterior = require("scripts/scenes/playerHouseInterior")
+        scene.changeTo(playerHouseInterior)
+
+        for i = #clearMeadowTown.objects, 1, -1 do
+            objectHandler.destroy(clearMeadowTown.objects[i])
+            table.remove(clearMeadowTown.objects, i)
+        end
+        clearMeadowTown = {}
+    end
 end
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -199,6 +205,15 @@ function clearMeadowTown.draw()
         clearMeadowTown.topHalfAbovePlayer[i]:drawTop()
     end
 
+    -- for i = 1, #clearMeadowTown.objects do
+    --     love.graphics.setColor(1, 0, 0, 1)
+    --     love.graphics.rectangle("line", clearMeadowTown.objects[i].x, clearMeadowTown.objects[i].y, clearMeadowTown.objects[i].width, clearMeadowTown.objects[i].splitPoint)
+
+    --     love.graphics.setColor(0, 1, 0, 1)
+    --     love.graphics.rectangle("line", clearMeadowTown.objects[i].x, clearMeadowTown.objects[i].y - clearMeadowTown.objects[i].splitPoint, clearMeadowTown.objects[i].width, clearMeadowTown.objects[i].height - clearMeadowTown.objects[i].splitPoint)
+
+    --     love.graphics.setColor(1, 1, 1, 1)
+    -- end
     -- DEBUG LINES: SHOW HITBOXES --
     -- for i = 1, #clearMeadowTown.objects do
     --     if (clearMeadowTown.objects[i].physics ~= nil) then

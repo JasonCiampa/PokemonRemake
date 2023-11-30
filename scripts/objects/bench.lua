@@ -2,8 +2,6 @@
 
 local bench = objectHandler.create("bench", 1050, 150, 360, 192, 72, love.graphics.newImage("assets/images/outdoor_decor/bench/bench1.png"), 1051, 221, 358, 1, "static", 1, 0)        -- Creates the bench object
 
--- local bench2 = clearMeadowTown.createDuplicateObject(bench1, 1526, 74) 
--- local bench3 = clearMeadowTown.createDuplicateObject(bench1, 1961, 74)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- BENCH ANIMATIONS --

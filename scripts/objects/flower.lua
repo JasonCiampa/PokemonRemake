@@ -31,12 +31,17 @@ function flower.draw(object)       -- empty so that this flower isn't drawn beca
 end
 
 function flower.setDrawPosition(object)
-    table.insert(clearMeadowTown.bottomHalfUnderPlayerTorso, object)
-    table.insert(clearMeadowTown.topHalfUnderPlayerTorso, object)
+    if ((player.y + player.height) > (object.y + object.height)) then
+        table.insert(clearMeadowTown.bottomHalfUnderPlayerTorso, object)
+        table.insert(clearMeadowTown.topHalfUnderPlayerTorso, object)
+    else
+        table.insert(clearMeadowTown.bottomHalfAbovePlayer, object)
+        table.insert(clearMeadowTown.topHalfAbovePlayer, object)
+    end
 end
 
-function flower.customUpdate(flower, dt)
-    flower.currentAnimation.update(dt)                                                 -- Updates the flower's animation so that it keeps changing frames                                                                                                      
+function flower.customUpdate(object, dt)
+    object.currentAnimation.update(dt)                                                 -- Updates the flower's animation so that it keeps changing frames                                                                                                      
 end
 
 function flower.customDuplicate(object, duplicateObject)

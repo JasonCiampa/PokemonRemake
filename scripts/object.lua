@@ -1,33 +1,42 @@
 local objectHandler = {}
 
--- CALLBACKS CURRENTLY ARE ONLY BEING USED FOR DEBUGGING --
-function beginContact(a, b, coll)
-    if (a:getUserData() == "player" or b:getUserData()) then
-        player.color = {1, 0, 0, 1}
-        printDebug = false
-        printDebugText = (a:getUserData() .. " is colliding with " .. b:getUserData())
-    end
-end 
 
-function endContact(a, b, coll)
-    if (a:getUserData() == "player" or b:getUserData()) then
-        player.color = {1, 1, 1, 1}
-        printDebug = false
-        printDebugText = ""
-    end
-end
 
--- function preSolve(fixtureA, fixtureB, coll)
-    
+-- function preSolve(a, b, coll)
+--     if (a:getUserData() == "player") then
+--         local object = {}
+--         object.name = b:getUserData()
+--         object.topLeftX, object.topLeftY, object.bottomRightX, object.bottomRightY = b:getBoundingBox()
+
+--         if (object.name == "player_house") then
+--             if ((player.x >= 2820) and (player.x <= 2988) and (player.y > 580)) then
+--                 printDebugText = "IT WORKS!!"
+        
+
+--                 switchToPlayerHouseInterior = true
+
+--                 -- if (love.keyboard.isDown("e")) then
+--                     -- Trigger the animation for the door to open
+--                     -- Trigger the upward animation for the player to walk inside (and maybe a doorknob opening animation at some point)
+
+--                 playerHouseInterior = require("scripts/scenes/playerHouseInterior")
+                
+--                   -- Change the scene from clearmeadowtown to player house interior
+--                 -- end
+--             end
+--         end
+--     end
 -- end
 
--- function postSolve(fixtureA, fixtureB, coll, normalimpulse, tangentimpulse)
+
+-- function postSolve(a, b, coll, normalimpulse, tangentimpulse)
   
 -- end
 
+
+
 -- love.physics.setMeter(64)
-world = love.physics.newWorld(0, 0, true)
-world:setCallbacks(beginContact, endContact, preSolve, postSolve)
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- OBJECTHANDLER CREATE FUNCTION --
@@ -53,6 +62,7 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
 
     if (physicsType ~= nil) then
         object.physics = {}
+
         object.physics.x = object.x + object.halfWidth                                                                                         -- Refers to the center of the Object
         object.physics.y = object.y + object.halfHeight                                                                                        -- Refers to the center of the Object
 
@@ -78,7 +88,7 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
 
         object.physics.shape = love.physics.newRectangleShape((hitboxX + hitboxWidth  / 2) - (object.x + object.halfWidth), (hitboxY + hitboxHeight / 2) - (object.y + object.halfHeight), hitboxWidth, hitboxHeight)      -- Creates a new physics shape (hitbox) for the Object
         object.physics.fixture = love.physics.newFixture(object.physics.body, object.physics.shape, object.physics.density)                                                         -- Creates a new physics fixture for the Object
-        object.physics.fixture:setUserData(object.name)                                                                                                     -- Sets the Object's fixture's userdata to equal to the name of the Object
+        object.physics.fixture:setUserData(object)                                                                                                     -- Sets the Object's fixture's userdata to equal to the name of the Object
         object.physics.fixture:setRestitution(object.physics.restitution)                                                                                           -- Sets the Object's restitution
     end
 
@@ -176,8 +186,35 @@ end
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
--- OBJECT WORLD AND PHYSICS --
+-- OBJECTHANDLER DUPLICATE FUNCTION --
+function objectHandler.destroy(object)
+    if (object.physics ~= nil) then
+        object.physics.fixture:release()
+        object.physics.body:release()
+        object.physics.shape:release()
+    end
 
+    object = {}
+end
+
+
+-- OBJECT WORLD AND PHYSICS --
+function beginContact(a, b, coll)
+    local objectA = a:getUserData()
+    local objectB = b:getUserData()
+    printDebugText = (objectA.name .. " is colliding with " .. objectB.name)
+
+    if (objectA.name == "player" and objectB.name == "player_house") then
+        objectB.door:toggleOpen()
+    end
+end 
+
+function endContact(a, b, coll)
+    printDebugText = ""
+end
+
+world = love.physics.newWorld(0, 0, true)
+world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
 
 return objectHandler

@@ -84,9 +84,9 @@ function love.draw()
 
     -- DEBUGGING STATEMENTS --
     if (printDebug) then
-        love.graphics.print("Player X: " .. player.x, player.physics.x, player.physics.y)
-        love.graphics.print("Player Y: " .. player.y, player.physics.x, player.physics.y - 25)
         love.graphics.print(printDebugText, player.physics.x, player.physics.y - 50)
+        love.graphics.print("Player X: " .. player.x, player.physics.x, player.physics.y + 100)
+        love.graphics.print("Player Y: " .. player.y, player.physics.x, player.physics.y + 125)
     end
 
 end

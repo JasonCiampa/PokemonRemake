@@ -111,6 +111,7 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     -- Draws the Scene's current state on the screen
     function scene.draw()
         -- The code for this function should be defined manually for each Scene in their own individual file.
+        love.graphics.draw(scene.background, scene.x, scene.y)
     end
 
     return scene

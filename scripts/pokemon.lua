@@ -1,3 +1,12 @@
+-- To parse out move data from HTML of pokemondb.net, look for a table with a class called "vitals-table"
+-- Inside of that table is a tbody, and inside of the tbody is the data in the following order:
+-- Type, Category, Power, Accuracy, PP
+
+-- To parse out pokemon data from HTML of pokemondb.net, look for a div tag with a class called "infocard-list infocard-list-pkm-lg"
+-- Inside of that div tag is another div tag with a class called "infocard"
+-- Inside of that second div tag is a span tag with a class called "infocard-lg-img"
+-- Inside of that span tag is an a tag with an href that contains a link to the pokemon
+
 -- A types table to hold all 17 pokemon types
 local types = {}
 
