@@ -1,0 +1,3 @@
+-- in grass's custom update, check for player stepping inside of grass
+-- if player is inside of grass, randomly roll to see if there is a pokemon encounter
+-- if yes, call battle.start between playerPokemon[1] and opposingPokemon (opposingPokemon will be a randomly generated pokemon from the scene's list of valid pokemon)

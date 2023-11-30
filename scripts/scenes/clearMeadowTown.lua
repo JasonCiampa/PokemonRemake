@@ -1,6 +1,6 @@
 -- SCENE SETUP --
 
-local clearMeadowTown = scene.create("assets/images/clear_meadow_town/clear_meadow_town_background.png", 0, 0, nil)  -- Creates a clearMeadowTown Scene
+local clearMeadowTown = scene.create("assets/images/clear_meadow_town/clear_meadow_town_background.jpg", 0, 0, nil)  -- Creates the clearMeadowTown Scene
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
