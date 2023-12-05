@@ -16,8 +16,9 @@ player = require("scripts/objects/player")
          
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
+nextScene = nil      -- Variable to hold a reference to the Scene that should become active next
 
-printDebug = false
+printDebug = true
 printDebugText = ""
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
@@ -73,6 +74,10 @@ end
 
 
 function love.update(dt)
+    if (nextScene ~= nil) then
+        scene.changeTo(nextScene)
+    end
+
     checkQuit()                                                     -- Checks if the game needs to be quit
     world:update(dt)                                                -- Updates the physics world
     activeScene.update(dt)                                          -- Updates the currently active scene

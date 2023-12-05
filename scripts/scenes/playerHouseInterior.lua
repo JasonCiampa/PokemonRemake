@@ -6,6 +6,7 @@ local playerHouseInterior = scene.create("assets/images/clear_meadow_town/buildi
 
 -- CAMERA SETUP --
 
+local mainCamera = camera.create(0, 0, (WIDTH * 0.55), (WIDTH * 0.45) - ((player.width / 2) ), (HEIGHT * 0.55), (HEIGHT * 0.45), 1920, 0, 1080, 0)   -- Adds a Camera labeled "main" to the clearMeadowTown Cameras tabl
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -14,12 +15,17 @@ local playerHouseInterior = scene.create("assets/images/clear_meadow_town/buildi
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function playerHouseInterior.load()
+
+    playerHouseInterior.loadCamera(mainCamera)
+    playerHouseInterior.activeCamera = mainCamera
+
     player.physics.body:setX(855)                   -- Sets the Player to be centered on the x-axis
     player.physics.body:setY(619)                   -- Sets the Player to be centered on the y-axis  
-    player.physics.body:setLinearVelocity(0, 0)
 end
 
 function playerHouseInterior.update(dt)
+    playerHouseInterior.cameras[1].follow(player)
+    
     player:update(dt)
 
     -- playerHouseInterior.updateObjects(dt)

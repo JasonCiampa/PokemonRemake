@@ -115,6 +115,13 @@ function player.customUpdate(player, dt)
     player.move(dt)
 end
 
+-- function player.resetBody(player, dt)
+--     player.physics.body:destroy()
+--     player.physics.body = love.physics.newBody(world, player.physics.x, player.physics.y, player.physics.type)
+--     player.physics.fixture = love.physics.newFixture(player.physics.body, player.physics.shape, player.physics.density)
+--     player.physics.fixture:setUserData(player)
+-- end
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 return player

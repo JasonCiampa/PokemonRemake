@@ -1,7 +1,5 @@
 local objectHandler = {}
 
-
-
 -- function preSolve(a, b, coll)
 --     if (a:getUserData() == "player") then
 --         local object = {}
@@ -189,9 +187,9 @@ end
 -- OBJECTHANDLER DUPLICATE FUNCTION --
 function objectHandler.destroy(object)
     if (object.physics ~= nil) then
-        object.physics.fixture:release()
-        object.physics.body:release()
-        object.physics.shape:release()
+        -- object.physics.fixture:destroy()
+        object.physics.body:destroy()
+        -- object.physics.shape:destroy()
     end
 
     object = {}
@@ -205,7 +203,9 @@ function beginContact(a, b, coll)
     printDebugText = (objectA.name .. " is colliding with " .. objectB.name)
 
     if (objectA.name == "player" and objectB.name == "player_house") then
-        objectB.door:toggleOpen()
+        objectB.door:open()
+    elseif (objectA.name == "player_house" and objectB.name == "player") then
+        objectA.door:open()
     end
 end 
 

@@ -16,21 +16,26 @@ playerHouse.currentAnimation = playerHouse.animations.idle
 playerHouse.door = {}
 playerHouse.door.width = 168
 playerHouse.door.height = 240
-playerHouse.door.x = 2820
-playerHouse.door.y = 580
+playerHouse.door.x = playerHouse.x + 324
+playerHouse.door.y = playerHouse.y + 252
 playerHouse.door.leftEdge = playerHouse.door.x
 playerHouse.door.rightEdge = playerHouse.door.x + 168
-playerHouse.door.open = false
+playerHouse.door.isOpen = false
 
-function playerHouse.door.toggleOpen(door)
+function playerHouse.door.open(door)
     if ((player.x >= door.leftEdge) and (player.x <= door.rightEdge) and (player.y > door.y)) then
-        door.open = true
+        door.isOpen = true
+    else
+        door.isOpen = false
     end
 end
 
-
 function playerHouse.customUpdate(object, dt)
-
+    if (playerHouse.door.isOpen) then
+        playerHouseInterior = require("scripts/scenes/playerHouseInterior")
+        nextScene = playerHouseInterior
+        playerHouse.door.isOpen = false
+    end
 end
 
 function playerHouse.setDrawPosition(object)
