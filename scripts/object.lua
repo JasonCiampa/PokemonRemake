@@ -39,7 +39,7 @@ local objectHandler = {}
 
 -- OBJECTHANDLER CREATE FUNCTION --
 
-function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight, splitPoint, spritesheet, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution)
+function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight, scaleFactor, splitPoint, spritesheet, hitboxX, hitboxY, hitboxWidth, hitboxHeight, physicsType, density, restitution)
 
     -- OBJECT SETUP --
 
@@ -55,6 +55,7 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
     object.height = objectHeight                                                                                                                -- Sets the Object's height
     object.halfWidth = object.width / 2                                                                                                         -- Stores half of the Object's width
     object.halfHeight = object.height / 2                                                                                                       -- Stores half of the Object's height
+    object.scaleFactor = scaleFactor
     object.x = objectX                                                                                                                          -- Refers to the top left corner of the Object
     object.y = objectY                                                                                                                          -- Refers to the top left corner of the Object
 
@@ -94,9 +95,23 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
 
     -- OBJECT FUNCTIONS --
 
+    -- Disables the Objects's physics body
+    function object.disable(object)
+        if (object.physics ~= nil) then
+            object.physics.body:setActive(false)
+        end
+    end
+    
+    -- Enables the Objects's physics body
+    function object.enable(object)
+        if (object.physics ~= nil) then
+            object.physics.body:setActive(true)
+        end
+    end
+
     -- Creates and returns a new Animation for the Object
     function object.createAnimation(frameCount, row, col, speed)
-        return animator.create(object.spritesheet, frameCount, object.width, object.height, row, col, object.splitPoint, speed)  
+        return animator.create(object.spritesheet, frameCount, object.width, object.height, object.scaleFactor, row, col, object.splitPoint, speed)  
     end
 
     -- Sets all of the object's animations to be updatable
@@ -167,10 +182,10 @@ function objectHandler.duplicate(object, newX, newY, newHitboxX, newHitboxY)
             newHitboxY = object.physics.hitbox.y + (newY - object.y)
         end
 
-        duplicateObject = objectHandler.create(object.name, newX, newY, object.width, object.height, object.splitPoint, object.spritesheet, newHitboxX, newHitboxY, object.physics.hitbox.width, object.physics.hitbox.height, object.physics.type, object.physics.density, object.physics.restitution)
+        duplicateObject = objectHandler.create(object.name, newX, newY, object.width, object.height, object.scaleFactor, object.splitPoint, object.spritesheet, newHitboxX, newHitboxY, object.physics.hitbox.width, object.physics.hitbox.height, object.physics.type, object.physics.density, object.physics.restitution)
 
     else
-        duplicateObject = objectHandler.create(object.name, newX, newY, object.width, object.height, object.splitPoint, object.spritesheet)
+        duplicateObject = objectHandler.create(object.name, newX, newY, object.width, object.height, object.scaleFactor, object.splitPoint, object.spritesheet)
     end
 
     duplicateObject.animations = object.animations
@@ -183,18 +198,6 @@ function objectHandler.duplicate(object, newX, newY, newHitboxX, newHitboxY)
 end
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
--- OBJECTHANDLER DUPLICATE FUNCTION --
-function objectHandler.destroy(object)
-    if (object.physics ~= nil) then
-        -- object.physics.fixture:destroy()
-        object.physics.body:destroy()
-        -- object.physics.shape:destroy()
-    end
-
-    object = {}
-end
-
 
 -- OBJECT WORLD AND PHYSICS --
 function beginContact(a, b, coll)

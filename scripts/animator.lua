@@ -1,7 +1,7 @@
 local animator = {}
 
 -- Creates an Animation
-function animator.create(spritesheet, frameCount, width, height, row, col, splitPoint, speed)
+function animator.create(spritesheet, frameCount, width, height, scaleFactor, row, col, splitPoint, speed)
 
     -- ANIMATION FIELDS --
 
@@ -17,17 +17,12 @@ function animator.create(spritesheet, frameCount, width, height, row, col, split
     animation.currentFrameNum = 1                                                                                                                           -- Stores the index of the currentFrame
     animation.currentFrameTime = 0                                                                                                                          -- Stores the amount of time a frame has been active for
     animation.updatable = false                                                                                                                             -- Determines if an Animation can be played or not (typically starts as true at the start of a love.update() call and is modified to false once the animation.update() function has run once in the love.update() call)
-    
+    width = (width / scaleFactor)
+    height = (height / scaleFactor)
+    splitPoint = (splitPoint / scaleFactor)
     ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     -- ANIMATION FRAME CREATION --
-
-    -- row = 4
-    -- col = 2
-    -- height = 160
-    -- width = 120
-    -- frameCount = 2
-    -- splitPoint = 112
 
     -- y = 1
     local y = ((row - 1) * height) + ((row * 2) - 1)                                                                                                                   -- Stores the row number where the Animation frames will start being pulled from (this value will not change, animations in spritesheets will be contained to one row)
@@ -71,8 +66,8 @@ function animator.create(spritesheet, frameCount, width, height, row, col, split
     function animation.drawTop(animation, x, y, r, sx, sy, ox, oy)
         if (r == nil and sx == nil and sy == nil and ox == nil and oy == nil) then                                                                          -- If no values were passed in after x and y...
             r = 0                                                                                                                                               -- Set those values to their defaults
-            sx = 1
-            sy = 1
+            sx = scaleFactor
+            sy = scaleFactor
             ox = 0
             oy = 0
         end
@@ -84,8 +79,8 @@ function animator.create(spritesheet, frameCount, width, height, row, col, split
     function animation.drawBottom(animation, x, y, r, sx, sy, ox, oy)
         if (r == nil and sx == nil and sy == nil and ox == nil and oy == nil) then                                                                          -- If no values were passed in after x and y...
             r = 0                                                                                                                                               -- Set those values to their defaults
-            sx = 1
-            sy = 1
+            sx = scaleFactor
+            sy = scaleFactor
             ox = 0
             oy = 0
         end
@@ -97,8 +92,8 @@ function animator.create(spritesheet, frameCount, width, height, row, col, split
     function animation.draw(animation, x, y, r, sx, sy, ox, oy)
         if (r == nil and sx == nil and sy == nil and ox == nil and oy == nil) then
             r = 0
-            sx = 1
-            sy = 1
+            sx = scaleFactor
+            sy = scaleFactor
             ox = 0
             oy = 0
         end

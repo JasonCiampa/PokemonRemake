@@ -13,7 +13,6 @@ scene = require("scripts/scene")
 
 -- Global import for the Player
 player = require("scripts/objects/player")     
-         
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
 nextScene = nil      -- Variable to hold a reference to the Scene that should become active next
@@ -65,6 +64,7 @@ end
 
 function love.load()
     love.window.setMode(WIDTH, HEIGHT)                              -- Sets the window size
+    love.graphics.setDefaultFilter("nearest", "nearest")
 
     titleScreen = require("scripts/scenes/titleScreen")             -- Imports the titleScreen file
     activeScene = titleScreen                                       -- Sets the currently active Scene to be the titleScreen
@@ -76,6 +76,7 @@ end
 function love.update(dt)
     if (nextScene ~= nil) then
         scene.changeTo(nextScene)
+        nextScene = nil
     end
 
     checkQuit()                                                     -- Checks if the game needs to be quit

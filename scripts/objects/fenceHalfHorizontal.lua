@@ -1,6 +1,6 @@
 -- HORIZONTAL HALF FENCE SETUP --
 
-local fenceHalfHorizontal = objectHandler.create("fence_half_horizontal", 0, 0, 180, 100, 5, love.graphics.newImage("assets/images/outdoor_decor/fence/horizontal/fenceHalfHorizontal1.png"), 0, 50, 180, 1, "static", 1, 0)
+local fenceHalfHorizontal = objectHandler.create("fence_half_horizontal", 0, 0, 180, 100, 10, 5, love.graphics.newImage("assets/images/outdoor_decor/fence/horizontal/fenceHalfHorizontal1.png"), 0, 50, 180, 1, "static", 1, 0)
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

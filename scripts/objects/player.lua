@@ -1,22 +1,23 @@
 -- PLAYER CREATION --
 
-local player = objectHandler.create("player", 0, 0, 120, 160, 112, love.graphics.newImage("assets/images/player/player_spritesheet.png"), 0, 0, 120, 160, "dynamic", 0, 0.05)      -- Creates the Player Object
+local player = objectHandler.create("player", 0, 0, 120, 160, 8, 112, love.graphics.newImage("assets/images/player/player_spritesheet.png"), 0, 0, 120, 160, "dynamic", 0, 0.05)      -- Creates the Player Object
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- PLAYER ANIMATIONS --
 
-player.animations.idle_up = player.createAnimation(2, 1, 1, 2)                              -- Creates an upward-idle animation
-player.animations.running_up = player.createAnimation(2, 1, 3, 2)                           -- Creates an upward-running animation
+player.animations.idle_down = player.createAnimation(2, 1, 1, 2)                            -- Creates an downward-idle animation
+player.animations.running_down = player.createAnimation(2, 1, 3, 2)                         -- Creates an downward-running animation
 
-player.animations.idle_down = player.createAnimation(2, 2, 1, 2)                            -- Creates an downward-idle animation
-player.animations.running_down = player.createAnimation(2, 2, 3, 2)                         -- Creates an downward-running animation
+player.animations.idle_left = player.createAnimation(2, 2, 1, 2)                            -- Creates an leftward-idle animation
+player.animations.running_left = player.createAnimation(2, 2, 3, 2)                         -- Creates an leftward-running animation
 
-player.animations.idle_left = player.createAnimation(2, 3, 1, 2)                            -- Creates an leftward-idle animation
-player.animations.running_left = player.createAnimation(2, 3, 3, 2)                         -- Creates an leftward-running animation
+player.animations.idle_right = player.createAnimation(2, 3, 1, 2)                           -- Creates an rightward-idle animation
+player.animations.running_right = player.createAnimation(2, 3, 3, 2)                        -- Creates an rightward-running animation
 
-player.animations.idle_right = player.createAnimation(2, 4, 1, 2)                           -- Creates an rightward-idle animation
-player.animations.running_right = player.createAnimation(2, 4, 3, 2)                        -- Creates an rightward-running animation
+player.animations.idle_up = player.createAnimation(2, 4, 1, 2)                              -- Creates an upward-idle animation
+player.animations.running_up = player.createAnimation(2, 4, 3, 2)                           -- Creates an upward-running animation
+
 
 player.animations.idle_direction = player.animations.idle_down                              -- Stores the direction for the idle animation                         
 

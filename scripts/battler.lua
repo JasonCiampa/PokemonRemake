@@ -31,7 +31,6 @@ function battler.start(playerPokemon, opposingPokemon)
     -- display a textbox saying that a pokemon has appeared (textBox.setText(),  then textBox.display())
 end
 
-
 function battler.finish()
     -- display a textbox saying how the battle ended (pokemon ran out of health, run away, etc.)
 

@@ -4,7 +4,6 @@ local sceneHandler = {}
 function sceneHandler.changeTo(newScene)
     activeScene.unload()
     activeScene = newScene
-    -- player:resetBody()
     activeScene.load()
 end
 
@@ -32,8 +31,7 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
 
     scene.buttons = {}                                                              -- Stores all of the Scene's Buttons
 
-    scene.assets = {}                                                               -- Stores all of the Scene's Assets (Objects that serve as blueprints for duplicates)
-    scene.objects = {}                                                              -- Stores all of the Scene's Objects (Duplicate Objects that are created from asset blueprints)
+    scene.objects = {}                                                              -- Stores all of the Scene's Objects
 
     ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -119,12 +117,12 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
     -- Unloads the Scene
     function scene.unload()
         for i = #scene.objects, 1, -1 do
-            objectHandler.destroy(scene.objects[i])
+            scene.objects[i]:disable()
             table.remove(scene.objects, i)
         end
 
         for i = #scene.cameras, 1, -1 do
-            table.remove(scene.cameras, i)
+
         end
     end
 
