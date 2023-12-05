@@ -16,6 +16,10 @@ player = require("scripts/objects/player")
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
 nextScene = nil      -- Variable to hold a reference to the Scene that should become active next
+sceneUnloading = false   -- Indicates whether or not a Scene change is in progress
+timer = 0
+screenColor = 1
+
 
 printDebug = true
 printDebugText = ""
@@ -63,7 +67,7 @@ end
 -- LOVE2D CALLBACK FUNCTIONS --
 
 function love.load()
-    love.window.setMode(WIDTH, HEIGHT)                              -- Sets the window size
+    love.window.setMode(1280, 720)                              -- Sets the window size
     love.graphics.setDefaultFilter("nearest", "nearest")
 
     titleScreen = require("scripts/scenes/titleScreen")             -- Imports the titleScreen file
@@ -74,9 +78,49 @@ end
 
 
 function love.update(dt)
-    if (nextScene ~= nil) then
-        scene.changeTo(nextScene)
+
+    if (sceneUnloading) then
+        
+        if (timer > 0) then
+            timer = timer - dt
+            screenColor = screenColor - dt
+            if (screenColor < 0) then
+                screenColor = 0
+            end
+            love.graphics.setColor(screenColor, screenColor, screenColor)
+            return
+        end
+            
+        activeScene.unload()
+        timer = 1
+        sceneUnloading = false
+        sceneLoading = true
+        
+        activeScene = nextScene
+        activeScene.load()
+    end
+
+    if (sceneLoading) then
+        if (timer > 0) then
+            timer = timer - dt
+            screenColor = screenColor + dt
+            if (screenColor > 1) then
+                screenColor = 1
+            end
+            love.graphics.setColor(screenColor, screenColor, screenColor) 
+            return       
+        end
+
+        timer = 0
+        sceneLoading = false
         nextScene = nil
+    end
+
+
+    if (nextScene ~= nil) then
+        sceneUnloading = true
+        timer = 1
+        return
     end
 
     checkQuit()                                                     -- Checks if the game needs to be quit

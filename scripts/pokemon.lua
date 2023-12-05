@@ -43,7 +43,7 @@ types.water = makePokemonType({types.fire, types.ice, types.rock}, {types.dragon
 -- A moves table to hold all of the existing moves in the game
 local moves = {}
 
-local function makePokemonMove(moveType, category, power, accuracy, powerPoints, effectDescription)
+local function makePokemonMove(moveType, category, power, accuracy, powerPoints, animations, effectDescription)
     move = {}
 
     move.type = moveType                        -- Any type (grass, fire, water, etc.)
@@ -51,7 +51,10 @@ local function makePokemonMove(moveType, category, power, accuracy, powerPoints,
     move.power = power                          -- Amount of damage dealt by move (number)
     move.accuracy = accuracy                    -- Accuracy of move (number between 0 and 100)
     move.powerPoints = powerPoints              -- Power Points (PP) of a move (number of times a move can be used without recharge) (5 min, 30 max)
+    move.animations = animations                -- Animations for the move
     move.effectDescription = effectDescription  -- Description of the move's effect (string of text)
+
+    -- MAKE POKEMON MOVE ANIMATIONS BE BASED ON COORDINATES (HAVE THE POKEMON MOVE TO A CERTAIN X AND Y AT CERTAIN KEYFRAMES ???)
 
     return move
 end
@@ -139,6 +142,9 @@ local function makePokemon(name, image, pokeType, pokeType2, level, move1, move2
     -- Pokemon Statuses
     pokemon.isWild = true
 
+    -- Pokemon Animations
+    pokemon.animations = {}
+
     -- Pokemon Image, Size, and Position
     pokemon.image = love.graphics.newImage(image)   -- image variable should be a path to an image
     pokemon.width = image:getWidth()    -- width of pokemon image
@@ -180,7 +186,6 @@ local function makePokemon(name, image, pokeType, pokeType2, level, move1, move2
         pokemon.isWild = false
         playersPokemon.(pokemon.name) = pokemon
     end
-
 
     return pokemon
 end

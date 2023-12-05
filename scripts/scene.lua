@@ -1,10 +1,13 @@
 local sceneHandler = {}
 
 -- Sets the currently active Scene to newScene
-function sceneHandler.changeTo(newScene)
-    activeScene.unload()
-    activeScene = newScene
-    activeScene.load()
+function sceneHandler.change()
+    sceneUnloading = true
+    timer = 2
+end
+
+function sceneHandler.fadeTransition(dt) 
+
 end
 
 -- Creates and returns a new Scene 

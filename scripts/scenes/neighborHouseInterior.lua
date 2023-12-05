@@ -1,6 +1,6 @@
 -- SCENE SETUP --
 
-local neighborHouseInterior = scene.create("assets/images/clear_meadow_town/buildings/houses/single_floor_expanded/interior/single_floor_expanded_interior.jpg", 0, 0, nil)
+local neighborHouseInterior = scene.create("assets/images/clear_meadow_town/buildings/houses/single_floor_long/interior/single_floor_long_interior.jpg", 0, 0, nil)
      
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

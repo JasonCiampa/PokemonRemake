@@ -1,6 +1,6 @@
 -- NEIGHBOR HOUSE CREATION --
 
-local neighborHouse = objectHandler.create("neighbor_house", 1831, 1368, 1680, 492, 12, 355, love.graphics.newImage("assets/images/clear_meadow_town/buildings/houses/single_floor_expanded/exterior/single_floor_expanded_exterior.png"), 1868, 1723, 1606, 1, "static", 1, 0)
+local neighborHouse = objectHandler.create("neighbor_house", 1831, 1368, 1680, 492, 12, 355, love.graphics.newImage("assets/images/clear_meadow_town/buildings/houses/single_floor_long/exterior/single_floor_long_exterior.png"), 1868, 1723, 1606, 1, "static", 1, 0)
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
