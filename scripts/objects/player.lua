@@ -18,8 +18,7 @@ player.animations.running_right = player.createAnimation(2, 3, 3, 2)            
 player.animations.idle_up = player.createAnimation(2, 4, 1, 2)                              -- Creates an upward-idle animation
 player.animations.running_up = player.createAnimation(2, 4, 3, 2)                           -- Creates an upward-running animation
 
-
-player.animations.idle_direction = player.animations.idle_down                              -- Stores the direction for the idle animation                         
+player.animations.idle_direction = player.animations.idle_down                              -- Stores the direction for the idle animation
 
 player.currentAnimation = player.animations.idle_down                                       -- Stores the current animation
 
