@@ -1,6 +1,6 @@
 -- FLOWER CREATION --
 
-local flower = objectHandler.create("flower", 0, 0, 60, 60, 12, 48, love.graphics.newImage("assets/images/outdoor_decor/greenery/flowers/flower_spritesheet.png"))        -- Creates the flower object
+local flower = objectHandler.create("flower", 0, 0, 60, 60, 12, 48, love.graphics.newImage("assets/images/outdoor_decor/greenery/flowers/flowers_spritesheet.png"))        -- Creates the flower object
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

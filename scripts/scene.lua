@@ -3,7 +3,7 @@ local sceneHandler = {}
 -- Sets the currently active Scene to newScene
 function sceneHandler.change()
     sceneUnloading = true
-    timer = 2
+    timer = 1
 end
 
 function sceneHandler.fadeTransition(dt) 

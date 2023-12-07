@@ -95,10 +95,11 @@ function love.update(dt)
         activeScene.unload()
         timer = 1
         sceneUnloading = false
-        sceneLoading = true
-        
+
         activeScene = nextScene
         activeScene.load()
+        activeScene.update(dt)                                          -- Updates the currently active scene
+        sceneLoading = true
     end
 
     if (sceneLoading) then
@@ -125,7 +126,6 @@ function love.update(dt)
         timer = 1
         return
     end
-
 end
 
 

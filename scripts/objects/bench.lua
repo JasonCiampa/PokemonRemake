@@ -1,6 +1,6 @@
 -- BENCH CREATION --
 
-local bench = objectHandler.create("bench", 1050, 150, 360, 192, 12, 72, love.graphics.newImage("assets/images/outdoor_decor/bench/bench1.png"), 1051, 221, 358, 1, "static", 1, 0)        -- Creates the bench object
+local bench = objectHandler.create("bench", 1050, 150, 360, 192, 12, 72, love.graphics.newImage("assets/images/outdoor_decor/bench/bench.png"), 1051, 221, 358, 1, "static", 1, 0)        -- Creates the bench object
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
