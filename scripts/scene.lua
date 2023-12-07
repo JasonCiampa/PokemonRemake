@@ -42,7 +42,7 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
 
     -- Creates and returns a new Button
     function scene.loadButton(button)
-        -- table.insert(scene.buttons, button)      -- Disabled for now, Buttons are put into dictionary format
+        table.insert(scene.buttons, button)      -- Disabled for now, Buttons are put into dictionary format
         return button
     end
 
@@ -125,7 +125,12 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
         end
 
         for i = #scene.cameras, 1, -1 do
+            table.remove(scene.cameras, i)
+        end
 
+        for i = #scene.buttons, 1, -1 do
+            scene.buttons[i].active = false
+            table.remove(scene.buttons, i)
         end
     end
 

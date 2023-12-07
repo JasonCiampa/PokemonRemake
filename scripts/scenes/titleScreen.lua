@@ -6,20 +6,13 @@ local titleScreen = scene.create("assets/images/title_screen/background.jpg", 0,
 
 -- CAMERA SETUP --
 
-titleScreen.cameras.main = titleScreen.loadCamera(camera.create(0, 0))   -- Adds a Camera labeled "main" to the titleScreen Cameras table
-titleScreen.activeCamera = titleScreen.cameras.main                      -- Sets the "main" Camera to be the active Camera for titleScreen
+local mainCamera
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- BUTTON SETUP --
 
-titleScreen.buttons.play = titleScreen.loadButton(button.create(WIDTH / 2, 100, (titleScreen.width / 2) - WIDTH / 4, (titleScreen.height / 2) - 50, {0, 0, 1}, {1, 1, 1}, "Play"))     -- Adds a play Button to the titleScreen Button list
-
--- Sets playButton's action to be to change the Scene to clearMeadowTown
-function titleScreen.buttons.play.performAction(button, mouseX, mouseY) 
-    clearMeadowTown = require("scripts/scenes/clearMeadowTown")   
-    nextScene = clearMeadowTown                                  -- Changes the Scene from titleScreen to clearMeadowTown
-end
+local playButton
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -34,7 +27,16 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function titleScreen.load()
-    
+    mainCamera = titleScreen.loadCamera(camera.create(0, 0))   -- Adds a Camera labeled "main" to the titleScreen Cameras table)
+    titleScreen.activeCamera = mainCamera
+        
+    playButton = titleScreen.loadButton(button.create(WIDTH / 2, 100, (titleScreen.width / 2) - WIDTH / 4, (titleScreen.height / 2) - 50, {0, 0, 1}, {1, 1, 1}, "Play"))     -- Adds a play Button to the titleScreen Button list
+
+    -- Sets playButton's action to be to change the Scene to clearMeadowTown
+    function playButton.performAction(button, mouseX, mouseY) 
+        clearMeadowTown = require("scripts/scenes/clearMeadowTown")   
+        nextScene = clearMeadowTown                                  -- Changes the Scene from titleScreen to clearMeadowTown
+    end
 end
 
 function titleScreen.update(dt)

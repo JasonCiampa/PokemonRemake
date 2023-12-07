@@ -9,10 +9,7 @@ animator = require("scripts/animator")
 button = require("scripts/button")     
 camera = require("scripts/camera")  
 objectHandler = require("scripts/object")    
-scene = require("scripts/scene")        
-
--- Global import for the Player
-player = require("scripts/objects/player")     
+scene = require("scripts/scene")          
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
 nextScene = nil      -- Variable to hold a reference to the Scene that should become active next
@@ -20,8 +17,7 @@ sceneUnloading = false   -- Indicates whether or not a Scene change is in progre
 timer = 0
 screenColor = 1
 
-
-printDebug = true
+printDebug = false
 printDebugText = ""
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
@@ -67,17 +63,22 @@ end
 -- LOVE2D CALLBACK FUNCTIONS --
 
 function love.load()
-    love.window.setMode(1280, 720)                              -- Sets the window size
+    love.window.setMode(WIDTH, HEIGHT)                              -- Sets the window size
     love.graphics.setDefaultFilter("nearest", "nearest")
+
+    -- Global import for the Player
+    player = require("scripts/objects/player")   
 
     titleScreen = require("scripts/scenes/titleScreen")             -- Imports the titleScreen file
     activeScene = titleScreen                                       -- Sets the currently active Scene to be the titleScreen
     activeScene.load()                                              -- Loads the currently active scene
-
 end
 
 
 function love.update(dt)
+    checkQuit()                                                     -- Checks if the game needs to be quit
+    world:update(dt)                                                -- Updates the physics world
+    activeScene.update(dt)                                          -- Updates the currently active scene
 
     if (sceneUnloading) then
         
@@ -87,7 +88,7 @@ function love.update(dt)
             if (screenColor < 0) then
                 screenColor = 0
             end
-            love.graphics.setColor(screenColor, screenColor, screenColor)
+            love.graphics.setColor(screenColor, screenColor, screenColor) 
             return
         end
             
@@ -114,6 +115,8 @@ function love.update(dt)
         timer = 0
         sceneLoading = false
         nextScene = nil
+
+        return
     end
 
 
@@ -123,13 +126,11 @@ function love.update(dt)
         return
     end
 
-    checkQuit()                                                     -- Checks if the game needs to be quit
-    world:update(dt)                                                -- Updates the physics world
-    activeScene.update(dt)                                          -- Updates the currently active scene
 end
 
 
 function love.draw()
+    love.graphics.setColor(screenColor, screenColor, screenColor)
     activeScene.draw()                                              -- Draws the currently active scene
 
     -- DEBUGGING STATEMENTS --

@@ -6,8 +6,8 @@ local clearMeadowTown = scene.create("assets/images/clear_meadow_town/clear_mead
 
 -- CAMERA SETUP --
 
-local mainCamera = clearMeadowTown.loadCamera(camera.create(0, 0, (WIDTH * 0.55), (WIDTH * 0.45) - ((player.width / 2) ), (HEIGHT * 0.55), (HEIGHT * 0.45), 1920, 0, 1080, 0))   -- Adds a Camera labeled "main" to the clearMeadowTown Cameras tabl
-clearMeadowTown.activeCamera = mainCamera
+local mainCamera
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- OBJECT SETUP --
@@ -27,6 +27,9 @@ local assets = {
 -- OBJECT LOADING --
 
 function clearMeadowTown.load()
+    mainCamera = clearMeadowTown.loadCamera(camera.create(0, 0, (WIDTH * 0.55), (WIDTH * 0.45) - ((player.width / 2) ), (HEIGHT * 0.55), (HEIGHT * 0.45), 1920, 0, 1080, 0))   -- Adds a Camera labeled "main" to the clearMeadowTown Cameras tabl
+    clearMeadowTown.activeCamera = mainCamera
+
     player.physics.body:setX(2400)                   -- Sets the Player to be centered on the x-axis
     player.physics.body:setY(1080)                   -- Sets the Player to be centered on the y-axis  
 
