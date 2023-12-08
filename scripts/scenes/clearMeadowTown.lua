@@ -13,15 +13,31 @@ local mainCamera
 -- OBJECT SETUP --
 
 local assets = {
-    require("scripts/objects/fenceHalfVertical"),
-    require("scripts/objects/fenceHalfHorizontal"),
-    require("scripts/objects/tree"),
-    require("scripts/objects/flower"),
-    require("scripts/objects/bench"),
+    require("scripts/objects/outdoor_decor/fenceHalfVertical"),
+    require("scripts/objects/outdoor_decor/fenceHalfHorizontal"),
+    require("scripts/objects/outdoor_decor/tree"),
+    require("scripts/objects/outdoor_decor/flower"),
+    require("scripts/objects/outdoor_decor/bench"),
     require("scripts/objects/playerHouse"),
     require("scripts/objects/neighborHouse"),
     require("scripts/objects/laboratory")
 }
+
+local playerHouse
+local neighborHouse
+local bench1
+local bench2
+local bench3
+local laboratory
+
+clearMeadowTown.bottomHalfUnderPlayerTorso = {}
+clearMeadowTown.topHalfUnderPlayerTorso = {}
+
+clearMeadowTown.bottomHalfUnderPlayerHead = {}
+clearMeadowTown.topHalfUnderPlayerHead = {}
+
+clearMeadowTown.bottomHalfAbovePlayer = {}
+clearMeadowTown.topHalfAbovePlayer = {}
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -31,11 +47,16 @@ function clearMeadowTown.load()
     mainCamera = clearMeadowTown.loadCamera(camera.create(0, 0, (WIDTH * 0.55), (WIDTH * 0.45) - ((player.width / 2) ), (HEIGHT * 0.55), (HEIGHT * 0.45), 1920, 0, 1080, 0))   -- Adds a Camera labeled "main" to the clearMeadowTown Cameras tabl
     clearMeadowTown.activeCamera = mainCamera
 
-    player.physics.body:setX(2400)                   -- Sets the Player to be centered on the x-axis
-    player.physics.body:setY(1080)                   -- Sets the Player to be centered on the y-axis  
-
-    local bench1 = clearMeadowTown.loadObject(objectHandler.duplicate(assets[5], (assets[5].x + assets[5].width) + (player.width + 10), assets[5].y, (assets[5].x + assets[5].width) + (player.width + 10), assets[5].physics.hitbox.y))
-    local bench2 = clearMeadowTown.loadObject(objectHandler.duplicate(bench1, (bench1.x + bench1.width) + (player.width + 10), bench1.y, (bench1.x + bench1.width) + (player.width + 10), bench1.physics.hitbox.y))
+    if (previousScene == playerHouseInterior) then
+        player.physics.body:setX(2905)                   -- Sets the Player to be centered on the x-axis
+        player.physics.body:setY(800)                   -- Sets the Player to be centered on the y-axis  
+    elseif (previousScene == neighborHouseInterior) then
+        player.physics.body:setX(2325)                   -- Sets the Player to be centered on the x-axis
+        player.physics.body:setY(1800)                   -- Sets the Player to be centered on the y-axis  
+    elseif (previousScene == laboratoryInterior) then
+        player.physics.body:setX(620)                   -- Sets the Player to be centered on the x-axis
+        player.physics.body:setY(910)                   -- Sets the Player to be centered on the y-axis  
+    end
 
     for row = 1, #clearMeadowTown.tilemap do
         for col = 1, #clearMeadowTown.tilemap[row] do
@@ -46,19 +67,12 @@ function clearMeadowTown.load()
         end
     end
 
-    for i = 1, #assets do
-        assets[i]:enable()
-        clearMeadowTown.loadObject(assets[i])
-    end
-
-    clearMeadowTown.bottomHalfUnderPlayerTorso = {}
-    clearMeadowTown.topHalfUnderPlayerTorso = {}
-    
-    clearMeadowTown.bottomHalfUnderPlayerHead = {}
-    clearMeadowTown.topHalfUnderPlayerHead = {}
-    
-    clearMeadowTown.bottomHalfAbovePlayer = {}
-    clearMeadowTown.topHalfAbovePlayer = {}
+    bench1 = clearMeadowTown.loadObject(objectHandler.duplicate(assets[5], 1080, 150, 1050, 221))
+    bench2 = clearMeadowTown.loadObject(objectHandler.duplicate(bench1, (bench1.x + bench1.width) + (player.width + 10), bench1.y, (bench1.x + bench1.width) + (player.width + 10), bench1.physics.hitbox.y))
+    bench3 = clearMeadowTown.loadObject(objectHandler.duplicate(bench2, (bench2.x + bench2.width) + (player.width + 10), bench2.y, (bench2.x + bench2.width) + (player.width + 10), bench2.physics.hitbox.y))
+    playerHouse = clearMeadowTown.loadObject(objectHandler.duplicate(assets[6], 2496, 328, 2532, 684))
+    neighborHouse = clearMeadowTown.loadObject(objectHandler.duplicate(assets[7], 1800, 1368, 1836, 1723))
+    laboratory = clearMeadowTown.loadObject(objectHandler.duplicate(assets[8], -649, -38, -648, -38))
 end
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -66,6 +80,11 @@ end
 -- OBJECT UPDATING --
 
 function clearMeadowTown.update(dt)
+    if (player.y > 2160) then
+        previousScene = clearMeadowTown
+        nextScene = titleScreen
+    end
+
     clearMeadowTown.activeCamera.follow(player)
 
     clearMeadowTown.bottomHalfUnderPlayerTorso = {}

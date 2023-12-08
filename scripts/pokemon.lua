@@ -7,6 +7,8 @@
 -- Inside of that second div tag is a span tag with a class called "infocard-lg-img"
 -- Inside of that span tag is an a tag with an href that contains a link to the pokemon
 
+-- For Cameron - pokemon immunities
+
 -- A types table to hold all 17 pokemon types
 local types = {}
 

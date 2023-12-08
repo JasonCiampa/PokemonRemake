@@ -122,7 +122,7 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
 
     -- Draws the Object's state
     function object.draw(object)
-        object.currentAnimation.draw(object.x, object.y)                                                                          -- Draws the currently active Animation
+        object.currentAnimation:draw(object.x, object.y)                                                                          -- Draws the currently active Animation
     end
 
     -- Produces a duplicate of the Object
@@ -156,6 +156,7 @@ function objectHandler.duplicate(object, newX, newY, newHitboxX, newHitboxY)
     duplicateObject.animations = object.animations
     duplicateObject.currentAnimation = object.currentAnimation
     duplicateObject.setDrawPosition = object.setDrawPosition
+    duplicateObject.customUpdate = object.customUpdate
 
     object:customDuplicate(duplicateObject)
 
@@ -169,12 +170,6 @@ function beginContact(a, b, coll)
     local objectA = a:getUserData()
     local objectB = b:getUserData()
     printDebugText = (objectA.name .. " is colliding with " .. objectB.name)
-
-    if (objectA.name == "player" and objectB.name == "player_house") then
-        objectB.door:open()
-    elseif (objectA.name == "player_house" and objectB.name == "player") then
-        objectA.door:open()
-    end
 end 
 
 function endContact(a, b, coll)

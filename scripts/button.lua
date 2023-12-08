@@ -20,7 +20,7 @@ function buttonHandler.create(width, height, x, y, backgroundColor, textColor, t
 
     button.text = text
 
-    button.sfxClick = love.audio.newSource("assets/audio/sfx/button_click.mp3", "static")       -- Button click sound effect is set     (Minecraft Button Click Sfx https://www.youtube.com/watch?v=rG-856TmuzA)
+    button.sfxClick = love.audio.newSource("assets/audio/sfx/minecraft_buttonClick.mp3", "static")       -- Button click sound effect is set     (Minecraft Button Click Sfx https://www.youtube.com/watch?v=rG-856TmuzA)
     button.sfxClick:setVolume(0.50)                                                             -- Button click sound effect volume is set to half
     button.sfxClick:setLooping(false)                                                           -- Button click sound effect is set to not loop
 

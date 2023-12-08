@@ -16,16 +16,6 @@ local playButton
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
--- OBJECT SETUP --
-
--- titleScreen.createObject()
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
--- TILEMAP SETUP --
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 function titleScreen.load()
     mainCamera = titleScreen.loadCamera(camera.create(0, 0))   -- Adds a Camera labeled "main" to the titleScreen Cameras table)
     titleScreen.activeCamera = mainCamera
@@ -34,8 +24,12 @@ function titleScreen.load()
 
     -- Sets playButton's action to be to change the Scene to clearMeadowTown
     function playButton.performAction(button, mouseX, mouseY) 
-        clearMeadowTown = require("scripts/scenes/clearMeadowTown")   
-        nextScene = clearMeadowTown                                  -- Changes the Scene from titleScreen to clearMeadowTown
+        if (playerHouseInterior == nil) then
+            playerHouseInterior = require("scripts/scenes/playerHouseInterior")
+        end
+
+        previousScene = titleScreen
+        nextScene = playerHouseInterior                                  -- Changes the Scene from titleScreen to playerHouseInterior
     end
 end
 

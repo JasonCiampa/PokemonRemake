@@ -9,13 +9,16 @@ animator = require("scripts/animator")
 button = require("scripts/button")     
 camera = require("scripts/camera")  
 objectHandler = require("scripts/object")    
-scene = require("scripts/scene")          
+scene = require("scripts/scene")     
+door = require("scripts/door")     
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
+previousScene = {}  -- Variable to hold a reference to the previously active Scene
 nextScene = nil      -- Variable to hold a reference to the Scene that should become active next
 sceneUnloading = false   -- Indicates whether or not a Scene change is in progress
 timer = 0
 screenColor = 1
+pauseUpdates = false
 
 printDebug = false
 printDebugText = ""
@@ -78,10 +81,14 @@ end
 function love.update(dt)
     checkQuit()                                                     -- Checks if the game needs to be quit
     world:update(dt)                                                -- Updates the physics world
-    activeScene.update(dt)                                          -- Updates the currently active scene
+
+    if (not pauseUpdates) then
+        activeScene.update(dt)                                          -- Updates the currently active scene
+    end
 
     if (sceneUnloading) then
-        
+        pauseUpdates = true
+
         if (timer > 0) then
             timer = timer - dt
             screenColor = screenColor - dt
@@ -100,6 +107,7 @@ function love.update(dt)
         activeScene.load()
         activeScene.update(dt)                                          -- Updates the currently active scene
         sceneLoading = true
+        pauseUpdates = false
     end
 
     if (sceneLoading) then
@@ -116,7 +124,6 @@ function love.update(dt)
         timer = 0
         sceneLoading = false
         nextScene = nil
-
         return
     end
 
