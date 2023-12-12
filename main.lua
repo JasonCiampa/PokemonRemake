@@ -10,7 +10,7 @@ button = require("scripts/button")
 camera = require("scripts/camera")  
 objectHandler = require("scripts/object")    
 scene = require("scripts/scene")     
-door = require("scripts/door")     
+door = require("scripts/door")   
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
 previousScene = {}  -- Variable to hold a reference to the previously active Scene
@@ -20,7 +20,7 @@ timer = 0
 screenColor = 1
 pauseUpdates = false
 
-printDebug = false
+printDebug = true
 printDebugText = ""
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
@@ -68,6 +68,10 @@ end
 function love.load()
     love.window.setMode(WIDTH, HEIGHT)                              -- Sets the window size
     love.graphics.setDefaultFilter("nearest", "nearest")
+
+    -- Global import for all Pokemon
+    pokemonHandler = require("scripts/pokemon/pokemonHandler")  
+    everyPokemon = pokemonHandler.loadAllPokemon()
 
     -- Global import for the Player
     player = require("scripts/objects/player")   
@@ -139,12 +143,15 @@ end
 function love.draw()
     love.graphics.setColor(screenColor, screenColor, screenColor)
     activeScene.draw()                                              -- Draws the currently active scene
+    
+    everyPokemon[100]:draw()
 
     -- DEBUGGING STATEMENTS --
     if (printDebug) then
         love.graphics.print(printDebugText, player.physics.x, player.physics.y - 50)
         love.graphics.print("Player X: " .. player.x, player.physics.x, player.physics.y + 100)
         love.graphics.print("Player Y: " .. player.y, player.physics.x, player.physics.y + 125)
+        love.graphics.print(everyPokemon[100].name, player.physics.x, player.physics.y + 150)
     end
 
 end
