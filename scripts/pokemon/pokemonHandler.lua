@@ -47,99 +47,104 @@ pokemonHandler.types.Water = pokemonHandler.makePokemonType({pokemonHandler.type
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
--- A moves table to hold all of the existing moves in the game
-pokemonHandler.moves = {}
+-- Creates a moves table for each Pokemon type that will hold all moves belonging to that type
+for pokeTypes, pokeType in pairs(pokemonHandler.types) do
+    pokeType.moves = {}
+end
 
-function pokemonHandler.makePokemonMove(moveType, category, power, accuracy, powerPoints, animations, effectDescription)
+function pokemonHandler.makePokemonMove(moveType, category, statsAffected, statsImpact, accuracy, powerPoints, effectDescription, animations)
     local move = {}
 
     move.type = moveType                        -- Any type (Grass, Fire, Water, etc.)
-    move.category = category                    -- Category of move (status (0), physical(1), special(2))
-    move.power = power                          -- Amount of damage dealt by move (number)
-    move.accuracy = accuracy                    -- Accuracy of move (number between 0 and 100)
+    move.category = category                    -- Status, Physical, or Special
+    move.statsAffected = statsAffected          -- Table of Pokemon stats that are affected by the move (health, attack, defense, sp attack, sp defense, speed, accuracy) (pokemon[stat] would get the Pokemon's stat)
+    move.statsImpact = statsImpact              -- Table of values that represent how much each stat in statsAffected should be incremented/decremented by
+    move.accuracy = accuracy
     move.powerPoints = powerPoints              -- Power Points (PP) of a move (number of times a move can be used without recharge) (5 min, 30 max)
-    move.animations = animations                -- Animations for the move
     move.effectDescription = effectDescription  -- Description of the move's effect (string of text)
+    move.animations = animations                -- Animations for the move
+    -- move.target = target                        -- Pokemon to perform the move on
 
     -- MAKE POKEMON MOVE ANIMATIONS BE BASED ON COORDINATES (HAVE THE POKEMON MOVE TO A CERTAIN X AND Y AT CERTAIN KEYFRAMES ???)
 
     return move
 end
 
+
 -- Normal Type Moves
-pokemonHandler.moves.growl = pokemonHandler.makePokemonMove(pokemonHandler.types.Normal, 0, 0, 100, 40, "The user growls in an endearing way, making the foe less wary. The target's Attack stat is lowered.")                 -- https://pokemondb.net/move/growl
-pokemonHandler.moves.tackle = pokemonHandler.makePokemonMove(pokemonHandler.types.Normal, 1, 40, 100, 35, "A physical attack in which the user charges and slams into the foe with its whole body.")                           -- https://pokemondb.net/move/tackle
-pokemonHandler.moves.leer = pokemonHandler.makePokemonMove(pokemonHandler.types.Normal, 0, 0, 100, 30, "The foe is given an intimidating leer with sharp eyes. The target's Defense stat is reduced.")                         -- https://pokemondb.net/move/leer
-pokemonHandler.moves.smokescreen = pokemonHandler.makePokemonMove(pokemonHandler.types.Normal, 0, 0, 100, 20, "The user releases an obscuring cloud of smoke or ink. It reduces the foe's accuracy.")                          -- https://pokemondb.net/move/smokescreen
+pokemonHandler.types.Normal.moves.growl = pokemonHandler.makePokemonMove(pokemonHandler.types.Normal, "Status", {"Attack"}, {-0.2}, 100, 40, "The user growls in an endearing way, making the foe less wary. The target's Attack stat is lowered.")                 -- https://pokemondb.net/move/growl
+pokemonHandler.types.Normal.moves.tackle = pokemonHandler.makePokemonMove(pokemonHandler.types.Normal, "Physical", {"Health"}, {-40}, 100, 35, "A physical attack in which the user charges and slams into the foe with its whole body.")                           -- https://pokemondb.net/move/tackle
+pokemonHandler.types.Normal.moves.leer = pokemonHandler.makePokemonMove(pokemonHandler.types.Normal, "Status", {"Defense"}, {-0.2}, 100, 30, "The foe is given an intimidating leer with sharp eyes. The target's Defense stat is reduced.")                  -- https://pokemondb.net/move/leer
+pokemonHandler.types.Normal.moves.smokescreen = pokemonHandler.makePokemonMove(pokemonHandler.types.Normal, "Status", {"Accuracy"}, {-0.2}, 100, 20, "The user releases an obscuring cloud of smoke or ink. It reduces the foe's accuracy.")                          -- https://pokemondb.net/move/smokescreen
 
 -- Grass Type Moves
-pokemonHandler.moves.razorLeaf = pokemonHandler.makePokemonMove(pokemonHandler.types.Grass, 1, 55, 95, 25, "Sharp-edged leaves are launched to slash at the foe. It has a high critical-hit ratio.")                           -- https://pokemondb.net/move/razor-leaf
-pokemonHandler.moves.synthesis = pokemonHandler.makePokemonMove(pokemonHandler.types.Grass, 0, 0, 100, 5, "The user restores its own HP.")                                                                                     -- https://pokemondb.net/move/synthesis
+pokemonHandler.types.Grass.moves.razorLeaf = pokemonHandler.makePokemonMove(pokemonHandler.types.Grass, "Physical", {"Health"}, {-55}, 1, 55, 95, 25, "Sharp-edged leaves are launched to slash at the foe. It has a high critical-hit ratio.")                           -- https://pokemondb.net/move/razor-leaf
+pokemonHandler.types.Grass.moves.synthesis = pokemonHandler.makePokemonMove(pokemonHandler.types.Grass, 0, 0, 100, 5, "The user restores its own HP.")                                                                                     -- https://pokemondb.net/move/synthesis
 
 -- Fire Type Moves
-pokemonHandler.moves.flameWheel = pokemonHandler.makePokemonMove(pokemonHandler.types.Fire, 1, 60, 100, 25, "The user cloaks itself in Fire and charges at the foe. It may also leave the target with a burn.")                -- https://pokemondb.net/move/flame-wheel
-pokemonHandler.moves.flamethrower = pokemonHandler.makePokemonMove(pokemonHandler.types.Fire, 2, 90, 100, 15, "The foe is scorched with an intense blast of Fire. The target may also be left with a burn.")                   -- https://pokemondb.net/move/flamethrower
+pokemonHandler.types.Fire.moves.flameWheel = pokemonHandler.makePokemonMove(pokemonHandler.types.Fire, 1, 60, 100, 25, "The user cloaks itself in Fire and charges at the foe. It may also leave the target with a burn.")                -- https://pokemondb.net/move/flame-wheel
+pokemonHandler.types.Fire.moves.flamethrower = pokemonHandler.makePokemonMove(pokemonHandler.types.Fire, 2, 90, 100, 15, "The foe is scorched with an intense blast of Fire. The target may also be left with a burn.")                   -- https://pokemondb.net/move/flamethrower
 
 -- Water Type Moves
-pokemonHandler.moves.WaterGun = pokemonHandler.makePokemonMove(pokemonHandler.types.Water, 1, 40, 100, 25, "The foe is blasted with a forceful shot of Water.")                                                                -- https://pokemondb.net/move/mud-slap
-pokemonHandler.moves.hydroPump = pokemonHandler.makePokemonMove(pokemonHandler.types.Water, 1, 110, 80, 5, "The foe is blasted by a huge volume of Water launched under great pressure.")                                      -- https://pokemondb.net/move/hydro-pump
+pokemonHandler.types.Water.moves.waterGun = pokemonHandler.makePokemonMove(pokemonHandler.types.Water, 1, 40, 100, 25, "The foe is blasted with a forceful shot of Water.")                                                                -- https://pokemondb.net/move/mud-slap
+pokemonHandler.types.Water.moves.hydroPump = pokemonHandler.makePokemonMove(pokemonHandler.types.Water, 1, 110, 80, 5, "The foe is blasted by a huge volume of Water launched under great pressure.")                                      -- https://pokemondb.net/move/hydro-pump
 
 -- Dark Type Moves
-pokemonHandler.moves.bite = pokemonHandler.makePokemonMove(pokemonHandler.types.Dark, 1, 60, 100, 25, "The foe is bitten with viciously sharp fangs. It may make the target flinch.")                                          -- https://pokemondb.net/move/bite
-pokemonHandler.moves.assurance = pokemonHandler.makePokemonMove(pokemonHandler.types.Dark, 1, 60, 100, 10, "If the foe has already taken some damage in the same turn, this attack's power is doubled.")                       -- https://pokemondb.net/move/assurance
+pokemonHandler.types.Dark.moves.bite = pokemonHandler.makePokemonMove(pokemonHandler.types.Dark, 1, 60, 100, 25, "The foe is bitten with viciously sharp fangs. It may make the target flinch.")                                          -- https://pokemondb.net/move/bite
+pokemonHandler.types.Dark.moves.assurance = pokemonHandler.makePokemonMove(pokemonHandler.types.Dark, 1, 60, 100, 10, "If the foe has already taken some damage in the same turn, this attack's power is doubled.")                       -- https://pokemondb.net/move/assurance
 
 -- Psychic Type Moves
-pokemonHandler.moves.confusion = pokemonHandler.makePokemonMove(pokemonHandler.types.Psychic, 1, 50, 100, 25, "The foe is hit by a weak telekinetic force. It may also leave the foe confused.")                               -- https://bulbapedia.bulbagarden.net/wiki/Confusion_(move) 
-pokemonHandler.moves.Psychic = pokemonHandler.makePokemonMove(pokemonHandler.types.Psychic, 2, 90, 100, 10, "The foe is hit by a strong telekinetic force. It may also reduce the foe's Sp. Def stat.")                        -- https://pokemondb.net/move/Psychic
+pokemonHandler.types.Psychic.moves.confusion = pokemonHandler.makePokemonMove(pokemonHandler.types.Psychic, 1, 50, 100, 25, "The foe is hit by a weak telekinetic force. It may also leave the foe confused.")                               -- https://bulbapedia.bulbagarden.net/wiki/Confusion_(move) 
+pokemonHandler.types.Psychic.moves.psychic = pokemonHandler.makePokemonMove(pokemonHandler.types.Psychic, 2, 90, 100, 10, "The foe is hit by a strong telekinetic force. It may also reduce the foe's Sp. Def stat.")                        -- https://pokemondb.net/move/Psychic
 
 -- Flying Type Moves
-pokemonHandler.moves.peck = pokemonHandler.makePokemonMove(pokemonHandler.types.Flying, 1, 35, 100, 35, "The foe is jabbed with a sharply pointed beak or horn.")                                                              -- https://pokemondb.net/move/peck
-pokemonHandler.moves.wingAttack = pokemonHandler.makePokemonMove(pokemonHandler.types.Flying, 1, 60, 100, 35, "The foe is struck with large, imposing wings spread wide to inflict damage.")                                   -- https://pokemondb.net/move/wing-attack
+pokemonHandler.types.Flying.moves.peck = pokemonHandler.makePokemonMove(pokemonHandler.types.Flying, 1, 35, 100, 35, "The foe is jabbed with a sharply pointed beak or horn.")                                                              -- https://pokemondb.net/move/peck
+pokemonHandler.types.Flying.moves.wingAttack = pokemonHandler.makePokemonMove(pokemonHandler.types.Flying, 1, 60, 100, 35, "The foe is struck with large, imposing wings spread wide to inflict damage.")                                   -- https://pokemondb.net/move/wing-attack
 
 -- Poison Type Moves
-pokemonHandler.moves.PoisonSting = pokemonHandler.makePokemonMove(pokemonHandler.types.Poison, 1, 15, 100, 35, "The foe is stabbed with a Poisonous barb of some sort. It may also Poison the target.")                        -- https://pokemondb.net/move/Poison-sting
-pokemonHandler.moves.PoisonJab = pokemonHandler.makePokemonMove(pokemonHandler.types.Poison, 2, 70, 100, 20, "The foe is stabbed with a tentacle or arm steeped in Poison. It may also Poison the foe.")                       -- https://pokemondb.net/move/Poison-jab
+pokemonHandler.types.Poison.moves.PoisonSting = pokemonHandler.makePokemonMove(pokemonHandler.types.Poison, 1, 15, 100, 35, "The foe is stabbed with a Poisonous barb of some sort. It may also Poison the target.")                        -- https://pokemondb.net/move/Poison-sting
+pokemonHandler.types.Poison.moves.PoisonJab = pokemonHandler.makePokemonMove(pokemonHandler.types.Poison, 2, 70, 100, 20, "The foe is stabbed with a tentacle or arm steeped in Poison. It may also Poison the foe.")                       -- https://pokemondb.net/move/Poison-jab
 
 -- Ghost Type Moves
-pokemonHandler.moves.nightShade = pokemonHandler.makePokemonMove(pokemonHandler.types.Ghost, 2, 0, 100, 15, "The user makes the foe see a mirage. It inflicts damage matching the user's level.")                              -- https://bulbapedia.bulbagarden.net/wiki/Night_Shade_(move)
-pokemonHandler.moves.shadowBall = pokemonHandler.makePokemonMove(pokemonHandler.types.Ghost, 2, 80, 100, 15, "The user hurls a shadowy blob at the foe. It may also lower the foe's Sp. Def stat.")                            -- https://pokemondb.net/move/shadow-ball
+pokemonHandler.types.Ghost.moves.nightShade = pokemonHandler.makePokemonMove(pokemonHandler.types.Ghost, 2, 0, 100, 15, "The user makes the foe see a mirage. It inflicts damage matching the user's level.")                              -- https://bulbapedia.bulbagarden.net/wiki/Night_Shade_(move)
+pokemonHandler.types.Ghost.moves.shadowBall = pokemonHandler.makePokemonMove(pokemonHandler.types.Ghost, 2, 80, 100, 15, "The user hurls a shadowy blob at the foe. It may also lower the foe's Sp. Def stat.")                            -- https://pokemondb.net/move/shadow-ball
 
 -- Electric Type Moves
-pokemonHandler.moves.thunderWave = pokemonHandler.makePokemonMove(pokemonHandler.types.Electric, 0, 0, 90, 20, "A weak Electric charge is launched at the foe. It causes paralysis if it hits.")                               -- https://pokemondb.net/move/thunder-wave
-pokemonHandler.moves.thunderBolt = pokemonHandler.makePokemonMove(pokemonHandler.types.Electric, 2, 90, 100, 15, "A strong Electric blast is loosed at the foe. It may also leave the foe paralyzed.")                         -- https://pokemondb.net/move/thunderbolt
+pokemonHandler.types.Electric.moves.thunderWave = pokemonHandler.makePokemonMove(pokemonHandler.types.Electric, 0, 0, 90, 20, "A weak Electric charge is launched at the foe. It causes paralysis if it hits.")                               -- https://pokemondb.net/move/thunder-wave
+pokemonHandler.types.Electric.moves.thunderBolt = pokemonHandler.makePokemonMove(pokemonHandler.types.Electric, 2, 90, 100, 15, "A strong Electric blast is loosed at the foe. It may also leave the foe paralyzed.")                         -- https://pokemondb.net/move/thunderbolt
 
 -- Rock Type Moves
-pokemonHandler.moves.RockSlide = pokemonHandler.makePokemonMove(pokemonHandler.types.Rock, 1, 75, 90, 10, "Large boulders are hurled at the foe to inflict damage. It may also make the target flinch.")                       -- https://pokemondb.net/move/Rock-slide
-pokemonHandler.moves.RockThrow = pokemonHandler.makePokemonMove(pokemonHandler.types.Rock, 1, 50, 90, 15, "The user picks up and throws a small Rock at the foe to attack.")                                                   -- https://pokemondb.net/move/Rock-throw
+pokemonHandler.types.Rock.moves.RockSlide = pokemonHandler.makePokemonMove(pokemonHandler.types.Rock, 1, 75, 90, 10, "Large boulders are hurled at the foe to inflict damage. It may also make the target flinch.")                       -- https://pokemondb.net/move/Rock-slide
+pokemonHandler.types.Rock.moves.RockThrow = pokemonHandler.makePokemonMove(pokemonHandler.types.Rock, 1, 50, 90, 15, "The user picks up and throws a small Rock at the foe to attack.")                                                   -- https://pokemondb.net/move/Rock-throw
 
 -- Ground Type Moves
-pokemonHandler.moves.bulldoze = pokemonHandler.makePokemonMove(pokemonHandler.types.Ground, 1, 60, 100, 20, "The user stomps down on the Ground and attacks everything in the area. Hit Pokémon's Speed stat is reduced.")     -- https://pokemondb.net/move/bulldoze
-pokemonHandler.moves.sandAttack = pokemonHandler.makePokemonMove(pokemonHandler.types.Ground, 0, 0, 100, 15, "Sand is hurled in the foe's face, reducing its accuracy.")                                                       -- https://pokemondb.net/move/sand-attack
+pokemonHandler.types.Ground.moves.bulldoze = pokemonHandler.makePokemonMove(pokemonHandler.types.Ground, 1, 60, 100, 20, "The user stomps down on the Ground and attacks everything in the area. Hit Pokémon's Speed stat is reduced.")     -- https://pokemondb.net/move/bulldoze
+pokemonHandler.types.Ground.moves.sandAttack = pokemonHandler.makePokemonMove(pokemonHandler.types.Ground, 0, 0, 100, 15, "Sand is hurled in the foe's face, reducing its accuracy.")                                                       -- https://pokemondb.net/move/sand-attack
 
 -- Bug Type Moves
-pokemonHandler.moves.BugBite = pokemonHandler.makePokemonMove(pokemonHandler.types.Bug, 1, 60, 100, 20, "The user bites the foe.")                                                                                             -- https://pokemondb.net/move/Bug-bite
-pokemonHandler.moves.furyCutter = pokemonHandler.makePokemonMove(pokemonHandler.types.Bug, 2, 40, 95, 20, "The foe is slashed with scythes or claws. Its power increases if it hits in succession.")                           -- https://pokemondb.net/move/fury-cutter
+pokemonHandler.types.Bug.moves.BugBite = pokemonHandler.makePokemonMove(pokemonHandler.types.Bug, 1, 60, 100, 20, "The user bites the foe.")                                                                                             -- https://pokemondb.net/move/Bug-bite
+pokemonHandler.types.Bug.moves.furyCutter = pokemonHandler.makePokemonMove(pokemonHandler.types.Bug, 2, 40, 95, 20, "The foe is slashed with scythes or claws. Its power increases if it hits in succession.")                           -- https://pokemondb.net/move/fury-cutter
 
 -- Ice Type Moves
-pokemonHandler.moves.icyWind = pokemonHandler.makePokemonMove(pokemonHandler.types.Ice, 1, 55, 95, 15, "The user attacks with a gust of chilled air.")                                                                         -- https://pokemondb.net/move/icy-wind
-pokemonHandler.moves.avalanche = pokemonHandler.makePokemonMove(pokemonHandler.types.Ice, 1, 60, 100, 10, "The user forcefully throws a huge mound of thick snow at the foe, dealing significant damage.")                     -- https://pokemondb.net/move/avalanche
+pokemonHandler.types.Ice.moves.icyWind = pokemonHandler.makePokemonMove(pokemonHandler.types.Ice, 1, 55, 95, 15, "The user attacks with a gust of chilled air.")                                                                         -- https://pokemondb.net/move/icy-wind
+pokemonHandler.types.Ice.moves.avalanche = pokemonHandler.makePokemonMove(pokemonHandler.types.Ice, 1, 60, 100, 10, "The user forcefully throws a huge mound of thick snow at the foe, dealing significant damage.")                     -- https://pokemondb.net/move/avalanche
 
 -- Steel Type Moves
-pokemonHandler.moves.ironDefense = pokemonHandler.makePokemonMove(pokemonHandler.types.Steel, 0, 0, 100, 15, "The user hardens its body's surface like iron, sharply raising its Defense stat.")                               -- https://pokemondb.net/move/iron-defense
-pokemonHandler.moves.SteelTail = pokemonHandler.makePokemonMove(pokemonHandler.types.Steel, 1, 100, 75, 15, "The foe is slammed with a Steel-hard tail.")                                                                      -- https://pokemondb.net/move/iron-tail
+pokemonHandler.types.Steel.moves.ironDefense = pokemonHandler.makePokemonMove(pokemonHandler.types.Steel, 0, 0, 100, 15, "The user hardens its body's surface like iron, sharply raising its Defense stat.")                               -- https://pokemondb.net/move/iron-defense
+pokemonHandler.types.Steel.moves.SteelTail = pokemonHandler.makePokemonMove(pokemonHandler.types.Steel, 1, 100, 75, 15, "The foe is slammed with a Steel-hard tail.")                                                                      -- https://pokemondb.net/move/iron-tail
 
 -- Dragon Type Moves
-pokemonHandler.moves.DragonBreath = pokemonHandler.makePokemonMove(pokemonHandler.types.Dragon, 2, 60, 100, 20, "The user exhales a mighty gust that inflicts damage. It may also paralyze the target.")                       --https://pokemondb.net/move/Dragon-breath
-pokemonHandler.moves.DragonClaw = pokemonHandler.makePokemonMove(pokemonHandler.types.Dragon, 1, 80, 100, 15, "Sharp, huge claws hook and slash the foe quickly and with great power.")                                        --https://pokemondb.net/move/Dragon-claw
+pokemonHandler.types.Dragon.moves.DragonBreath = pokemonHandler.makePokemonMove(pokemonHandler.types.Dragon, 2, 60, 100, 20, "The user exhales a mighty gust that inflicts damage. It may also paralyze the target.")                       --https://pokemondb.net/move/Dragon-breath
+pokemonHandler.types.Dragon.moves.DragonClaw = pokemonHandler.makePokemonMove(pokemonHandler.types.Dragon, 1, 80, 100, 15, "Sharp, huge claws hook and slash the foe quickly and with great power.")                                        --https://pokemondb.net/move/Dragon-claw
 
 -- Fighting Type Moves
-pokemonHandler.moves.armThrust = pokemonHandler.makePokemonMove(pokemonHandler.types.Fighting, 2, 15, 100, 20, "The user looses a flurry of open-palmed arm thrusts that hit two to five times in a row.")                     -- https://pokemondb.net/move/arm-thrust
-pokemonHandler.moves.brickBreak = pokemonHandler.makePokemonMove(pokemonHandler.types.Fighting, 1, 75, 100, 15, "The user attacks with fists strong enough to break bricks.")                                                  -- https://pokemondb.net/move/brick-break
+pokemonHandler.types.Fighting.moves.armThrust = pokemonHandler.makePokemonMove(pokemonHandler.types.Fighting, 2, 15, 100, 20, "The user looses a flurry of open-palmed arm thrusts that hit two to five times in a row.")                     -- https://pokemondb.net/move/arm-thrust
+pokemonHandler.types.Fighting.moves.brickBreak = pokemonHandler.makePokemonMove(pokemonHandler.types.Fighting, 1, 75, 100, 15, "The user attacks with fists strong enough to break bricks.")                                                  -- https://pokemondb.net/move/brick-break
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
 -- Creates a new Pokemon
-function pokemonHandler.createNewPokemon(name, number, animations, pokeType, pokeType2, level, move1, move2, move3, move4, healthStat, attackStat, defenseStat, specialAttackStat, specialDefenseStat, speed)
+function pokemonHandler.makeNewPokemon(name, number, animations, pokeType, pokeType2, level, move1, move2, move3, move4, health, attack, defense, specialAttack, specialDefense, speed)
     local pokemon = {}
 
     -- Pokemon Name
@@ -153,7 +158,7 @@ function pokemonHandler.createNewPokemon(name, number, animations, pokeType, pok
     pokemon.animations = animations
     pokemon.currentAnimation = pokemon.animations.frontFacing
 
-    -- Pokemon Image, Size, and Position
+    -- Pokemon Size and Position
     pokemon.width = 80   -- width of pokemon image
     pokemon.height = 80 -- height of pokemon image
     pokemon.x = 0       -- x-position of pokemon image (initialized at top-left corner)
@@ -176,22 +181,69 @@ function pokemonHandler.createNewPokemon(name, number, animations, pokeType, pok
     pokemon.moves.move4 = move4     -- A move table containing all of the move's information (or nil if pokemon shouldn't have 4th move)
 
     -- Pokemon Stats
-    -- Multiply given health by randomized IV value
-    pokemon.healthStat = healthStat
-    pokemon.attackStat = attackStat
-    pokemon.defenseStat = defenseStat
-    pokemon.specialAttackStat = specialAttackStat
-    pokemon.specialDefenseStat = specialDefenseStat
-    pokemon.speed = speed
+    pokemon.baseHealth = health
+    pokemon.baseAttack = attack
+    pokemon.baseDefense = defense
+    pokemon.baseSpecialAttack = specialAttack
+    pokemon.baseSpecialDefense = specialDefense
+    pokemon.baseSpeed = speed
+    pokemon.baseAccuracy = 100
+
+    pokemon.currentHealth = pokemon.baseHealth
+    pokemon.currentAttack = pokemon.baseAttack
+    pokemon.currentDefense = pokemon.baseDefense
+    pokemon.currentSpecialAttack = pokemon.baseSpecialAttack
+    pokemon.currentSpecialDefense = pokemon.baseSpecialDefense
+    pokemon.currentSpeed = pokemon.baseSpeed
+    pokemon.currentAccuracy = pokemon.baseAccuracy
 
     function pokemon.draw(pokemon) 
-        love.graphics.draw(pokemonHandler.spritesheet, pokemon.animations.shinyFrontFacing[2], pokemon.x, pokemon.y, 0, 4, 4)                                 -- Draw the Animation
+        love.graphics.draw(pokemonHandler.spritesheet, pokemon.animations.frontFacing[1], pokemon.x, pokemon.y, 0, 4, 4)                                 -- Draw the Animation
     end
 
-    -- -- Pokemon uses a selected move against an opposing pokemon
-    -- function pokemon.useMove(pokemon, move, opposingPokemon)
+    -- Pokemon uses a selected move against an opposing pokemon
+    function pokemon.useMove(targetPokemon, move)
         
-    -- end
+        
+        for i = 1, #move.statsAffected do
+            local stat = targetPokemon["current" + move.statsAffected[i]]
+
+            if (move.category == "Status") then                                                                                                         -- If the move is in the Status category...
+                stat = stat + (stat * moves.statsImpact[i])                                                                                                 -- Increase/decrease the current stat by the percentage value in statsImpact
+            
+            elseif (move.category == "Physical") then                                                                                                   -- Otherwise, if the move is in the Physical category...
+                stat = stat + (move.statsImpact[i] * (stat / 0.5))                                                                                                          -- Increase/decrease the current stat by the
+            
+            elseif (move.category == "Special") then
+
+            end
+
+        end
+
+
+        -- MAKE SURE THE MOVE ANIMATION IS PLAYED AT SOME POINT (move.playAnimation ???)
+            -- Maybe Idea for this pokemon.useMove function:
+            -- Have this function trigger a timer for the move (2-3 seconds?)
+            -- Store the move into a currentMove variable or something like that
+            -- Reset the currentMove animation to the first frame
+            -- Somewhere in the battler.lua file, if (currentMove ~= nil) then move.updateAnimation??
+
+    end
+
+    function pokemonHandler.makePokemonMove(moveType, statsAffected, statsImpact, powerPoints, effectDescription, animations)
+        local move = {}
+    
+        move.type = moveType                        -- Any type (Grass, Fire, Water, etc.)
+        move.statsAffected = statsAffected          -- Table of Pokemon stats (as strings, like "health", or "attack", etc.) that are affected by the move (health, attack, defense, sp attack, sp defense, speed, accuracy) (pokemon[stat] would get the Pokemon's stat)
+        move.statsImpact = statsImpact              -- Table of values that represent how much each stat in statsAffected should be incremented/decremented by
+        move.powerPoints = powerPoints              -- Power Points (PP) of a move (number of times a move can be used without recharge) (5 min, 30 max)
+        move.effectDescription = effectDescription  -- Description of the move's effect (string of text)
+        move.animations = animations                -- Animations for the move
+    
+        -- MAKE POKEMON MOVE ANIMATIONS BE BASED ON COORDINATES (HAVE THE POKEMON MOVE TO A CERTAIN X AND Y AT CERTAIN KEYFRAMES ???)
+    
+        return move
+    end
 
     -- -- If pokemon is caught, add it to player's inventory
     -- function pokemon.isCaught(pokemon, playersPokemon)
@@ -208,11 +260,11 @@ function pokemonHandler.createNewPokemon(name, number, animations, pokeType, pok
     --     pokemon.specialDefenseIV = math.random(0, 31)
 
     --     -- Multiply given health by randomized IV value
-    --     pokemon.healthStat = pokemon.healthStat + pokemon.healthIV
-    --     pokemon.attackStat = pokemon.attackStat + pokemon.attackIV
-    --     pokemon.defenseStat = pokemon.defenseStat + pokemon.defenseIV
-    --     pokemon.specialAttackStat = pokemon.specialAttackStat + pokemon.specialAttackIV
-    --     pokemon.specialDefenseStat = pokemon.specialDefenseStat + pokemon.specialDefenseIV
+    --     pokemon.health = pokemon.health + pokemon.healthIV
+    --     pokemon.attack = pokemon.attack + pokemon.attackIV
+    --     pokemon.defense = pokemon.defense + pokemon.defenseIV
+    --     pokemon.specialAttack = pokemon.specialAttack + pokemon.specialAttackIV
+    --     pokemon.specialDefense = pokemon.specialDefense + pokemon.specialDefenseIV
     -- end
 
     return pokemon
@@ -268,18 +320,18 @@ function pokemonHandler.loadAllPokemon()
         local pokeLevel = 5
     
         -- MOVES
-        local pokeMove1 = pokemonHandler.moves.tackle
-        local pokeMove2 = pokemonHandler.moves.leer
-        local pokeMove3 = pokemonHandler.moves.growl
-        local pokeMove4 = pokemonHandler.moves.smokescreen
+        local pokeMove1 = pokemonHandler.types.Normal.moves.tackle
+        local pokeMove2 = pokemonHandler.types.Normal.moves.leer
+        local pokeMove3 = pokemonHandler.types.Normal.moves.growl
+        local pokeMove4 = pokemonHandler.types.Normal.moves.smokescreen
     
         -- STATS
-        local pokeHealthStat = pokemonData[i][5]
-        local pokeAttackStat = pokemonData[i][6]
-        local pokeDefenseStat = pokemonData[i][7]
-        local pokeSpecialAttackStat = pokemonData[i][8]
-        local pokeSpecialDefenseStat = pokemonData[i][9]
-        local pokeSpeedStat = pokemonData[i][10]
+        local pokehealth = pokemonData[i][5]
+        local pokeattack = pokemonData[i][6]
+        local pokedefense = pokemonData[i][7]
+        local pokespecialAttack = pokemonData[i][8]
+        local pokespecialDefense = pokemonData[i][9]
+        local pokespeed = pokemonData[i][10]
     
     
         -- ANIMATIONS 
@@ -316,7 +368,7 @@ function pokemonHandler.loadAllPokemon()
             rowCounter = rowCounter + 1
         end
     
-        table.insert(allPokemon, pokemonHandler.createNewPokemon(pokeName, pokeNumber, pokeAnimations, pokeType, pokeType2, pokeLevel, pokeMove1, pokeMove2, pokeMove3, pokeMove4, pokeHealthStat, pokeAttackStat, pokeDefenseStat, pokeSpecialAttackStat, pokeSpecialDefenseStat, pokeSpeedStat))
+        table.insert(allPokemon, pokemonHandler.makeNewPokemon(pokeName, pokeNumber, pokeAnimations, pokeType, pokeType2, pokeLevel, pokeMove1, pokeMove2, pokeMove3, pokeMove4, pokehealth, pokeattack, pokedefense, pokespecialAttack, pokespecialDefense, pokespeed))
 
         currentSpritesheetIndex = currentSpritesheetIndex + 1
     end

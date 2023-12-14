@@ -1,5 +1,5 @@
 local battler = {}  
-battler.scene =                        -- scene.create("assets/images/battle/", 0, 0, nil)  -- Creates the battle Scene            (in this scene's load function, it should call battler.start)   -- Implement fade to and from black for scene transition
+battler.scene =  -- scene.create("assets/images/battle/", 0, 0, nil)  -- Creates the battle Scene            (in this scene's load function, it should call battler.start)   -- Implement fade to and from black for scene transition
 
 
 battler.playerPokemon = {}
@@ -11,7 +11,7 @@ battler.bothMovesStarted = false
 
 battler.timer = nil
 battler.textBox = nil -- create a textbox
--- calling battler.textBox.display() should play the fade in animation, then keep the text in the idle animation until abttler.textBox.hide() is called
+-- calling battler.textBox.display() should play the fade in animation, then keep the text in the idle animation until battler.textBox.hide() is called
 -- calling battler.textBox.hide() should play the fade out animation, then prevent the textBox from being drawn
 battler.textBoxLifeSpan = 5 --seconds
 
@@ -20,13 +20,16 @@ battler.textBoxLifeSpan = 5 --seconds
 -- BATTLER FUNCTIONS --
 
 function battler.start(playerPokemon, opposingPokemon)
-    -- draw the playerPokemon in the battle circle closest (make sure they're facing away towards the other pokemon)
-    -- draw the opposingPokemon in the battle circle furthest (make sure they're facing towards the player's pokemon)
-
     battler.playerPokemon = playerPokemon
     battler.opposingPokemon = opposingPokemon
 
-    battler.timer = 45                                                                                                      -- Sets the battler.timer equal to 45 seconds
+    battler.playerPokemon.x = 0                                                         -- Sets the x-coordinate for the playerPokemon to be drawn at         
+    battler.playerPokemon.y = 1000                                                      -- Sets the y-coordinate for the playerPokemon to be drawn at
+
+    battler.opposingPokemon.x = 1250                                                    -- Sets the x-coordinate for the opposingPokemon to be drawn at         
+    battler.opposingPokemon.y = 10                                                      -- Sets the y-coordinate for the opposingPokemon to be drawn at
+
+    battler.timer = 45                                                                  -- Sets the battler.timer equal to 45 seconds
 
     -- display a textbox saying that a pokemon has appeared (textBox.setText(),  then textBox.display())
 end

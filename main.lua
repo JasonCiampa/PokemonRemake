@@ -144,14 +144,14 @@ function love.draw()
     love.graphics.setColor(screenColor, screenColor, screenColor)
     activeScene.draw()                                              -- Draws the currently active scene
     
-    everyPokemon[100]:draw()
+    everyPokemon[17]:draw()
 
     -- DEBUGGING STATEMENTS --
     if (printDebug) then
         love.graphics.print(printDebugText, player.physics.x, player.physics.y - 50)
         love.graphics.print("Player X: " .. player.x, player.physics.x, player.physics.y + 100)
         love.graphics.print("Player Y: " .. player.y, player.physics.x, player.physics.y + 125)
-        love.graphics.print(everyPokemon[100].name, player.physics.x, player.physics.y + 150)
+        love.graphics.print(everyPokemon[17].baseSpecialDefense, player.physics.x, player.physics.y + 150)
     end
 
 end

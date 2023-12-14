@@ -1,7 +1,7 @@
 local animator = {}
 
 -- Creates an Animation
-function animator.create(spritesheet, frameCount, width, height, scaleFactor, row, col, splitPoint, speed)
+function animator.create(spritesheet, frameCount, width, height, scaleFactor, row, col, splitPoint, speed, repeatable)
 
     -- ANIMATION FIELDS --
 
@@ -16,7 +16,9 @@ function animator.create(spritesheet, frameCount, width, height, scaleFactor, ro
     animation.frameLifetime = ((1 / animation.totalFrames) / speed)                                                                                         -- Calculates the lifetime for each individual frame
     animation.currentFrameNum = 1                                                                                                                           -- Stores the index of the currentFrame
     animation.currentFrameTime = 0                                                                                                                          -- Stores the amount of time a frame has been active for
+    animation.repeatable = repeatable
     animation.updatable = false                                                                                                                             -- Determines if an Animation can be played or not (typically starts as true at the start of a love.update() call and is modified to false once the animation.update() function has run once in the love.update() call)
+    
     width = (width / scaleFactor)
     height = (height / scaleFactor)
     splitPoint = (splitPoint / scaleFactor)
@@ -24,10 +26,7 @@ function animator.create(spritesheet, frameCount, width, height, scaleFactor, ro
 
     -- ANIMATION FRAME CREATION --
 
-    -- y = 1
-    local y = ((row - 1) * height) + ((row * 2) - 1)                                                                                                                   -- Stores the row number where the Animation frames will start being pulled from (this value will not change, animations in spritesheets will be contained to one row)
-    
-    -- x = 243
+    local y = ((row - 1) * height) + ((row * 2) - 1)                                                                                                                 -- Stores the row number where the Animation frames will start being pulled from
     local startX = ((col - 1) * width) + ((col * 2) - 1)                                                                                                             -- Stores the column number where the Animation frames will start being pulled from
  
     -- startX = 243
@@ -49,12 +48,15 @@ function animator.create(spritesheet, frameCount, width, height, scaleFactor, ro
                 animation.currentFrameNum = animation.currentFrameNum + 1                                                                                           -- Set the current frame to be the next frame in line
                 animation.currentFrameTime = (animation.currentFrameTime - animation.frameLifetime)                                                                 -- Reset the current frame timer for the newly set current frame
 
-                if (animation.currentFrameNum > animation.totalFrames) then                                                                                         -- If our newly set current frame doesn't exist...
-                    animation.currentFrameNum = 1                                                                                                                       -- Reset currentFrameNum to the first frame: 1
+                if ((animation.currentFrameNum > animation.totalFrames)) then                                                                                   -- If our newly set current frame doesn't exist...
+                    if (animation.repeatable ~= false) then                                                                                                                 -- If the animation should repeat...
+                        animation.currentFrameNum = 1                                                                                                                  -- Reset currentFrameNum to the first frame so that the Animation repeats
+                    else                                                                                                                                       -- Otherwise...
+                        animation.currentFrameNum = animation.totalFrames                                                                                          -- Set the currentFrameNum to the last frame in the Animation
+                    end
                 end
             end
-
-            animation.updatable = false                                                                                                                         -- Animation has been updated, so animation.updatable is set to false until and is only set to true again when its time for another update
+            animation.updatable = false                                                                                                                         -- Animation has been updated once this frame, so animation.updatable is set to false and is only set to true again when its time for another update
         end
     end
 
