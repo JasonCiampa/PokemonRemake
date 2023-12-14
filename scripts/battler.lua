@@ -1,41 +1,66 @@
-local battler = {}  
-battler.scene =  -- scene.create("assets/images/battle/", 0, 0, nil)  -- Creates the battle Scene            (in this scene's load function, it should call battler.start)   -- Implement fade to and from black for scene transition
-
+local battler =  scene.create("assets/images/battle_screen/battle_screen.jpg", 0, 0, nil)  -- Creates the battle Scene            (in this scene's load function, it should call battler.start)   -- Implement fade to and from black for scene transition 
 
 battler.playerPokemon = {}
+battler.playerPokemon.selectedMove = {}
+
 battler.opposingPokemon = {}
+battler.opposingPokemon.selectedMove = {}
+
+
+battler.moveTypes = {}
+battler.moveTypes.itemUse = 1
+battler.moveTypes.run = 2
+battler.moveTypes.switchPokemon = 3
+battler.moveTypes.performMove = 4
+
+battler.movesFirst = {}
+battler.movesSecond = {}
 
 battler.movesFirst = nil
 battler.movesSecond = nil
 battler.bothMovesStarted = false
 
 battler.timer = nil
-battler.textBox = nil -- create a textbox
+battler.textbox = textbox.create("Battler Textbox") -- create a textbox
 -- calling battler.textBox.display() should play the fade in animation, then keep the text in the idle animation until battler.textBox.hide() is called
 -- calling battler.textBox.hide() should play the fade out animation, then prevent the textBox from being drawn
+
 battler.textBoxLifeSpan = 5 --seconds
+
+local itemUseButton = battler.loadButton(button.create(WIDTH / 2, 100, (titleScreen.width / 2) - WIDTH / 4, (titleScreen.height / 2) - 50, {0, 0, 1}, {1, 1, 1}, "Play"))     -- Adds a play Button to the titleScreen Button list
+
+-- Sets itemUseButton's action to be set the player's selected move type
+function itemUseButton.performAction(button, mouseX, mouseY) 
+    battler.playerPokemon.selectedMove = battler.moveTypes.itemUse
+end
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- BATTLER FUNCTIONS --
 
 function battler.start(playerPokemon, opposingPokemon)
-    battler.playerPokemon = playerPokemon
-    battler.opposingPokemon = opposingPokemon
+    battler.playerPokemon = playerPokemon                                                                           -- Stores a reference to the playerPokemon
+    battler.opposingPokemon = opposingPokemon                                                                       -- Stores a reference to the opposingPokemon
 
-    battler.playerPokemon.x = 0                                                         -- Sets the x-coordinate for the playerPokemon to be drawn at         
-    battler.playerPokemon.y = 1000                                                      -- Sets the y-coordinate for the playerPokemon to be drawn at
+    battler.playerPokemon.x = 0                                                                                     -- Sets the x-coordinate for the playerPokemon to be drawn at         
+    battler.playerPokemon.y = 520                                                                                   -- Sets the y-coordinate for the playerPokemon to be drawn at
+    battler.playerPokemon.currentAnimation = battler.playerPokemon.animations.backFacing                            -- Sets the current animation for the opposingPokemon to be backFacing
 
-    battler.opposingPokemon.x = 1250                                                    -- Sets the x-coordinate for the opposingPokemon to be drawn at         
-    battler.opposingPokemon.y = 10                                                      -- Sets the y-coordinate for the opposingPokemon to be drawn at
+    battler.opposingPokemon.x = 1250                                                                                -- Sets the x-coordinate for the opposingPokemon to be drawn at         
+    battler.opposingPokemon.y = 10                                                                                  -- Sets the y-coordinate for the opposingPokemon to be drawn at
+    battler.opposingPokemon.currentAnimation = battler.opposingPokemon.animations.frontFacing                       -- Sets the current animation for the opposingPokemon to be frontFacing
 
-    battler.timer = 45                                                                  -- Sets the battler.timer equal to 45 seconds
+    battler.timer = 45                                                                                              -- Sets the battler.timer equal to 45 seconds
 
     -- display a textbox saying that a pokemon has appeared (textBox.setText(),  then textBox.display())
+    battler.textbox.setText("A wild " .. tostring(battler.opposingPokemon.name) .. " has appeared!")                -- Sets the textbox's text to indicate that a wild pokemon has been encountered
+    battler.textbox.display()                                                                                       -- Displays the textbox onto the screen
 end
 
 function battler.finish()
     -- display a textbox saying how the battle ended (pokemon ran out of health, run away, etc.)
+    battler.textbox.setText("HOWEVER THE BATTLE ENDED")
+    battler.textbox.display()
 
     battler.playerPokemon = nil
     battler.opposingPokemon = nil
@@ -43,13 +68,20 @@ function battler.finish()
     battler.bothMovesStarted = false
 end
 
+-- Determines which Pokemon gets to move first in a round
 function battler.determineFirstMove()
-    -- check what kind of move is being made by both pokemon (item use, run, switch pokemon, attack)
-        -- item use, run, or switch pokemon would occur before an attack
-        -- if both pokemon are attacking, whichever pokemon is faster will attack first
-
-    -- set battler.movesFirst to the pokemon who moves first
-    -- set battler.movesSecond to the pokemon who moves second
+    if ( (battler.playerPokemon.selectedMove == battler.moveTypes.itemUse) or (battler.playerPokemon.selectedMove == battler.moveTypes.run) or (battler.playerPokemon.selectedMove == battler.moveTypes.switchPokemon) ) then   -- If the player's selected move is to either use an item, run, or switch to a different pokemon...
+        battler.movesFirst = battler.playerPokemon                                                                                                                                                                                  -- Set the first move to belong to the player's pokemon
+        battler.movesSecond = battler.opposingPokemon                                                                                                                                                                               -- Set the second move to belong to the opposing pokemon
+    elseif (battler.playerPokemon.selectedMove ~= nil) then                                                                                                                                                                     -- Otherwise, if the player pokemon selected a move to perform...
+        if (battler.playerPokemon.currentSpeed > battler.opposingPokemon.currentSpeed) then                                                                                                                                         -- If the player pokemon is faster than the opposing pokemon...
+            battler.movesFirst = battler.playerPokemon                                                                                                                                                                                  -- Set the first move to belong to the player's pokemon
+            battler.movesSecond = battler.opposingPokemon                                                                                                                                                                               -- Set the second move to belong to the opposing pokemon        
+        end                                                                                                                                                                                                                       
+    else                                                                                                                                                                                                                        -- Otherwise...
+        battler.movesFirst = battler.opposingPokemon                                                                                                                                                                                -- Set the first move to belong to the opposing pokemon
+        battler.movesSecond = battler.playerPokemon                                                                                                                                                                                 -- Set the second move to belong to the player's pokemon
+    end
 end
 
 function battler.startMove(pokemon)
@@ -109,6 +141,10 @@ function battler.update(dt)
                 
         -- update the health
 end
+
+-- function battler.draw()
+
+-- end
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

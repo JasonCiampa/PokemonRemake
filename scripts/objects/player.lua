@@ -1,7 +1,7 @@
 -- PLAYER CREATION --
 
 local player = objectHandler.create("player", 0, 0, 120, 160, 8, 112, love.graphics.newImage("assets/images/player/player_spritesheet.png"), 0, 0, 120, 160, "dynamic", 0, 0.05)      -- Creates the Player Object
-
+player.pokemon = {}
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- PLAYER ANIMATIONS --
@@ -114,13 +114,6 @@ end
 function player.customUpdate(player, dt)
     player.move(dt)
 end
-
--- function player.resetBody(player, dt)
---     player.physics.body:destroy()
---     player.physics.body = love.physics.newBody(world, player.physics.x, player.physics.y, player.physics.type)
---     player.physics.fixture = love.physics.newFixture(player.physics.body, player.physics.shape, player.physics.density)
---     player.physics.fixture:setUserData(player)
--- end
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

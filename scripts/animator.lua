@@ -1,7 +1,7 @@
 local animator = {}
 
 -- Creates an Animation
-function animator.create(spritesheet, frameCount, width, height, scaleFactor, row, col, splitPoint, speed, repeatable)
+function animator.create(spritesheet, frameCount, width, height, scaleFactor, row, col, splitPoint, speed, repeatable, generateFrames)
 
     -- ANIMATION FIELDS --
 
@@ -9,6 +9,7 @@ function animator.create(spritesheet, frameCount, width, height, scaleFactor, ro
 
     animation.frames_top = {}                                                                                                                               -- A list to hold the top halves of all of the Animation frames
     animation.frames_bottom = {}                                                                                                                            -- A list to hold the bottom halves of all of the Animation frames
+    animation.frames = {}                                                                                                                                   -- A list to hold the full frames of Animation
 
     animation.spritesheet = spritesheet                                                                                                                     -- Spritesheet that the Animation is to be made from
     animation.totalFrames = frameCount                                                                                                                      -- Stores the total number of frames in the Animation
@@ -18,21 +19,26 @@ function animator.create(spritesheet, frameCount, width, height, scaleFactor, ro
     animation.currentFrameTime = 0                                                                                                                          -- Stores the amount of time a frame has been active for
     animation.repeatable = repeatable
     animation.updatable = false                                                                                                                             -- Determines if an Animation can be played or not (typically starts as true at the start of a love.update() call and is modified to false once the animation.update() function has run once in the love.update() call)
-    
-    width = (width / scaleFactor)
-    height = (height / scaleFactor)
-    splitPoint = (splitPoint / scaleFactor)
+
     ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     -- ANIMATION FRAME CREATION --
+    local frameWidth
+    local frameHeight 
+    local frameSplitPoint
 
-    local y = ((row - 1) * height) + ((row * 2) - 1)                                                                                                                 -- Stores the row number where the Animation frames will start being pulled from
-    local startX = ((col - 1) * width) + ((col * 2) - 1)                                                                                                             -- Stores the column number where the Animation frames will start being pulled from
- 
-    -- startX = 243
-    for x = startX, (startX + ((frameCount * width))), width + 2 do                                                                                             -- For every Sprite from this starting position until the inputted number of sprites...
-        table.insert(animation.frames_top, love.graphics.newQuad(x, y, width, splitPoint, animation.spritesheet:getDimensions()))                                -- Create the top half of the new frame/quad/sprite and add it to the animation.frames_top list (splitPoint is used as a dividing point between top and bottom half)
-        table.insert(animation.frames_bottom, love.graphics.newQuad(x, y + splitPoint, width, height - splitPoint, animation.spritesheet:getDimensions()))    -- Create the bottom half of the new frame/quad/sprite and add it to the animation.frames_top list (splitPoint is used as a dividing point between top and bottom half)
+    if (generateFrames or generateFrames == nil) then
+        width = (width / scaleFactor)
+        height = (height / scaleFactor)
+        splitPoint = (splitPoint / scaleFactor)
+        local y = ((row - 1) * height) + ((row * 2) - 1)                                                                                                                 -- Stores the row number where the Animation frames will start being pulled from
+        local startX = ((col - 1) * width) + ((col * 2) - 1)                                                                                                             -- Stores the column number where the Animation frames will start being pulled from
+    
+        -- startX = 243
+        for x = startX, (startX + ((frameCount * width))), width + 2 do                                                                                             -- For every Sprite from this starting position until the inputted number of sprites...
+            table.insert(animation.frames_top, love.graphics.newQuad(x, y, width, splitPoint, animation.spritesheet:getDimensions()))                                -- Create the top half of the new frame/quad/sprite and add it to the animation.frames_top list (splitPoint is used as a dividing point between top and bottom half)
+            table.insert(animation.frames_bottom, love.graphics.newQuad(x, y + splitPoint, width, height - splitPoint, animation.spritesheet:getDimensions()))    -- Create the bottom half of the new frame/quad/sprite and add it to the animation.frames_top list (splitPoint is used as a dividing point between top and bottom half)
+        end
     end
 
     ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

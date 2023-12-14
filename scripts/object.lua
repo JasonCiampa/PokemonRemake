@@ -80,7 +80,7 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
     end
 
     -- Sets all of the object's animations to be updatable
-    function object.resetAnimation()
+    function object.resetAnimations()
         for animations, animation in pairs(object.animations) do
             animation.updatable = true                                          -- Sets each animation to be updatable
         end
@@ -106,7 +106,7 @@ function objectHandler.create(name, objectX, objectY, objectWidth, objectHeight,
         end
 
         object:setDrawPosition()                                                                                                                -- Updates the Object's draw position (above or below the player)
-        object.resetAnimation()
+        object.resetAnimations()
         object:customUpdate(dt)
     end
 

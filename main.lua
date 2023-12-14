@@ -4,6 +4,7 @@
 
 WIDTH, HEIGHT = 1920, 1080  -- Width and Height of the Window
 
+font = love.graphics.newFont("assets/fonts/showcard_gothic.ttf", 38)
 -- Global imports for different game components, each with helpful functions
 animator = require("scripts/animator")  
 button = require("scripts/button")     
@@ -11,6 +12,8 @@ camera = require("scripts/camera")
 objectHandler = require("scripts/object")    
 scene = require("scripts/scene")     
 door = require("scripts/door")   
+textbox = require("scripts/textbox")
+battler = require("scripts/battler")
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
 previousScene = {}  -- Variable to hold a reference to the previously active Scene
@@ -51,6 +54,13 @@ end
 function love.mousepressed(mouseX, mouseY, mouseButton)
     if (mouseButton == 1) then                              -- If the mouseButton was left-click...
         activeScene.mousepressed(mouseX,mouseY)                 -- Have the currently active Scene process the click
+        
+        testbox.display()
+
+    end
+
+    if (mouseButton == 2) then
+        testbox.hide()
     end
 end
 
@@ -71,13 +81,16 @@ function love.load()
 
     -- Global import for all Pokemon
     pokemonHandler = require("scripts/pokemon/pokemonHandler")  
-    everyPokemon = pokemonHandler.loadAllPokemon()
+    everyPokemon = pokemonHandler.generateAllPokemon()
+    battler.start(pokemonHandler.loadPokemon("Cyndaquil", 69), pokemonHandler.loadPokemon("Totodile", 69))
+    
+    testbox = textbox.create("Betty bought some butter but the butter Betty bought was bitter so betty bought some better butter to make the bitter butter better!")
 
     -- Global import for the Player
     player = require("scripts/objects/player")   
 
     titleScreen = require("scripts/scenes/titleScreen")             -- Imports the titleScreen file
-    activeScene = titleScreen                                       -- Sets the currently active Scene to be the titleScreen
+    activeScene = battler                                       -- Sets the currently active Scene to be the titleScreen
     activeScene.load()                                              -- Loads the currently active scene
 end
 
@@ -137,6 +150,9 @@ function love.update(dt)
         timer = 1
         return
     end
+
+    cyndaquil:update(dt)
+    testbox:update(dt)
 end
 
 
@@ -144,14 +160,16 @@ function love.draw()
     love.graphics.setColor(screenColor, screenColor, screenColor)
     activeScene.draw()                                              -- Draws the currently active scene
     
-    everyPokemon[17]:draw()
+    love.graphics.setColor(screenColor, screenColor, screenColor)
+    cyndaquil:draw()
+    testbox:draw()
 
     -- DEBUGGING STATEMENTS --
     if (printDebug) then
         love.graphics.print(printDebugText, player.physics.x, player.physics.y - 50)
         love.graphics.print("Player X: " .. player.x, player.physics.x, player.physics.y + 100)
         love.graphics.print("Player Y: " .. player.y, player.physics.x, player.physics.y + 125)
-        love.graphics.print(everyPokemon[17].baseSpecialDefense, player.physics.x, player.physics.y + 150)
+        love.graphics.print(cyndaquil.level, player.physics.x, player.physics.y + 150)
     end
 
 end
