@@ -30,8 +30,6 @@ function buttonHandler.create(width, height, x, y, backgroundColor, textColor, t
 
     button.active = true                                                                        -- Button is set to be active
 
-
-
     -- This code is to be initialized manually by whoever creates the button, as this code will execute code to achieve whatever the button's unique purpose is
     function button.performAction(button, mouseX, mouseY)
 
@@ -55,17 +53,21 @@ function buttonHandler.create(width, height, x, y, backgroundColor, textColor, t
     end
 
     function button.update(button, dt)
-        button:mouseHovering()
+        if (button.active) then
+            button:mouseHovering()
+        end
     end
 
     -- Draws the Button on the screen.
     function button.draw(button)
-        local previousColor = getCurrentColor()
-        love.graphics.setColor(button.currentBackgroundColor)
-        love.graphics.rectangle("fill", x, y, width, height)
+        if (button.active) then
+            local previousColor = getCurrentColor()
+            love.graphics.setColor(button.currentBackgroundColor)
+            love.graphics.rectangle("fill", x, y, width, height)
 
-        love.graphics.setColor(button.currentTextColor)
-        love.graphics.printf(button.text, button.font, button.x, (button.y + (button.height / 2)) - (button.fontSize * 0.4), button.width, "center")
+            love.graphics.setColor(button.currentTextColor)
+            love.graphics.printf(button.text, button.font, button.x, (button.y + (button.height / 2)) - (button.fontSize * 0.4), button.width, "center")
+        end
     end
 
     return button

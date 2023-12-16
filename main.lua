@@ -23,7 +23,7 @@ timer = 0
 screenColor = 1
 pauseUpdates = false
 
-printDebug = true
+printDebug = false
 printDebugText = ""
 
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
@@ -55,12 +55,9 @@ function love.mousepressed(mouseX, mouseY, mouseButton)
     if (mouseButton == 1) then                              -- If the mouseButton was left-click...
         activeScene.mousepressed(mouseX,mouseY)                 -- Have the currently active Scene process the click
         
-        testbox.display()
-
-    end
-
-    if (mouseButton == 2) then
-        testbox.hide()
+        if (gameText.active == true) then
+            gameText.hide()
+        end
     end
 end
 
@@ -79,18 +76,20 @@ function love.load()
     love.window.setMode(WIDTH, HEIGHT)                              -- Sets the window size
     love.graphics.setDefaultFilter("nearest", "nearest")
 
+    -- Global import for the game's textbox (only one textbox can be active at once, so every file should just use this one)
+    gameText = textbox.create("Betty bought some butter but the butter Betty bought was bitter so betty bought some better butter to make the bitter butter better!")
+    
     -- Global import for all Pokemon
     pokemonHandler = require("scripts/pokemon/pokemonHandler")  
     everyPokemon = pokemonHandler.generateAllPokemon()
-    battler.start(pokemonHandler.loadPokemon("Cyndaquil", 69), pokemonHandler.loadPokemon("Totodile", 69))
-    
-    testbox = textbox.create("Betty bought some butter but the butter Betty bought was bitter so betty bought some better butter to make the bitter butter better!")
 
     -- Global import for the Player
     player = require("scripts/objects/player")   
 
     titleScreen = require("scripts/scenes/titleScreen")             -- Imports the titleScreen file
     activeScene = battler                                       -- Sets the currently active Scene to be the titleScreen
+    battler.playerPokemon = pokemonHandler.loadPokemon("Cyndaquil", 69)
+    battler.opposingPokemon = pokemonHandler.loadPokemon("Typhlosion", 69)
     activeScene.load()                                              -- Loads the currently active scene
 end
 
@@ -151,8 +150,7 @@ function love.update(dt)
         return
     end
 
-    cyndaquil:update(dt)
-    testbox:update(dt)
+    gameText:update(dt)
 end
 
 
@@ -161,15 +159,13 @@ function love.draw()
     activeScene.draw()                                              -- Draws the currently active scene
     
     love.graphics.setColor(screenColor, screenColor, screenColor)
-    cyndaquil:draw()
-    testbox:draw()
+    gameText:draw()
 
     -- DEBUGGING STATEMENTS --
     if (printDebug) then
         love.graphics.print(printDebugText, player.physics.x, player.physics.y - 50)
         love.graphics.print("Player X: " .. player.x, player.physics.x, player.physics.y + 100)
         love.graphics.print("Player Y: " .. player.y, player.physics.x, player.physics.y + 125)
-        love.graphics.print(cyndaquil.level, player.physics.x, player.physics.y + 150)
     end
 
 end

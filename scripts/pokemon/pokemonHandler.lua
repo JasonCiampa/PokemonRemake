@@ -50,6 +50,7 @@ end
 function pokemonHandler.makePokemonMove(moveType, category, statsAffected, power, accuracy, powerPoints, effectDescription, animations)
     local move = {}
 
+    -- move.name = name
     move.type = moveType                        -- Any type (Grass, Fire, Water, etc.)
     move.category = category                    -- Status, Physical, or Special
     move.statsAffected = statsAffected          -- Table of Pokemon stats that are affected by the move (health, attack, defense, sp attack, sp defense, speed, accuracy) (pokemon[stat] would get the Pokemon's stat)
@@ -145,7 +146,7 @@ pokemonHandler.makePokemonMove(pokemonHandler.types.Fighting, 1, 75, 100, 15, "T
 --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
 -- Creates a new Pokemon
-function pokemonHandler.makeNewPokemon(name, number, animations, pokeType, pokeType2, level, move1, move2, move3, move4, health, attack, defense, specialAttack, specialDefense, speed)
+function pokemonHandler.makeNewPokemon(name, number, animations, pokeType1, pokeType2, level, move1, move2, move3, move4, health, attack, defense, specialAttack, specialDefense, speed)
     local pokemon = {}
 
     -- NAME --
@@ -164,7 +165,7 @@ function pokemonHandler.makeNewPokemon(name, number, animations, pokeType, pokeT
 
     -- TYPE(S) --
     pokemon.types = {}
-    pokemon.types.type1 = pokeType                                                                                                                                -- The first type of the Pokemon
+    pokemon.types.type1 = pokeType1                                                                                                                               -- The first type of the Pokemon
     pokemon.types.type2 = pokeType2                                                                                                                               -- The second type of the Pokemon
 
     -- EXPERIENCE --
@@ -207,6 +208,8 @@ function pokemonHandler.makeNewPokemon(name, number, animations, pokeType, pokeT
 
     -- STATUS --
     pokemon.isWild = true                                                                                                                                   -- Wild status
+    pokemon.isBattling = false                                                                                                                              -- Battling Status
+    pokemon.isShiny = false
 
     --=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--
 
@@ -401,7 +404,7 @@ function pokemonHandler.generateAllPokemon()
         end
     
         table.insert(allPokemon, pokemonHandler.makeNewPokemon(                                                                                                                         -- Create the new Pokemon
-            pokeName, pokeNumber, pokeAnimations, pokeType, pokeType2, pokeLevel,
+            pokeName, pokeNumber, pokeAnimations, pokeType1, pokeType2, pokeLevel,
             pokeMove1, pokeMove2, pokeMove3, pokeMove4, 
             pokehealth, pokeattack, pokedefense, pokespecialAttack, pokespecialDefense, pokespeed))
 
@@ -419,7 +422,15 @@ function pokemonHandler.loadPokemon(pokemonName, pokemonLevel)
         local pokemon = everyPokemon[i]
 
         if (pokemonName == pokemon.name) then
-            return pokemonHandler.makeNewPokemon(pokemon.name, pokemon.number, pokemon.animations, pokemon.pokeType1, pokemon.pokeType2, pokemonLevel, pokemon.moves.move1, pokemon.moves.move2, pokemon.moves.move3, pokemon.moves.move4, pokemon.baseHealth, pokemon.baseAttack, pokemon.baseDefense, pokemon.baseSpecialAttack, pokemon.baseSpecialDefense, pokemon.baseSpeed)
+            local newPokemon = pokemonHandler.makeNewPokemon(pokemon.name, pokemon.number, pokemon.animations, pokemon.types["type1"], pokemon.types["type2"], pokemonLevel, pokemon.moves.move1, pokemon.moves.move2, pokemon.moves.move3, pokemon.moves.move4, pokemon.baseHealth, pokemon.baseAttack, pokemon.baseDefense, pokemon.baseSpecialAttack, pokemon.baseSpecialDefense, pokemon.baseSpeed)
+            
+            if (love.math.random(0, 2) == 0) then
+                newPokemon.isShiny = false
+            else
+                newPokemon.isShiny = true
+            end
+
+            return newPokemon
         end
     end
 end
