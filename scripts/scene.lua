@@ -63,9 +63,11 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
 
     -- Checks if any of the Buttons in the Scene were clicked on (this function is only called after a left-click has been detected by the love.mousepressed function).
     function scene.mousepressed(mouseX, mouseY)
-        for buttonKey, button in pairs(scene.buttons) do    -- For every Button in the Scene...
-            if (mouseInObject(button, mouseX, mouseY)) then
-                button:isPressed(mouseX, mouseY)                    -- Check if the Button was pressed
+        for buttonKey, button in pairs(scene.buttons) do                -- For every Button in the Scene...
+            if (button.active) then                                         -- If the Button is currently active...    
+                if (mouseInObject(button, mouseX, mouseY)) then                 -- If the mouse is currently inside of the Button...
+                    button:isPressed(mouseX, mouseY)                                -- Check if the Button was pressed
+                end
             end
         end
     end

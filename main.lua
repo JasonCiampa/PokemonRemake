@@ -55,7 +55,7 @@ function love.mousepressed(mouseX, mouseY, mouseButton)
     if (mouseButton == 1) then                              -- If the mouseButton was left-click...
         activeScene.mousepressed(mouseX,mouseY)                 -- Have the currently active Scene process the click
         
-        if (gameText.active == true) then
+        if (gameText.active == true and mouseInObject(gameText, mouseX, mouseY)) then
             gameText.hide()
         end
     end
@@ -87,9 +87,9 @@ function love.load()
     player = require("scripts/objects/player")   
 
     titleScreen = require("scripts/scenes/titleScreen")             -- Imports the titleScreen file
-    activeScene = battler                                       -- Sets the currently active Scene to be the titleScreen
-    battler.playerPokemon = pokemonHandler.loadPokemon("Cyndaquil", 69)
-    battler.opposingPokemon = pokemonHandler.loadPokemon("Typhlosion", 69)
+    activeScene = titleScreen                                       -- Sets the currently active Scene to be the titleScreen
+    battler.playerPokemon = player.pokemon[3]
+    battler.opposingPokemon = pokemonHandler.loadPokemon("Totodile", 100)
     activeScene.load()                                              -- Loads the currently active scene
 end
 

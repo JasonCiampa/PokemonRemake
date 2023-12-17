@@ -1,7 +1,7 @@
 local buttonHandler = {}
 
 -- Creates and returns a Button
-function buttonHandler.create(width, height, x, y, backgroundColor, textColor, text)
+function buttonHandler.create(width, height, x, y, backgroundColor, textColor, text, textAlignment, fontSize)
     local button = {}
 
     button.width = width       -- Button width is set
@@ -19,13 +19,24 @@ function buttonHandler.create(width, height, x, y, backgroundColor, textColor, t
     button.currentTextColor = textColor                 -- Button current text color is set
 
     button.text = text
+    
+    if (textAlignment == nil) then
+        button.textAlignment = "center"
+    else
+        button.textAlignment = textAlignment
+    end
 
     button.sfxClick = love.audio.newSource("assets/audio/sfx/minecraft_buttonClick.mp3", "static")       -- Button click sound effect is set     (Minecraft Button Click Sfx https://www.youtube.com/watch?v=rG-856TmuzA)
     button.sfxClick:setVolume(0.50)                                                             -- Button click sound effect volume is set to half
     button.sfxClick:setLooping(false)                                                           -- Button click sound effect is set to not loop
 
-    button.fontSize = 60                                                                      -- Button text font size
-    button.font = love.graphics.newFont("assets/fonts/showcard_gothic.ttf", button.fontSize)  -- Button text font is set
+    if (fontSize == nil) then
+        button.fontSize = 60                                                                      -- Button text font size
+    else
+        button.fontSize = fontSize
+    end
+    
+    button.font = love.graphics.newFont("assets/fonts/showcard_gothic.ttf", button.fontSize)    -- Button text font is set
     button.fonts = {}                                                                           -- Button font list is created
 
     button.active = true                                                                        -- Button is set to be active
@@ -66,7 +77,7 @@ function buttonHandler.create(width, height, x, y, backgroundColor, textColor, t
             love.graphics.rectangle("fill", x, y, width, height)
 
             love.graphics.setColor(button.currentTextColor)
-            love.graphics.printf(button.text, button.font, button.x, (button.y + (button.height / 2)) - (button.fontSize * 0.4), button.width, "center")
+            love.graphics.printf(button.text, button.font, button.x, (button.y + (button.height / 2)) - (button.fontSize * 0.4), button.width, button.textAlignment)
         end
     end
 

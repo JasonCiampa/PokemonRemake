@@ -29,7 +29,7 @@ function titleScreen.load()
         end
 
         previousScene = titleScreen
-        nextScene = playerHouseInterior                                  -- Changes the Scene from titleScreen to playerHouseInterior
+        nextScene = battler                                  -- Changes the Scene from titleScreen to playerHouseInterior
     end
 end
 

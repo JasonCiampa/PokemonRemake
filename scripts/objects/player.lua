@@ -1,7 +1,7 @@
 -- PLAYER CREATION --
 
 local player = objectHandler.create("player", 0, 0, 120, 160, 8, 112, love.graphics.newImage("assets/images/player/player_spritesheet.png"), 0, 0, 120, 160, "dynamic", 0, 0.05)      -- Creates the Player Object
-player.pokemon = {}
+player.pokemon = {pokemonHandler.loadPokemon("Cyndaquil", 100), pokemonHandler.loadPokemon("Totodile", 100), pokemonHandler.loadPokemon("Chikorita", 100), pokemonHandler.loadPokemon("Crobat", 100), pokemonHandler.loadPokemon("Ho-oh", 100), pokemonHandler.loadPokemon("Lugia", 100)}
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- PLAYER ANIMATIONS --
