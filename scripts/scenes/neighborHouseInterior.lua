@@ -1,6 +1,6 @@
 -- SCENE SETUP --
 
-local neighborHouseInterior = scene.create("assets/images/clear_meadow_town/buildings/houses/single_floor_long/interior/single_floor_long_interior.jpg", 0, 0, nil)
+local neighborHouseInterior = scene.create("assets/images/clear_meadow_town/buildings/houses/single_floor_long/interior/single_floor_long_interior.jpg", 0, 0, "assets/audio/music/Family - Super Mario Galaxy.mp3")
      
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -41,6 +41,9 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function neighborHouseInterior.load()
+    neighborHouseInterior.backgroundMusic:setVolume(0.15)                                           -- Sets the Scene's background music volume to 15%
+    love.audio.play(neighborHouseInterior.backgroundMusic)
+    
     -- PLAYER --
     player.physics.body:setX(515)                   
     player.physics.body:setY(620)                    

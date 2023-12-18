@@ -1,6 +1,6 @@
 -- SCENE SETUP --
 
-local clearMeadowTown = scene.create("assets/images/clear_meadow_town/clear_meadow_town_background.jpg", 0, 0, nil)  -- Creates the clearMeadowTown Scene
+local clearMeadowTown = scene.create("assets/images/clear_meadow_town/clear_meadow_town_background.jpg", 0, 0, "assets/audio/music/Comet Observatory - Super Mario Galaxy.mp3")  -- Creates the clearMeadowTown Scene
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -48,14 +48,17 @@ function clearMeadowTown.load()
     clearMeadowTown.activeCamera = mainCamera
 
     if (previousScene == playerHouseInterior) then
-        player.physics.body:setX(2905)                   -- Sets the Player to be centered on the x-axis
-        player.physics.body:setY(800)                   -- Sets the Player to be centered on the y-axis  
+        player.physics.body:setX(2905)                   -- Sets the Player's physics body's x-coordinate
+        player.physics.body:setY(800)                   -- Sets the Player's physics body's y-coordinate
     elseif (previousScene == neighborHouseInterior) then
-        player.physics.body:setX(2325)                   -- Sets the Player to be centered on the x-axis
-        player.physics.body:setY(1800)                   -- Sets the Player to be centered on the y-axis  
+        player.physics.body:setX(2325)                   -- Sets the Player's physics body's x-coordinate
+        player.physics.body:setY(1800)                   -- Sets the Player's physics body's y-coordinate
     elseif (previousScene == laboratoryInterior) then
-        player.physics.body:setX(620)                   -- Sets the Player to be centered on the x-axis
-        player.physics.body:setY(910)                   -- Sets the Player to be centered on the y-axis  
+        player.physics.body:setX(620)                   -- Sets the Player's physics body's x-coordinate
+        player.physics.body:setY(910)                   -- Sets the Player's physics body's y-coordinate
+    elseif (previousScene == route1) then
+        player.physics.body:setX(450)                   -- Sets the Player's physics body's x-coordinate
+        player.physics.body:setY(1900)                   -- Sets the Player's physics body's y-coordinate
     end
 
     for row = 1, #clearMeadowTown.tilemap do
@@ -77,12 +80,19 @@ end
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
--- OBJECT UPDATING --
+-- SCENE UPDATING --
 
 function clearMeadowTown.update(dt)
+    clearMeadowTown.backgroundMusic:setVolume(0.15)                                           -- Sets the Scene's background music volume to 15%
+    love.audio.play(clearMeadowTown.backgroundMusic)
+
     if (player.y > 2160) then
+        if (route1 == nil) then
+            route1 = require("scripts/scenes/route1")
+        end
+        
         previousScene = clearMeadowTown
-        nextScene = titleScreen
+        nextScene = route1
     end
 
     clearMeadowTown.activeCamera.follow(player)
@@ -102,7 +112,7 @@ function clearMeadowTown.update(dt)
 end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
--- OBJECT DRAWING --
+-- SCENE DRAWING --
 
 function clearMeadowTown.draw()
     clearMeadowTown.activeCamera.draw()

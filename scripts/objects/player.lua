@@ -1,7 +1,18 @@
 -- PLAYER CREATION --
 
 local player = objectHandler.create("player", 0, 0, 120, 160, 8, 112, love.graphics.newImage("assets/images/player/player_spritesheet.png"), 0, 0, 120, 160, "dynamic", 0, 0.05)      -- Creates the Player Object
-player.pokemon = {pokemonHandler.loadPokemon("Cyndaquil", 100), pokemonHandler.loadPokemon("Totodile", 100), pokemonHandler.loadPokemon("Chikorita", 100), pokemonHandler.loadPokemon("Crobat", 100), pokemonHandler.loadPokemon("Ho-oh", 100), pokemonHandler.loadPokemon("Lugia", 100)}
+player.pokemon = {pokemonHandler.loadPokemon("Cyndaquil", nil, 30), pokemonHandler.loadPokemon("Totodile", nil, 30), pokemonHandler.loadPokemon("Chikorita", nil, 30), pokemonHandler.loadPokemon("Heracross", nil, 30), pokemonHandler.loadPokemon("Ho-oh", nil, 30), pokemonHandler.loadPokemon("Tyranitar", nil, 30)}
+player.walkingSFX = love.audio.newSource("assets/audio/sfx/walking.mp3", "static")
+player.walkingSFX:setVolume(0.25)                                           -- Sets the Scene's background music volume to full
+player.walkingSFX:setLooping(true)                                          -- Sets the Scene's background music to loop
+
+for i = 1, #player.pokemon do
+    if (player.pokemon[i].isShiny) then
+        player.pokemon[i].currentAnimation = player.pokemon[i].animations.shinyPlayerSide1
+    else
+        player.pokemon[i].currentAnimation = player.pokemon[i].animations.playerSide1
+    end
+end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- PLAYER ANIMATIONS --
@@ -33,6 +44,7 @@ function player.move(dt)
     
     -- UPWARD AND RIGHTWARD MOVEMENT --
     if (love.keyboard.isDown("w") and love.keyboard.isDown("d")) then                       -- If the "w" key and the "d" key are both being pressed...
+        love.audio.play(player.walkingSFX)
         player.currentAnimation = player.animations.running_up                                  -- Set the Player's currentAnimation to the running_up Animation
         player.animations.idle_direction = player.animations.idle_up                            -- Set the idle_up as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
@@ -42,6 +54,7 @@ function player.move(dt)
 
     -- UPWARD AND LEFTWARD MOVEMENT --
     if (love.keyboard.isDown("w") and love.keyboard.isDown("a")) then                       -- If the "w" key and the "a" key are both being pressed...
+        love.audio.play(player.walkingSFX)
         player.currentAnimation = player.animations.running_up                                  -- Set the Player's currentAnimation to the running_up Animation
         player.animations.idle_direction = player.animations.idle_up                            -- Set the idle_up as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
@@ -51,6 +64,7 @@ function player.move(dt)
 
     -- DOWNWARD AND RIGHTWARD MOVEMENT --
     if (love.keyboard.isDown("s") and love.keyboard.isDown("d")) then                       -- If the "s" key and the "d" key are both being pressed...
+        love.audio.play(player.walkingSFX)
         player.currentAnimation = player.animations.running_down                                -- Set the Player's currentAnimation to the running_down Animation
         player.animations.idle_direction = player.animations.idle_down                          -- Set the idle_down as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
@@ -60,6 +74,7 @@ function player.move(dt)
 
     -- DOWNWARD AND LEFTWARD MOVEMENT --
     if (love.keyboard.isDown("s") and love.keyboard.isDown("a")) then                       -- If the "s" key and the "a" key are both being pressed...
+        love.audio.play(player.walkingSFX)
         player.currentAnimation = player.animations.running_down                                -- Set the Player's currentAnimation to the running_down Animation
         player.animations.idle_direction = player.animations.idle_down                          -- Set the idle_down as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
@@ -69,6 +84,7 @@ function player.move(dt)
 
     -- UPWARD MOVEMENT --
     if (love.keyboard.isDown("w")) then                                                     -- If the "w" key is being pressed...
+        love.audio.play(player.walkingSFX)
         player.currentAnimation = player.animations.running_up                                  -- Set the Player's currentAnimation to the running_up Animation
         player.animations.idle_direction = player.animations.idle_up                            -- Set the idle_up as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
@@ -78,6 +94,7 @@ function player.move(dt)
 
     -- DOWNWARD MOVEMENT --
     if (love.keyboard.isDown("s")) then                                                     -- If the "s" key is being pressed...
+        love.audio.play(player.walkingSFX)
         player.currentAnimation = player.animations.running_down                                -- Set the Player's currentAnimation to the running_down Animation
         player.animations.idle_direction = player.animations.idle_down                          -- Set the idle_down as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
@@ -87,6 +104,7 @@ function player.move(dt)
 
     -- LEFTWARD MOVEMENT --
     if (love.keyboard.isDown("a")) then                                                     -- If the "a" key is being pressed...
+        love.audio.play(player.walkingSFX)
         player.currentAnimation = player.animations.running_left                                -- Set the Player's currentAnimation to the running_left Animation
         player.animations.idle_direction = player.animations.idle_left                          -- Set the idle_left as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
@@ -96,6 +114,7 @@ function player.move(dt)
 
     -- RIGHTWARD MOVEMENT --
     if (love.keyboard.isDown("d")) then                                                     -- If the "d" key is being pressed...
+        love.audio.play(player.walkingSFX)
         player.currentAnimation = player.animations.running_right                               -- Set the Player's currentAnimation to the running_right Animation
         player.animations.idle_direction = player.animations.idle_right                         -- Set the idle_right as the next idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the current Animation
@@ -108,6 +127,7 @@ function player.move(dt)
         player.currentAnimation = player.animations.idle_direction                              -- Set the Player's currentAnimation to the idle Animation
         player.currentAnimation.update(dt)                                                      -- Update the idle Animation
         player.physics.body:setLinearDamping(10)                                                        -- Set the amount of "sliding" the Player does when finishing a movement (deceleration)
+        player.walkingSFX:stop()
     end
 end
 

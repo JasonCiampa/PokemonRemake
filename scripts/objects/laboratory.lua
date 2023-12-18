@@ -1,6 +1,6 @@
 -- PLAYER HOUSE CREATION --
 
-local laboratory = objectHandler.create("laboratory", 0, 0, 1800, 984, 12, 809, love.graphics.newImage("assets/images/clear_meadow_town/buildings/lab/lab_spritesheet.png"), 0, 0, 1560, 830, "static", 1, 0)
+local laboratory = objectHandler.create("laboratory", 0, 0, 1800, 984, 12, 809, love.graphics.newImage("assets/images/clear_meadow_town/buildings/lab/exterior/lab_exterior.png"), 0, 0, 1560, 830, "static", 1, 0)
 laboratory:disable()
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -8,7 +8,6 @@ laboratory:disable()
 -- PLAYER HOUSE ANIMATIONS --
 
 laboratory.animations.idle = laboratory.createAnimation(1, 1, 1, 1)
-laboratory.animations.openDoor = laboratory.createAnimation(4, 2, 1, 1.5)
 laboratory.currentAnimation = laboratory.animations.idle
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

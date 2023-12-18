@@ -1,6 +1,6 @@
 -- SCENE SETUP --
 
-local playerHouseInterior = scene.create("assets/images/clear_meadow_town/buildings/houses/single_floor/interior/single_floor_interior.jpg", 0, 0, nil)
+local playerHouseInterior = scene.create("assets/images/clear_meadow_town/buildings/houses/single_floor/interior/single_floor_interior.jpg", 0, 0, "assets/audio/music/Family - Super Mario Galaxy.mp3")
      
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -40,6 +40,9 @@ end
 -- SCENE LOADING --
 
 function playerHouseInterior.load()
+    playerHouseInterior.backgroundMusic:setVolume(0.15)                                           -- Sets the Scene's background music volume to 15%
+    love.audio.play(playerHouseInterior.backgroundMusic)
+
     -- PLAYER --
     player.physics.body:setX(920)                   -- Sets the Player to be centered on the x-axis
     player.physics.body:setY(620)                   -- Sets the Player to be centered on the y-axis 

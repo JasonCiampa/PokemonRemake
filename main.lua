@@ -13,7 +13,7 @@ objectHandler = require("scripts/object")
 scene = require("scripts/scene")     
 door = require("scripts/door")   
 textbox = require("scripts/textbox")
-battler = require("scripts/battler")
+battle = require("scripts/battle")
 
 activeScene = {}    -- Variable to hold a reference to the currently active Scene
 previousScene = {}  -- Variable to hold a reference to the previously active Scene
@@ -87,9 +87,8 @@ function love.load()
     player = require("scripts/objects/player")   
 
     titleScreen = require("scripts/scenes/titleScreen")             -- Imports the titleScreen file
-    activeScene = titleScreen                                       -- Sets the currently active Scene to be the titleScreen
-    battler.playerPokemon = player.pokemon[3]
-    battler.opposingPokemon = pokemonHandler.loadPokemon("Totodile", 100)
+    activeScene = titleScreen                                   -- Sets the currently active Scene to be the titleScreen
+
     activeScene.load()                                              -- Loads the currently active scene
 end
 

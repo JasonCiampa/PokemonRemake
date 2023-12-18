@@ -48,7 +48,7 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
 
     -- Creates and returns a new Camera
     function scene.loadCamera(camera)
-        table.insert(scene.cameras, camera)      -- Disabled for now, Cameras are put into dictionary format
+        table.insert(scene.cameras, camera)      -- Inserts the new Camera into the Scene's list of Cameras
         return camera          
     end
 
@@ -69,6 +69,13 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
                     button:isPressed(mouseX, mouseY)                                -- Check if the Button was pressed
                 end
             end
+        end
+    end
+
+    -- Changes the active state of every Button in a list of Buttons
+    function scene.setButtonStates(buttonList, activeState)
+        for buttons, button in pairs(buttonList) do
+            button.active = activeState
         end
     end
 
@@ -134,6 +141,9 @@ function sceneHandler.create(backgroundImage, x, y, backgroundMusic)
             scene.buttons[i].active = false
             table.remove(scene.buttons, i)
         end
+
+        scene.backgroundMusic:stop()
+        player.walkingSFX:stop()
     end
 
     return scene

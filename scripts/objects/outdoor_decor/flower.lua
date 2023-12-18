@@ -20,16 +20,8 @@ flower.currentAnimation = flower.animations[1]
 --  FLOWER FUNCTIONALITY --
 
 function flower.setDrawPosition(object)
-    if ((player.y + player.height) > (object.y + object.height)) then
-        table.insert(clearMeadowTown.bottomHalfUnderPlayerTorso, object)
-        table.insert(clearMeadowTown.topHalfUnderPlayerTorso, object)
-    else
-        table.insert(clearMeadowTown.bottomHalfAbovePlayer, object)
-        table.insert(clearMeadowTown.topHalfAbovePlayer, object)
-    end
-
-    -- table.insert(clearMeadowTown.bottomHalfUnderPlayerTorso, object)
-    -- table.insert(clearMeadowTown.topHalfUnderPlayer, object)
+    table.insert(clearMeadowTown.bottomHalfUnderPlayerTorso, object)
+    table.insert(clearMeadowTown.topHalfUnderPlayerTorso, object)
 end
 
 function flower.customUpdate(object, dt)

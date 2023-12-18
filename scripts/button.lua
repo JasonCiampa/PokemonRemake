@@ -72,9 +72,8 @@ function buttonHandler.create(width, height, x, y, backgroundColor, textColor, t
     -- Draws the Button on the screen.
     function button.draw(button)
         if (button.active) then
-            local previousColor = getCurrentColor()
             love.graphics.setColor(button.currentBackgroundColor)
-            love.graphics.rectangle("fill", x, y, width, height)
+            love.graphics.rectangle("fill", button.x, button.y, button.width, button.height)
 
             love.graphics.setColor(button.currentTextColor)
             love.graphics.printf(button.text, button.font, button.x, (button.y + (button.height / 2)) - (button.fontSize * 0.4), button.width, button.textAlignment)

@@ -1,6 +1,6 @@
 -- SCENE SETUP --
 
-local laboratoryInterior = scene.create("assets/images/clear_meadow_town/buildings/lab/interior/lab_interior.jpg", 0, 0, nil)
+local laboratoryInterior = scene.create("assets/images/clear_meadow_town/buildings/lab/interior/lab_interior.jpg", 0, 0, "assets/audio/music/Family - Super Mario Galaxy.mp3")
      
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -63,6 +63,9 @@ laboratoryInterior.topHalfAbovePlayer = {}
 -- SCENE LOADING --
 
 function laboratoryInterior.load()
+    laboratoryInterior.backgroundMusic:setVolume(0.15)                                           -- Sets the Scene's background music volume to 15%
+    love.audio.play(laboratoryInterior.backgroundMusic)
+    
     -- PLAYER --
     player.physics.body:setX(1440)                   
     player.physics.body:setY(842)                   
@@ -87,14 +90,14 @@ function laboratoryInterior.load()
 
     startersTable = laboratoryInterior.loadObject(objectHandler.duplicate(assets[3], 804, 480, 804, 530))
 
-    fireStarter = laboratoryInterior.loadObject(objectHandler.duplicate(assets[4], 840, 552, nil, nil))
-    fireStarter.currentAnimation = fireStarter.animations.fire
+    -- fireStarter = laboratoryInterior.loadObject(objectHandler.duplicate(assets[4], 840, 552, nil, nil))
+    -- fireStarter.currentAnimation = fireStarter.animations.fire
 
-    grassStarter = laboratoryInterior.loadObject(objectHandler.duplicate(assets[4], 924, 504, nil, nil))
-    grassStarter.currentAnimation = grassStarter.animations.grass
+    -- grassStarter = laboratoryInterior.loadObject(objectHandler.duplicate(assets[4], 924, 504, nil, nil))
+    -- grassStarter.currentAnimation = grassStarter.animations.grass
 
-    waterStarter = laboratoryInterior.loadObject(objectHandler.duplicate(assets[4], 1008, 552, nil, nil))
-    waterStarter.currentAnimation = waterStarter.animations.water
+    -- waterStarter = laboratoryInterior.loadObject(objectHandler.duplicate(assets[4], 1008, 552, nil, nil))
+    -- waterStarter.currentAnimation = waterStarter.animations.water
 
     laboratoryInterior.door.isOpen = false
 end
@@ -103,7 +106,7 @@ end
 
 -- SCENE UPDATING --
 
-function laboratoryInterior.update(dt)   
+function laboratoryInterior.update(dt) 
     laboratoryInterior.bottomHalfUnderPlayerTorso = {}
     laboratoryInterior.topHalfUnderPlayerTorso = {}
 

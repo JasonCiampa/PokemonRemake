@@ -16,6 +16,10 @@ function textboxHandler.create(startingText)
     textbox.animations.blinking = animator.create(textbox.spritesheet, 2, textbox.width, textbox.height, 8, 1, 1, 124, 1.25)                -- Creates a blinking animation
     textbox.currentAnimation = textbox.animations.blinking                                                                                  -- Sets the current animation to the blinking animation
     textbox.text = startingText                                                                                                             -- Sets the text to the starting text that was passed in
+    textbox.textBuilder = ""                                                                                                                -- Stores each character of the textbox.text one by one each update
+    textbox.characterDelay = 0.025                                                                                                           -- Delays each character's addition to textbox.textBuilder by the set amount 
+    textbox.characterDelayTimer = textbox.characterDelay                                                                                    -- Timer to update characterDelay
+
 
     textbox.active = false                                                                                                                  -- Sets the textbox to be inactive                                                                  
     textbox.movingDown = false                                                                                                              -- Sets the textbox to be not moving down
@@ -29,6 +33,7 @@ function textboxHandler.create(startingText)
     -- Sets the text for the textbox
     function textbox.setText(newText)
         textbox.text = newText
+        textbox.textBuilder = ""
     end
 
     -- Displays the textbox on the screen and triggers a timer for how long its been alive for
@@ -76,20 +81,32 @@ function textboxHandler.create(startingText)
             animation.updatable = true                                                                                                          -- Set the animation to be updatable
         end
 
-        if (textbox.active) then                                                                                                            -- If the textbox is currently active...                                   
-            textbox.timeAlive = textbox.timeAlive + dt                                                                                          -- Increment the textbox's time alive counter by dt
+
+
+        if (thisTextbox.active) then                                                                                                            -- If the textbox is currently active...                                   
+            thisTextbox.timeAlive = thisTextbox.timeAlive + dt                                                                                          -- Increment the textbox's time alive counter by dt
             thisTextbox.currentAnimation.update(dt)                                                                                             -- Update the textbox's animation       
             thisTextbox.move(dt)                                                                                                                -- Handle the textbox's movement
         else                                                                                                                                -- Otherwise...
-            textbox.timeAlive = 0                                                                                                               -- Set the textbox's time alive counter to 0 (since it is not alive)
+            thisTextbox.timeAlive = 0                                                                                                               -- Set the textbox's time alive counter to 0 (since it is not alive)
         end
+
+        if (string.len(thisTextbox.textBuilder) ~= string.len(thisTextbox.text)) then
+            if (thisTextbox.characterDelayTimer < 0) then
+                textbox.textBuilder = thisTextbox.text:sub(1, string.len(thisTextbox.textBuilder) + 1)
+                thisTextbox.characterDelayTimer = thisTextbox.characterDelay
+            else
+                thisTextbox.characterDelayTimer = thisTextbox.characterDelayTimer - dt
+            end
+        end
+
     end
 
     function textbox.draw(thisTextbox)
         if (thisTextbox.active) then                                                                                                        -- If the textbox is currently active...
             thisTextbox.currentAnimation:draw(textbox.x, textbox.y)                                                                             -- Draw the textbox's current animation
             love.graphics.setColor(0.1, 0.1, 0.1)                                                                                               -- Set the color to a dark gray
-            love.graphics.printf(thisTextbox.text, font, thisTextbox.x + 50, thisTextbox.y + 50, thisTextbox.width - 100, "left")               -- Print the text onto the text box
+            love.graphics.printf(thisTextbox.textBuilder, font, thisTextbox.x + 50, thisTextbox.y + 50, thisTextbox.width - 100, "left")               -- Print the text onto the text box            
         end
     end
 

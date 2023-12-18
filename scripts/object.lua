@@ -170,6 +170,13 @@ function beginContact(a, b, coll)
     local objectA = a:getUserData()
     local objectB = b:getUserData()
     printDebugText = (objectA.name .. " is colliding with " .. objectB.name)
+
+    if ((objectA.name == "player" and objectB.name == "grass") or (objectA.name == "grass" and objectB.name == "player")) then
+        if (love.math.random(1, 100) >= 99) then
+            previousScene = activeScene
+            nextScene = battle
+        end
+    end
 end 
 
 function endContact(a, b, coll)

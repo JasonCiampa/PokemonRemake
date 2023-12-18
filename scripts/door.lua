@@ -37,7 +37,9 @@ function doorHandler.create(name, x, y, width, height)
             building.currentAnimation.updatable = false
 
         elseif (building.currentAnimation == building.animations.idle) then
-            building.currentAnimation = building.animations.openDoor
+            if (building.animations.openDoor ~= nil) then
+                building.currentAnimation = building.animations.openDoor
+            end
         end
 
         building.currentAnimation.update(dt)
